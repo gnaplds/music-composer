@@ -39,6 +39,10 @@ Visible browser observations:
 
 [Mobile landscape screenshot](../../song-composer/prototype/evidence/mobile-landscape.png). These are desktop-browser observations using mouse pointers and viewport resizing, not Android hardware tests. Real finger gestures, multi-finger/pointer interruption, speaker output, latency, and browser lifecycle recovery remain unverified. Browser reload still loses scratch notes.
 
+## Delivery
+
+The owner supplied https://simplecomposer.netlify.app/. Commit `b5aa831` was pushed to `master`; Netlify then picked up the update automatically. The hosted page exposes the responsive Tools and selection controls. At an 844 × 390 browser viewport it uses the phone layout and 25-key range; piano entry and Tools were exercised without console errors. The Netlify badge was found covering piano keys, so it is hidden only in the phone workspace. No Netlify sign-in or manual upload is needed for the trial.
+
 ## Owner trial — pending
 
 Use the owner's existing Netlify site: https://simplecomposer.netlify.app/. Turn the Redmi Note 9 sideways and try the accepted Q88 task: held bass, chord, advancing melody; pan from a note; select/move/resize/delete a group and Undo; change the key of separated boxes; play and rotate. Report any missed taps, accidental edits, hidden controls, or audio trouble.
