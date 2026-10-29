@@ -323,3 +323,22 @@ Scope is appearance, native controls, one piano-symbol display expression, and u
 A document check reported the missing Dark mode control before the edit. Afterward, document assertions check the native labeled checkbox, Help in the header, hidden-by-default piano labels, and removal of the old key strips. All 43 existing musical tests pass. The inline scripts compile, element references resolve, and the core script is unchanged.
 
 The agreed visible browser-control seam is unavailable because local browser use is disabled in Work settings. Static checks do not prove rendered contrast, layout, or gesture behavior. The owner trial should switch themes with written notes present, open and dismiss Help, toggle both piano labels, and check silent preview and playback highlights. Keep this ticket claimed pending that trial; reload still clears scratch music.
+
+
+### Fourteenth revision: adjustable piano and compact timeline
+
+October 30, 2026: the owner confirmed both display questions. A single Hide parts / Show parts button hides all three note rows while keeping chord labels and the ruler. Showing them restores their previous collapse state; notes keep playing. Parts start visible. Piano resizing applies to desktop and landscape phones, stays within viewport limits, and lasts for the page session. Key labels start off. Cursor handles widen from 18 to 30 pixels on desktop and from 34 to 44 pixels on phones.
+
+The existing HTML/CSS and pointer handlers provide these controls; no musical model, storage, or dependency changes were needed. The focusable piano separator also supports Up/Down, Home/End, and Escape. Interrupted drags restore the previous height. The phone limit reserves the labels, ruler, and one note row where screen height permits, with a 64-pixel minimum piano.
+
+#### Verification
+
+Before implementation, the live local document had no parts toggle or resize separator, key labels were on, and the desktop cursor measured 18 pixels. Browser assertions after implementation checked:
+
+- A written C chord survives Hide parts / Show parts, including a previously collapsed Melody row. The ruler and harmony remain visible; hidden notes still play.
+- A desktop upward drag of 60 pixels changes piano height from 116 to 176 pixels. Down-arrow changes it to 168; Home gives 64 and End gives the viewport maximum. Black keys scale with white keys.
+- At 844 × 390, the maximum piano height is 117 pixels and the timeline retains 170 pixels. A downward drag of 31 pixels restores 86-pixel keys. The phone cursor is 44 pixels wide.
+- Portrait at 390 × 844 hides the piano. Returning to landscape preserves three notes, the hidden-parts preference, and the chosen 86-pixel height.
+- At 844 × 320, the piano is limited to 69 pixels and the timeline retains 148 pixels. Undo after display changes removes the last entered note, leaving two notes.
+
+All 45 musical behavior tests pass. Browser console checks found no warnings or errors. The inline scripts compile, static IDs are unique, and the composer core is unchanged. See the [compact workspace with resized piano](../prototype/evidence/adjustable-workspace.png). These checks used mouse pointers and browser viewport overrides. Real touch, multi-pointer cancellation, and Escape during an active pointer drag still need a device/manual trial; source handling alone does not prove them.

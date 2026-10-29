@@ -19,7 +19,8 @@ This is a working prototype. **Notes are not saved:** reloading, closing, or dis
 - Edit a note's pitch, start, and duration, or drag it along the timeline to move or resize it.
 - Select notes across parts, then move, resize, or delete them together. Group edits preserve relative timing and can be undone in one step.
 - Snap edits to quarter notes, eighth notes, or quarter- and eighth-note triplets. Invalid edits, including overlapping notes of the same pitch in one part, are rejected.
-- Undo and redo musical edits. Pan and zoom the timeline, collapse individual parts, and drag the editing cursor to inspect active notes silently.
+- Undo and redo musical edits. Pan and zoom the timeline, collapse individual parts, or hide all three part rows while keeping chord labels and the ruler visible.
+- Drag the wider editing cursor handle to inspect active notes silently. Resize the piano vertically by dragging its top handle on desktop or landscape phones.
 
 ## Explore harmony
 
@@ -36,7 +37,7 @@ This is a working prototype. **Notes are not saved:** reloading, closing, or dis
 - Use a metronome with accented measure starts. In 6/8, it follows dotted-quarter pulses.
 - Adjust each part's volume independently, including muting it.
 - Follow the playhead and highlighted chord boxes during playback. Piano keys audition notes while the composition plays.
-- Switch to dark mode, show or hide key labels, and open built-in help, shortcuts, and guided examples for held bass, moving inner voices, and context changes.
+- Switch to dark mode, turn on key labels (hidden by default), and open built-in help, shortcuts, and guided examples for held bass, moving inner voices, and context changes.
 
 ## Desktop and phone
 

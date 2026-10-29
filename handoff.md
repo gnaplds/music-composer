@@ -12,10 +12,9 @@ Desktop supports piano step entry, independent Melody/Chord/Bass parts, a timeli
 
 ## Latest work and evidence
 
-- The responsive phone workflow was published in commit `b5aa831`. Commit `cae5ee9` hid the hosting badge on phones. The change accompanying this handoff removes the `.phone` restriction from that CSS rule, hiding `#nl-badge-frame` on desktop too. Musical logic is unchanged.
-- All 45 command/inspection and playback-plan tests pass after the badge change. App scripts are unchanged, handoff links resolve, and `git diff --check` passes. The [phone trial ticket](.scratch/song-composer-mobile/issues/03-phone-touch-prototype.md#implementation-and-verification--october-30-2026) records the earlier responsive and desktop browser checks, including their limits.
-- The owner has not supplied a physical-phone trial verdict. Mouse interaction at a resized desktop viewport does not establish touch comfort, Android audio latency, or interruption recovery. Keep the phone trial ticket claimed until that evidence arrives.
-- Browser control was disabled in the app settings during the badge/handoff task. Verification of this small CSS change uses source and deployed-response checks; do not describe it as a fresh visual browser check.
+- The current update adds a draggable piano-height handle, a global Hide parts / Show parts button, key labels off by default, and wider orange cursor handles. The owner confirmed the desktop/phone behavior and session-only preferences. See the [workspace revision](.scratch/song-composer/issues/06-desktop-workspace.md#fourteenth-revision-adjustable-piano-and-compact-timeline).
+- All 45 musical tests pass. Browser checks cover resizing, limits, hiding/restoring rows, playback with hidden rows, musical undo, portrait rotation, and short landscape layout. The composer core is unchanged. The prototype guide records current controls; the root README lists features only.
+- The owner has not supplied a physical-phone trial verdict. Mouse interaction at resized desktop viewports does not establish touch comfort, Android audio latency, or interruption recovery. Keep the phone trial ticket claimed until that evidence arrives. Multi-pointer and Escape cancellation during a resize still need a manual trial.
 
 ## Where to work
 
