@@ -75,4 +75,24 @@ These checks used a desktop browser with resized viewports and mouse pointers. T
 
 The prototype does not save or export projects, insert/delete measures, resize box boundaries, implement the full voicing toolbox, or use the final piano sound. Notes can still extend the song automatically. Maximum length is 256 quarter notes. Exact chord matching covers 14 qualities: major, minor, diminished, augmented, sus2, sus4, 6, m6, 7, maj7, m7, m(maj7), m7♭5, and dim7. Ninths, 6/9, 7♭9, and other extended sets remain playable without automatic names. This limits chord types, not pitch registers or open voicings; incomplete matches display their notes without missing-note suggestions. Display spelling uses practical flat names, so the full context-sensitive spelling policy is not yet implemented.
 
-The repository had no commits or remote when this prototype was started. On October 29, 2026, the owner authorized public source publication as `gnaplds/music-composer` and Netlify hosting. The [root README](../../../README.md) contains the run and deployment instructions; `netlify.toml` copies only the app page into the hosting output. Publication does not settle the production architecture or add project saving.
+The repository had no commits or remote when this prototype was started. On October 29, 2026, the owner authorized public source publication as `gnaplds/music-composer` and Netlify hosting. The [root README](../../../README.md) describes the current app features. Publication does not settle the production architecture or add project saving.
+
+## Run locally
+
+From the repository root, with Python 3 installed:
+
+```sh
+python3 -m http.server 8765 --bind 127.0.0.1 --directory .scratch/song-composer/prototype
+```
+
+Open <http://127.0.0.1:8765/>. The app is a single HTML file with no runtime dependencies or external assets. You can also open [index.html](index.html) directly in a browser. The local preview address is only accessible on the computer running the server.
+
+## Deploy on Netlify
+
+Import `gnaplds/music-composer` from GitHub into Netlify and select the `master` branch. Keep the base directory at the repository root. The tracked [netlify.toml](../../../netlify.toml) supplies these settings:
+
+- Build command: `mkdir -p dist && cp .scratch/song-composer/prototype/index.html dist/index.html`
+- Publish directory: `dist`
+- No environment variables or framework preset are needed.
+
+Only the app page is copied to the hosted site. Planning files, tests, and screenshots remain in GitHub. Pushes to the connected production branch trigger new deployments. Hosting does not add storage or synchronization; each visitor's composition stays in that browser tab.

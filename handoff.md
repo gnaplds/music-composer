@@ -23,7 +23,7 @@ Desktop supports piano step entry, independent Melody/Chord/Bass parts, a timeli
 | --- | --- |
 | App source | [.scratch/song-composer/prototype/index.html](.scratch/song-composer/prototype/index.html) — self-contained HTML, CSS, and JavaScript |
 | Automated checks | [composer.test.cjs](.scratch/song-composer/prototype/composer.test.cjs) |
-| Local run, test, and deployment commands | [README.md](README.md) and [netlify.toml](netlify.toml) |
+| Local run, test, and deployment commands | [Prototype guide](.scratch/song-composer/prototype/README.md#run-locally) and [netlify.toml](netlify.toml) |
 | Accepted musical terms | [GLOSSARY.md](GLOSSARY.md) |
 | Desktop plan and decisions | [Desktop map](.scratch/song-composer/map.md), [planning intake](docs/planning-intake.md), and [ADRs](docs/adr) |
 | Accepted phone controls | [Touch workflow](.scratch/song-composer-mobile/issues/01-touch-workflow.md) |

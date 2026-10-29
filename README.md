@@ -1,51 +1,53 @@
-# Music Composer
+# Simple Composer
 
-A playable desktop and phone browser prototype for writing songs with chord boxes and independent Melody, Chord, and Bass parts. Enter notes on the piano, arrange them on the timeline, inspect chord names and Roman numerals, and hear the result.
+A browser app for writing music with an on-screen piano, a timeline of chord boxes, and independent Melody, Chord, and Bass parts. Build a phrase, explore its harmony, and hear the parts together.
 
-**Prototype status:** compositions stay in memory. Reloading or closing the page loses the notes. Saving, MIDI export, and final piano sound are planned but not implemented. The phone layout supports landscape writing and portrait review; physical-device acceptance is pending.
+**[Open Simple Composer](https://simplecomposer.netlify.app/)** — no account or installation needed.
 
-Open [Simple Composer](https://simplecomposer.netlify.app/) on a computer or phone. On a phone, turn it sideways to write. Select notes, then choose Move or Resize before dragging; ordinary swipes scroll. Tools contains the secondary controls. The [phone guide](.scratch/song-composer/prototype/README.md#phone-workflow) covers the trial.
+This is a working prototype. **Notes are not saved:** reloading, closing, or discarding the browser tab loses the composition.
 
-## Run locally
+## Write and arrange
 
-From this repository's root, with Python 3 installed:
+- Enter notes on the piano with separate duration settings for Melody, Chord, and Bass. Use whole through sixteenth notes, dotted values, and quarter- or eighth-note triplets.
+- Advance the cursor after each note to write a melody, or keep it in place to build a chord. Each part remembers its own entry settings during the session.
+- Give every note its own start and duration. Hold a bass note while the melody and chord voices move, including across measures.
+- Organize the timeline by splitting and merging chord boxes without changing the notes.
+- Change the time signature within a composition: 2/4, 3/4, 4/4, and 6/8 are supported. Notes entered beyond the song's end add measures automatically.
 
-```sh
-python3 -m http.server 8765 --bind 127.0.0.1 --directory .scratch/song-composer/prototype
-```
+## Edit and navigate
 
-Open <http://127.0.0.1:8765/>. The app is a single HTML file with no runtime dependencies or external assets. You can also open [index.html](.scratch/song-composer/prototype/index.html) directly in a browser.
+- Edit a note's pitch, start, and duration, or drag it along the timeline to move or resize it.
+- Select notes across parts, then move, resize, or delete them together. Group edits preserve relative timing and can be undone in one step.
+- Snap edits to quarter notes, eighth notes, or quarter- and eighth-note triplets. Invalid edits, including overlapping notes of the same pitch in one part, are rejected.
+- Undo and redo musical edits. Pan and zoom the timeline, collapse individual parts, and drag the editing cursor to inspect active notes silently.
 
-The [prototype guide](.scratch/song-composer/prototype/README.md) explains note entry, snapping, multi-note editing, playback, and the remaining usability checks.
+## Explore harmony
 
-## Tests
+- See chord names based on the sounding Bass and Chord notes. Melody notes remain independent of chord recognition.
+- Recognize 14 chord qualities: major, minor, diminished, augmented, sus2, sus4, 6, m6, 7, maj7, m7, m(maj7), m7♭5, and dim7.
+- Choose an alternative recognized name or write a custom chord label without changing the notes.
+- View Roman numerals and inversion figures relative to the active key. Choose compatible readings for secondary dominants, tritone substitutes, leading-tone diminished chords, and modal interchange.
+- Change the key from the cursor or apply a key to selected chord boxes, including separated boxes. Key changes and harmonic collections have independent settings.
+- Use major or minor sixth-diminished collections to distinguish sixth-chord tones, diminished-chord tones, and outside tones. Optional piano symbols and note names support this view.
 
-With a current Node.js LTS release installed:
+## Listen and review
 
-```sh
-node .scratch/song-composer/prototype/composer.test.cjs
-```
+- Play, pause, and resume the composition at an adjustable tempo, or loop a range of whole measures.
+- Use a metronome with accented measure starts. In 6/8, it follows dotted-quarter pulses.
+- Adjust each part's volume independently, including muting it.
+- Follow the playhead and highlighted chord boxes during playback. Piano keys audition notes while the composition plays.
+- Switch to dark mode, show or hide key labels, and open built-in help, shortcuts, and guided examples for held bass, moving inner voices, and context changes.
 
-The 45 tests cover musical editing and playback planning. Browser interaction evidence and its limits are recorded in the [desktop ticket](.scratch/song-composer/issues/06-desktop-workspace.md) and [phone trial ticket](.scratch/song-composer-mobile/issues/03-phone-touch-prototype.md).
+## Desktop and phone
 
-## Deploy on Netlify
+The same app adapts to both screens. Desktop supports mouse editing and selection shortcuts. On a phone, landscape mode provides a two-octave piano, touch selection, and explicit Move, Resize, and Delete actions; ordinary swipes scroll the timeline. Secondary controls are in Tools.
 
-Import `gnaplds/music-composer` from GitHub into Netlify and select the `master` branch. Keep the base directory at the repository root. The tracked [netlify.toml](netlify.toml) supplies the build command and publish directory:
+Portrait mode supports review and playback. Rotating back to landscape preserves notes and selections within the current session.
 
-- Build command: `mkdir -p dist && cp .scratch/song-composer/prototype/index.html dist/index.html`
-- Publish directory: `dist`
-- No environment variables or framework preset are needed.
+## Current limits
 
-Only the self-contained app page is copied to the hosted site. Planning files, tests, and screenshots remain in GitHub. Once Netlify is connected, pushes to the production branch trigger new deployments. See [Netlify's repository deployment guide](https://docs.netlify.com/start/quickstarts/deploy-from-repository/).
-
-Hosting the prototype does not add project storage or synchronization. Each visitor's scratch composition remains in that browser tab.
-
-## Project notes
-
-- [Session handoff and next steps](handoff.md)
-- [Musical vocabulary](GLOSSARY.md)
-- [Desktop plan](.scratch/song-composer/map.md) and [initial scope](docs/planning-intake.md)
-- [Android plan](.scratch/song-composer-mobile/map.md) and [Godot feasibility study](docs/research/godot-android-feasibility.md)
-- [Architecture decisions](docs/adr)
-
-The source remains under `.scratch/` because it is an interaction prototype. Some historical planning links refer to a separate local `barry-harris/` study; that material is excluded from this repository and is not needed to run the app.
+- No project saving, project import/export, or MIDI export.
+- Playback uses a temporary synth sound.
+- Automatic chord naming covers the 14 qualities above. Extended chords remain playable but may have no automatic name; pitch spelling currently uses practical flat names.
+- Compositions are limited to 256 quarter notes. Measure insertion/deletion, draggable box boundaries, and the full voicing toolbox are not implemented.
+- The phone layout has been checked in resized desktop browsers; physical-phone usability and audio checks are still pending.
