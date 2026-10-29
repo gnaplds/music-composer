@@ -42,6 +42,7 @@ Hosting the prototype does not add project storage or synchronization. Each visi
 
 ## Project notes
 
+- [Session handoff and next steps](handoff.md)
 - [Musical vocabulary](GLOSSARY.md)
 - [Desktop plan](.scratch/song-composer/map.md) and [initial scope](docs/planning-intake.md)
 - [Android plan](.scratch/song-composer-mobile/map.md) and [Godot feasibility study](docs/research/godot-android-feasibility.md)

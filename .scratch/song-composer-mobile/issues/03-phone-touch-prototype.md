@@ -41,7 +41,7 @@ Visible browser observations:
 
 ## Delivery
 
-The owner supplied https://simplecomposer.netlify.app/. Commit `b5aa831` was pushed to `master`; Netlify then picked up the update automatically. The hosted page exposes the responsive Tools and selection controls. At an 844 × 390 browser viewport it uses the phone layout and 25-key range; piano entry and Tools were exercised without console errors. The Netlify badge was found covering piano keys, so it is hidden only in the phone workspace. No Netlify sign-in or manual upload is needed for the trial.
+The owner supplied https://simplecomposer.netlify.app/. Commit `b5aa831` was pushed to `master`; Netlify then picked up the update automatically. The hosted page exposes the responsive Tools and selection controls. At an 844 × 390 browser viewport it uses the phone layout and 25-key range; piano entry and Tools were exercised without console errors. The Netlify badge was found covering piano keys and initially hidden in the phone workspace. At the owner's later request, the same rule now covers desktop too. No Netlify sign-in or manual upload is needed for the trial.
 
 ## Owner trial — pending
 
