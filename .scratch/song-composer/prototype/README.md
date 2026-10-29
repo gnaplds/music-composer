@@ -1,8 +1,10 @@
-# Song composer interaction prototype
+# Simple Composer interaction prototype
 
 Open `index.html` directly in a desktop browser. It is self-contained: no installation, network assets, account, or build step is needed. The current local preview is also available at `http://127.0.0.1:8765/` while its preview server is running.
 
 This is disposable prototype code. It keeps composition state only in memory. Reloading or closing the page loses the scratch composition. The triangle-wave sound is temporary, not the final piano. Note audition and playback now use three times the previous note gain, with shared peak compression for dense chords. The part sliders still range from 0% to 100%; metronome levels are unchanged before compression.
+
+The workspace opens with a compact Simple Composer header. The floating **?** button at the bottom right contains the instructions, shortcuts, harmony explanations, guided examples, composition inspector, and prototype limits. Close it with **×**, Escape, or a click outside. The piano has room beneath its keys so the button does not cover note-entry controls. Routine success messages and coaching paragraphs are hidden; errors, label-review warnings, selection state, and drag previews remain available in the workspace.
 
 ## Try the workflow
 
@@ -31,7 +33,7 @@ The Roman interpretation menu groups composer-selected readings:
 
 The choice appears in the sounding-harmony panel and timeline and can be undone. Hover over a label for its explanation. Interpretations do not force a following resolution or rewrite notes. A choice that becomes unsuitable after a note or key edit receives a review notice; choosing the ordinary degree clears that choice. Chord membership alone does not establish harmonic function.
 
-The three guided examples build a held bass, moving inner voices, and context changes. Choosing an example replaces current scratch work after confirmation. Inspect the composition shows the written notes and context markers.
+The three guided examples under **? → Guided examples** build a held bass, moving inner voices, and context changes. Choosing an example replaces current scratch work after confirmation. **? → Inspect the composition** shows the written notes and context markers. Help is nonmodal; dismiss it to inspect the timeline, then reopen it to continue the same example.
 
 ## Tests and evidence
 
@@ -48,6 +50,8 @@ Both script blocks compile. Static source checks found no duplicate element IDs 
 Browser inspection was blocked in earlier revisions. Access worked for the ninth revision: direct browser checks reproduced the late scroll and retained purple selection before the fixes, then verified earlier chord visibility, cleared box selection, loop-return scrolling, and unchanged written notes. Piano audition and playback ran through the revised audio path without console errors. See the [playback screenshot](evidence/early-playback-follow.png) and [prototype ticket](../issues/06-desktop-workspace.md). These checks do not establish perceived loudness, distortion under every dense passage, speaker latency, background playback, or mobile behavior; listening and owner acceptance remain necessary.
 
 The tenth revision reproduced the offscreen cursor and entry scrolling to the right edge, then checked centered entry, seeking, Zoom, the song end, and song extension through real controls. Right-click deletion, Undo, and left-drag movement also passed. See the [centered-entry view](evidence/centered-note-entry.png). The browser tool cannot hold the right button during a drag, so that gesture still needs a mouse trial: pan from a note and from empty space, check that no notes change, then try Escape to restore the previous view. Reduced-motion behavior and resizing were not directly exercised.
+
+The eleventh revision checks the help launcher and dismissible panel at the HTML document boundary: the check failed before implementation and passed afterward. Further source checks confirm the Simple Composer heading, moved tutorial/inspector content, removed coaching elements, balanced markup, and consistent script references. All 43 musical tests still pass. Browser access was disabled in Work settings during this revision, so the rendered layout, native popover dismissal/focus behavior, and examples inside the panel still need a browser trial. The help uses the browser's [native automatic popover](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover), without a dependency or custom focus system.
 
 ## Deliberate limits
 

@@ -288,3 +288,22 @@ Right-click deleted only the clicked note, and Undo restored the written-note ta
 The browser tool supports left dragging and right clicking, but not a drag with the right button held. Right-button panning, Escape during that pan, and playback-follow interaction during a pan remain owner checks, not verified results. Try dragging from both a note and empty space, then confirm that notes remain unchanged; try a stationary right-click and Undo separately. Reduced-motion and device resizing were not directly exercised in this revision.
 
 The [centered-entry screenshot](../prototype/evidence/centered-note-entry.png) records the visible final melody fixture. Keep this ticket claimed until the owner's trial; the prototype still loses scratch notes on reload.
+
+### Eleventh revision: Simple Composer and help on demand
+
+October 29, 2026: the owner requested a plain Simple Composer heading and removal of scattered instructions, with tutorials collected behind a floating question-mark button at the bottom right.
+
+- Replace the introductory block and browser title with Simple Composer. Keep New composition as the existing reset action.
+- Remove the persistent prototype banner, empty-timeline instructions, entry and keyboard coaching, box-selection instructions, long context explanations, and routine success messages from the main workspace. Keep control labels, current selection, sounding pitches, color legend, error messages, invalid-label warnings, and concise drag previews.
+- Collect note entry, durations, gestures, multiple selection, snapping, navigation, boxes/context, playback, piano colors, Roman notation, shortcuts, guided examples, and limitations in the help panel. Move the composition inspector there too. Keep the existing example replacement confirmation; opening help itself never changes the song.
+- Use a native automatic HTML popover, opened by an accessible question-mark button and closed by its explicit close button, Escape, or outside click. It is nonmodal, keeps example progress, has a scrollable body, and reserves space below the piano keys for the launcher. Application editing shortcuts do not act on the song while focus is inside help.
+
+The design retains the existing light background, dark blue controls, teal/purple musical colors, amber entry focus, and system typeface. The timeline remains the central workspace. This is a focused cleanup, not a new layout or musical model.
+
+Scope reaches document structure/styles, dynamic coaching writes, selection previews, status visibility, example accessibility attributes, and usage notes. No musical command or persistence behavior changed; there are no new dependencies.
+
+#### Verification
+
+A document-level check for the accessible help launcher and native dismissible panel failed before implementation and passed afterward. Source assertions also verify the new heading, tutorials and inspector inside help, removed coaching elements, valid nesting, unique IDs, and consistent element references. Both scripts compile; all 43 existing musical tests pass. The Netlify build still produces only the unchanged app-page copy.
+
+Local browser use was disabled in Work settings. The agent could not run the agreed visible-control trial or capture a current screenshot; static checks do not establish rendered layout or actual focus/dismissal behavior. The owner trial should open help, close it with × and Escape, click outside, continue an example after reopening help, and confirm that piano entry, group drag previews, and error messages still work. Keep this ticket claimed pending that trial.
