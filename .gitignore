@@ -1,0 +1,21 @@
+# Local study material is separate from this app.
+/barry-harris/
+
+# Keep only the two project planning/prototype folders under .scratch.
+/.scratch/*
+!/.scratch/song-composer/
+!/.scratch/song-composer-mobile/
+
+# Build output, hosting state, credentials, and local tools.
+/dist/
+/.netlify/
+/.codex/
+/.agents/
+.env
+.env.*
+!.env.example
+node_modules/
+.venv/
+__pycache__/
+*.log
+.DS_Store

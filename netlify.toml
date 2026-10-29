@@ -1,0 +1,3 @@
+[build]
+  command = "mkdir -p dist && cp .scratch/song-composer/prototype/index.html dist/index.html"
+  publish = "dist"

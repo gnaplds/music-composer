@@ -1,0 +1,1014 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Song composer · interaction prototype</title>
+<style>
+.keyboard.names-hidden .pitch-name{visibility:hidden}.keyboard.symbols-hidden .family-symbol{visibility:hidden}.name-toggle{display:flex;align-items:center;gap:5px}
+.timeline::after{content:"";position:absolute;left:100%;top:0;width:var(--cursor-room,0px);height:1px;pointer-events:none}
+.scroll:has(.panning),.timeline.panning,.timeline.panning *{cursor:grabbing!important;user-select:none}
+.note:has(.resize-handle){padding:2px 0 2px 2px;touch-action:none;cursor:grab}.note.resizing{cursor:grabbing}.resize-handle{position:absolute;right:0;top:0;bottom:0;width:min(10px,35%);cursor:ew-resize;touch-action:none;background:currentColor;opacity:.25;border-left:2px solid currentColor}.note:hover .resize-handle,.note.selected .resize-handle{opacity:.55}.note.resizing{outline:3px solid #d38b19;z-index:6}.length-preview{font-weight:650;color:#805800}
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#243747;background:#edf2f6;font-size:14px;--sixth:#16736a;--dim:#7555a1;--outside:#667581;--line:#d5dee5;--row:96px}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button,select,input{border:1px solid #bccbd5;border-radius:5px;background:white;color:inherit;min-height:34px;padding:6px 10px}button{cursor:pointer;font-weight:550}button:hover:not(:disabled){background:#e7f1f7;border-color:#5e839b}button:disabled{opacity:.42;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #d38b19;outline-offset:2px}.primary{background:#294c66;color:white;border-color:#294c66}.primary:hover:not(:disabled){background:#365f7c}h1{font-size:23px;line-height:1.2;margin:0;font-weight:650;letter-spacing:-.6px}h2{font-size:15px;margin:0 0 10px}h3{font-size:14px;margin:0 0 8px}p{line-height:1.5;margin:6px 0}.muted{color:#566b7a}.small{font-size:12px}.top{padding:20px 24px 12px;display:flex;justify-content:space-between;gap:20px;align-items:center}.intro{max-width:760px}.badge{font-size:12px;display:inline-block;background:#dce6ed;border-radius:4px;padding:3px 7px;margin-bottom:7px}.limits{padding:7px 24px;background:#f7f0df;color:#655129;font-size:12px;border-block:1px solid #e8ddc2}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:13px 24px;background:#f8fbfd;border-bottom:1px solid var(--line)}.toolbar label{display:flex;align-items:center;gap:6px}.toolbar input[type=number]{width:65px}.separator{width:1px;height:24px;background:var(--line);margin:0 4px}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:18px;margin:20px 24px 14px}.canvas-area{min-width:0}.entry{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:4px 0 0;padding:12px 0;border-top:1px solid var(--line)}label.field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:550}label.field input,label.field select{font-size:14px;font-weight:400}.entry input[type=number]{width:110px}.entry .hint{align-self:center;margin-left:auto;font-size:12px;color:#566b7a}.scroll{overflow:auto;position:relative;background:#fff;border:1px solid #bccbd5;border-radius:7px}.timeline{position:relative;min-height:420px}.ruler{position:relative;height:38px;border-bottom:1px solid var(--line);background:#f5f8fa}.measure-head{position:absolute;height:38px;padding:9px 10px;border-left:1px solid #9bb0bd;white-space:nowrap;overflow:hidden;font-size:12px;font-weight:650}.measure-head span{font-weight:400;color:#587081;margin-left:8px}.boxes{height:44px;position:relative;border-bottom:1px solid var(--line)}.box{position:absolute;height:44px;border-left:1px solid #c4d2dc;background:#fff;padding:7px 8px;font-size:13px;overflow:hidden;white-space:nowrap;border-radius:0;border-block:0;border-right:0;text-align:left}.box:hover{background:#eff5f8!important}.box .small{display:block;font-size:10px;color:#637887}.lanes{position:relative}.lane{position:relative;height:var(--row);border-bottom:1px solid #dce4ea;background:repeating-linear-gradient(to right,transparent 0,transparent calc(var(--beat-width) - 1px),#e5ecf0 calc(var(--beat-width) - 1px),#e5ecf0 var(--beat-width));cursor:crosshair}.lane:nth-child(even){background-color:#f8fafc}.lane-label{position:sticky;left:0;top:0;display:inline-block;background:#e7eef3e8;z-index:3;font-size:11px;padding:3px 7px;border-radius:0 0 4px 0;pointer-events:none}.bar-line{position:absolute;top:0;bottom:0;width:1px;background:#9bb0bd;pointer-events:none}.box-line{position:absolute;top:0;bottom:0;width:1px;border-left:1px dashed #d0dce4;pointer-events:none}.note{position:absolute;min-height:22px;height:22px;padding:2px 5px;border:1px solid currentColor;border-left:3px solid currentColor;border-radius:4px;text-align:left;overflow:hidden;white-space:nowrap;font-size:11px;font-weight:600;z-index:2;line-height:16px}.note.sixth{color:#125b54;background:#cfe9e3}.note.diminished{color:#624184;background:#e5dcf1}.note.outside{color:#4c5e6d;background:#e1e7ec}.note.selected{outline:3px solid #d38b19;outline-offset:1px;z-index:4}.note.sounding{filter:brightness(.91);box-shadow:0 0 0 2px #243747}.cursor{position:absolute;top:0;bottom:0;width:2px;background:#bf811a;pointer-events:none;z-index:5}.cursor::before{content:"";position:absolute;top:0;left:-4px;border-top:7px solid #bf811a;border-inline:5px solid transparent}.playhead{background:#294c66;display:none}.playhead::before{border-top-color:#294c66}.timeline-footer{padding:9px 0;display:flex;justify-content:space-between;gap:10px;font-size:12px;color:#566b7a}.box-tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:0;padding-bottom:8px}.inspector{border-left:1px solid #c9d5dd;padding-left:18px}.inspector section{padding-bottom:15px;margin-bottom:15px;border-bottom:1px solid var(--line)}.inspector section:last-child{border:0}.inspector .field{margin-bottom:9px}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.two input,.two select{min-width:0;width:100%}.note-form[hidden]{display:none}.context-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}.context-row select{min-width:0}.context-row button{grid-column:1/-1}.chord-name{font-size:28px;font-weight:600;letter-spacing:-.7px;line-height:1.2;margin:4px 0}.recognition-select{width:100%;margin:7px 0}.custom-row{display:flex;gap:6px}.custom-row input{min-width:0;flex:1}.warning{color:#815b18}.walkthrough{margin:0 24px 18px;border-top:1px solid #c6d3dd;padding-top:12px}.walk-header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button[aria-selected=true]{background:#294c66;color:#fff}.walk-content{margin-top:10px;display:flex;gap:15px;align-items:center;justify-content:space-between;flex-wrap:wrap}.walk-content p{max-width:680px}.walk-step{display:flex;gap:7px;align-items:center}.status{margin:0 24px 12px;padding:9px 12px;background:#e1eaf0;border-radius:5px;min-height:36px;font-size:12px}.status.error{background:#fae7df;color:#913e22}details.state{margin:0 24px 18px;font-size:12px}summary{cursor:pointer;padding:6px 0;font-weight:600}.state-content{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-height:260px;overflow:auto}table{border-collapse:collapse;width:100%;background:#fff}td,th{padding:6px 9px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.keyboard-dock{position:sticky;bottom:0;background:#e6edf3;border-top:1px solid #aabcc9;padding:12px 24px 16px;z-index:10}.keyboard-top{display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}.collection-name{font-size:14px;font-weight:650}.legend{display:flex;gap:12px;font-size:11px;flex-wrap:wrap}.legend .sixth{color:var(--sixth)}.legend .diminished{color:var(--dim)}.legend .outside{color:var(--outside)}.keyboard-actions{display:flex;flex-wrap:wrap;align-items:center;gap:7px;font-size:12px}.keyboard-scroll{overflow-x:auto}.keyboard{height:116px;position:relative;display:flex;min-width:680px;margin:auto}.key{position:relative;border-radius:0 0 5px 5px;border:1px solid #a1b1be;border-top:2px solid #738999;background:#fff;height:116px;flex:1;min-width:22px;padding:0;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:3px;padding-bottom:10px;font-size:11px}.key.black{position:absolute;z-index:2;top:0;height:73px;background:#263c4b;color:#fff;border:1px solid #182c39;min-width:0;padding-bottom:7px;font-size:10px}.key.sixth::after,.key.diminished::after,.key.outside::after{content:"";width:10px;height:5px;border-radius:3px;background:var(--outside)}.key.sixth::after{background:var(--sixth)}.key.diminished::after{background:var(--dim)}.key.black.sixth::after{background:#67c6b8}.key.black.diminished::after{background:#c6a3f0}.key.sounding{background:#cbdce7;box-shadow:inset 0 0 0 3px #d38b19}.key.black.sounding{background:#55778f}.key:hover{background:#e0ebf3!important}.key.black:hover{background:#446578!important}.empty-help{position:absolute;top:160px;left:80px;max-width:380px;color:#778d9b;pointer-events:none;z-index:1;font-size:14px;line-height:1.65}.note-form button{margin-right:5px}.danger{color:#974327}.keyboard-hint{font-size:11px;color:#566b7a;margin:7px 0 0}.only-listening{font-size:11px;font-weight:500;color:#6b5426}
+@media(max-width:1000px){.workspace{grid-template-columns:minmax(0,1fr) 245px;gap:12px;margin-inline:14px}.inspector{padding-left:12px}.top,.toolbar{padding-inline:14px}.keyboard-dock{padding-inline:14px}.walkthrough,.status,details.state{margin-inline:14px}.entry .hint{display:none}.keyboard-top{gap:7px}.legend{gap:7px}}
+@media(max-width:720px){.workspace{grid-template-columns:1fr}.inspector{border-left:0;padding-left:0;display:grid;grid-template-columns:1fr 1fr;gap:16px}.top{align-items:start}.intro .muted{font-size:12px}.keyboard-dock{position:relative}.keyboard{min-width:680px}.state-content{grid-template-columns:1fr}.limits{padding-inline:14px}.inspector section{min-width:0}.walk-content{align-items:start}.entry{gap:6px}}
+
+.ruler{height:62px;border-top:1px solid #9bb0bd;border-bottom:0}.measure-head{height:34px;bottom:0;padding:8px 10px}.beat-mark{position:absolute;top:0;height:23px;border-left:1px solid #b8c9d5;padding:3px 5px;font-size:10px;color:#587081;pointer-events:none}.cursor:not(.playhead){pointer-events:auto;cursor:ew-resize;touch-action:none}.cursor-handle{position:absolute;bottom:33px;left:-8px;width:18px;min-height:27px;height:27px;padding:0;border:1px solid #9d6813;background:#bf811a;color:#fff;cursor:ew-resize;touch-action:none;border-radius:3px}.cursor-handle:hover{background:#9d6813!important}.cursor::before{display:none}
+
+.boxes{height:96px}.box{height:96px;padding:9px 0;line-height:1.2}.box>span{padding-inline:8px}.box-chord{display:block;font-size:23px;font-weight:650;overflow:hidden;text-overflow:ellipsis}.box-roman{display:block;font-size:18px;font-weight:600;color:#5d4681;margin:3px 0 5px;overflow:hidden;text-overflow:ellipsis}.box.harmony-change{border-left-style:dashed}.box .small{font-size:11px;overflow:hidden;text-overflow:ellipsis}.harmony-heading{display:flex;align-items:baseline;gap:10px}.harmony-heading .chord-name{min-width:0;overflow-wrap:anywhere}.roman-name{margin-left:auto;font-size:22px;font-weight:650;color:#5d4681;white-space:normal;min-width:0;max-width:65%;overflow-wrap:anywhere;text-align:right}.numeral-guide{font-size:11px}.timeline{min-height:0}
+.roman-figures{display:inline-flex;flex-direction:column;align-items:center;font-size:.7em;line-height:.85;vertical-align:super;margin-left:.08em}.roman-figures.stacked{display:inline-block;vertical-align:baseline}.roman-figures.stacked>span{display:block;text-align:center}.box-roman{line-height:1.45}.timeline.hide-box-keys .box-key{display:none}.timeline.hide-box-keys .boxes,.timeline.hide-box-keys .box{height:82px}.lane-label{pointer-events:auto;min-height:25px;height:25px;border:0;line-height:19px;padding:3px 7px;cursor:pointer}.lane.collapsed{cursor:default}.lane-label[aria-expanded=false]{background:#dbe5ec}
+.box.box-selected{box-shadow:inset 0 0 0 2px #7555a1;background:#f0ebf8}.box.box-playing,.box.box-playing:hover{background:#d1e9df!important;border-top:4px solid #16736a}.lane-controls{position:sticky;left:0;display:inline-flex;align-items:center;gap:8px;background:#e7eef3ed;z-index:3;height:25px;padding-right:7px}.lane-controls .lane-label{position:static}.lane.entry-part{box-shadow:inset 4px 0 #bf811a;background-color:#fff8e9}.lane.entry-part .lane-controls{background:#f6e5c4}.entry-badge{font-size:10px;font-weight:650;color:#805800}.note.drag-invalid{outline-color:#b43f21}.part-volume{display:inline-flex;align-items:center;gap:4px;font-size:11px}.part-volume input{width:80px;min-height:20px;padding:0;border:0}.part-volume output{min-width:30px}.box-selection-hint{flex-basis:100%;margin:2px 0}
+</style></head><body>
+<header class="top"><div class="intro"><span class="badge">Interaction prototype</span><h1>A place to shape the song</h1><p class="muted">Can three independent parts stay easy to write inside chord boxes? Try a phrase, move its notes, and listen.</p></div><button id="blank">New blank composition</button></header>
+<div class="limits">Temporary synthesized sound · In memory only: reloading clears your work · No project saving or MIDI export in this prototype</div>
+<div class="toolbar"><button class="primary" id="play" aria-pressed="false">▶ Play</button><span class="separator"></span><label>♩ BPM <input id="bpm" type="number" min="1" max="300" value="96" aria-label="Quarter-note BPM"></label><label><input id="metronome" type="checkbox">Metronome</label><label><input id="loop" type="checkbox">Loop measures</label><label>From <select id="loop-from" aria-label="First loop measure"></select></label><label>to <select id="loop-to" aria-label="Last loop measure"></select></label><span class="separator"></span><button id="undo" disabled>Undo</button><button id="redo" disabled>Redo</button></div>
+<main class="workspace"><div class="canvas-area"><div class="scroll" id="timeline-scroll"><div class="timeline" id="timeline" aria-label="Composition timeline"></div></div><div class="timeline-footer"><span id="position-readout"></span><label>Zoom <input type="range" id="zoom" min="28" max="160" value="48" aria-label="Timeline zoom"></label></div><div class="entry"><label class="field">Part<select id="part"><option value="melody">Melody</option><option value="chord" selected>Chord</option><option value="bass">Bass</option></select></label><label class="field">Position in quarter notes<input id="position" type="number" value="0" min="0" max="256" step="0.25"></label><label class="field">Note duration<select id="duration"></select></label><label class="field">Snap<select id="snap"><option value="1" selected>Quarter</option><option value="0.5">Eighth</option><option value="0.6666666666666666">Quarter triplet</option><option value="0.3333333333333333">Eighth triplet</option></select></label><label class="name-toggle"><input id="advance-entry" type="checkbox">Advance after entry</label><button id="next">Next step</button><span class="hint">Click a row to choose time.<br>Drag a note to move; its edge to resize.<br>Right-click a note to delete; right-drag to pan.<br>Entry keeps the orange cursor centered.</span></div><div class="box-tools"><button id="split">Split box here</button><button id="merge">Merge boundary here</button><button id="show-box-keys" aria-pressed="true" title="Show or hide the local song key beneath chord labels">Key labels: On</button><button id="clear-box-selection" disabled>Clear box selection</button><span id="box-selection-count" class="muted small" style="align-self:center">No boxes selected</span><p class="small muted box-selection-hint">Click a chord label to select its box. Ctrl/Cmd-click toggles boxes; Shift-click selects a range.</p></div></div>
+<aside class="inspector"><section><h2>Sounding harmony</h2><div class="harmony-heading"><div class="chord-name" id="chord-name">No harmony yet</div><span class="roman-name" id="roman-name" aria-label="Roman numeral">—</span></div><p class="small muted" id="roman-context"></p><details class="small muted numeral-guide"><summary>About Roman numerals</summary><p>Degrees use the tonic’s major scale in both modes. Inversion figures are stacked: triads use 6 or 6 over 4; sevenths use 6 over 5, 4 over 3, or 4 over 2. A slash before a Roman numeral still means “of,” as in V/IV. (add6) means an added sixth; sixth and suspended chords name their bass explicitly. V/x, subV/x, and vii°/x offer dominant, tritone-substitute, and leading-tone readings. A mode name records a possible borrowing source. Choose the reading you intend; notes, key, and colors stay unchanged. Recognition covers triads, sus2/sus4, sixths, and sevenths in any register. Ninths and other extended sets remain playable with custom labels.</p></details><p class="small muted" id="harmony-notes">Bass + chord notes determine the name.</p><select id="alternatives" class="recognition-select" aria-label="Choose a chord interpretation"></select><label class="field">Roman interpretation<select id="roman-choice" aria-label="Choose a Roman interpretation"></select></label><p id="roman-detail" class="small muted"></p><div class="custom-row"><input id="custom-label" placeholder="Custom label" maxlength="80" aria-label="Custom chord label"><button id="set-label">Set</button></div><p class="small warning" id="label-review"></p></section>
+<section><h2 id="selection-title">No note selected</h2><p id="selection-help" class="small muted">Drag a note to move it in time; drag its right edge to resize. Right-click deletes the complete note. Undo restores it.</p><div class="note-form" id="note-form" hidden><label class="field">Pitch<select id="note-pitch"></select></label><div class="two"><label class="field">Start (quarters)<input id="note-start" type="number" min="0" max="256" step="0.25"></label><label class="field">Duration<select id="note-length" aria-label="Selected note duration"></select></label></div><p class="small muted" id="note-span"></p><button id="apply-note">Apply edit</button><button id="delete-note" class="danger">Delete</button></div></section>
+<section><h2>Musical context</h2><p class="small muted" id="key-scope">Key change: from the entry position onward.</p><label class="field">Song key</label><div class="context-row"><select id="key-tonic" aria-label="Key tonic"></select><select id="key-mode" aria-label="Key mode"><option>major</option><option>minor</option></select><button id="apply-key">Set key from cursor</button></div><label class="field" style="margin-top:10px">Collection at entry position</label><div class="context-row"><select id="collection-tonic" aria-label="Collection tonic"></select><select id="collection-mode" aria-label="Collection mode"><option>major</option><option>minor</option></select><button id="apply-collection">Set collection here</button></div><div class="two" style="margin-top:10px"><select id="meter" aria-label="Time signature"><option>2/4</option><option>3/4</option><option selected>4/4</option><option>6/8</option></select><button id="apply-meter">Set meter here</button></div><p class="small muted">Key and collection are independent. A meter change starts a new measure without moving notes.</p></section></aside></main>
+<section class="walkthrough"><div class="walk-header"><h2 style="margin:0">Try a musical situation</h2><div class="tabs" role="tablist" aria-label="Guided examples"><button role="tab" aria-selected="false" data-scene="bass">Held bass</button><button role="tab" aria-selected="false" data-scene="inner">Moving inner voices</button><button role="tab" aria-selected="false" data-scene="context">Context changes</button></div></div><div class="walk-content"><p id="walk-description" class="small muted">Choose an example to start from a blank composition, then add its phrase one step at a time. These examples replace the current scratch work.</p><div class="walk-step"><span id="walk-progress" class="small muted"></span><button id="walk-next" hidden></button></div></div></section>
+<div class="status" id="status" role="status" aria-live="polite">Choose a part and duration, then click a piano key. Position 0 is the beginning of measure 1.</div>
+<details class="state"><summary>Inspect the composition</summary><div class="state-content"><div><h3>Written notes</h3><table><thead><tr><th>Part</th><th>Pitch</th><th>Start ♩</th><th>Duration</th></tr></thead><tbody id="notes-table"></tbody></table></div><div><h3>Context markers</h3><div id="markers-list"></div><p class="muted">This prototype recognizes exact matches from the initial vocabulary. Incomplete matches show their notes; missing-note suggestions are deferred. Pitch labels use practical flat names here. The final spelling rules remain in the specification.</p><p class="muted">Prototype limit: 256 quarter notes. Saving, file exchange, measure insertion/deletion, box resizing, and the full voicing toolbox belong to the later implementation.</p></div></div></details>
+<footer class="keyboard-dock"><div class="keyboard-top"><div><div class="collection-name" id="collection-name">C major sixth-diminished</div><div class="legend"><span class="sixth">● Sixth-chord tone</span><span class="diminished">◆ Diminished-chord tone</span><span class="outside">– Outside collection</span></div></div><div class="keyboard-actions"><label class="name-toggle">Default duration<select id="piano-duration" aria-label="Default duration for new piano notes"></select></label><label class="name-toggle"><input id="note-names" type="checkbox" checked>Note names</label><label class="name-toggle"><input id="piano-symbols" type="checkbox" checked>Symbols</label><span id="keyboard-range"></span><button id="octave-down" aria-label="Keyboard down one octave">− Octave</button><button id="octave-up" aria-label="Keyboard up one octave">+ Octave</button></div></div><div class="keyboard-scroll"><div class="keyboard" id="keyboard" aria-label="Piano note entry"></div></div><p class="keyboard-hint" id="keyboard-hint">Write into Chord at position 0. Each click adds a note; Next step moves time forward.</p></footer>
+<script id="composer-core">
+var Composer = (() => {
+  const durationChoices = [['Whole',4],['Half',2],['Quarter',1],['Eighth',.5],['Sixteenth',.25],['Dotted whole',6],['Dotted half',3],['Dotted quarter',1.5],['Dotted eighth',.75],['Dotted sixteenth',.375],['Quarter triplet',2/3],['Eighth triplet',1/3]];
+  function lengthLabel(duration) {
+    const named = durationChoices.find(([,value]) => Math.abs(value-duration) < 1e-8);
+    if (named) return named[0];
+    const ticks = Math.round(duration*24);
+    let a = ticks, b = 96;
+    while (b) [a,b] = [b,a%b];
+    return `${ticks/a}/${96/a} of a whole note`;
+  }
+  const names = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'];
+  const degrees = ['I','♭II','II','♭III','III','IV','♭V','V','♭VI','VI','♭VII','VII'];
+  const qualities = [
+    ['', [0, 4, 7]], ['m', [0, 3, 7]], ['dim', [0, 3, 6]], ['aug', [0, 4, 8]],
+    ['sus2', [0, 2, 7]], ['sus4', [0, 5, 7]], ['6', [0, 4, 7, 9]], ['m6', [0, 3, 7, 9]],
+    ['7', [0, 4, 7, 10]], ['maj7', [0, 4, 7, 11]], ['m7', [0, 3, 7, 10]], ['m(maj7)', [0, 3, 7, 11]],
+    ['m7♭5', [0, 3, 6, 10]], ['dim7', [0, 3, 6, 9]],
+  ];
+  function recognize(notes, position) {
+    const active = notes.filter(note => note.part !== 'melody' && note.start <= position && note.start + note.duration > position);
+    const pcs = [...new Set(active.map(note => note.pitch % 12))].sort((a, b) => a - b);
+    const bass = active.length ? Math.min(...active.map(note => note.pitch)) % 12 : null;
+    const matches = [];
+    for (let root = 0; root < 12; root++) for (const [quality, intervals] of qualities) {
+      const tones = intervals.map(interval => (root + interval) % 12).sort((a, b) => a - b);
+      if (tones.length === pcs.length && tones.every((pc, i) => pc === pcs[i])) matches.push({ root, quality, bass, name: names[root] + quality + (bass === root ? '' : `/${names[bass]}`) });
+    }
+    matches.sort((a, b) => Number(b.root === bass) - Number(a.root === bass));
+    return { suggested: matches[0]?.name ?? null, alternatives: matches.map(match => match.name), matches, pcs, bass };
+  }
+  function romanLabel(match, key) {
+    if (!match) return null;
+    // shortcut: Chromatic degrees use flat names; add enharmonic choices with contextual spelling.
+    const degree = degrees[(match.root-key.tonic+12)%12];
+    const minor = match.quality.startsWith('dim') || (match.quality.startsWith('m') && !match.quality.startsWith('maj'));
+    const suffixes = { dim:'°', dim7:'°7', aug:'+', 'm7♭5':'ø7', '6':'(add6)', m6:'(add6)' };
+    let suffix = suffixes[match.quality] ?? (minor ? match.quality.slice(1) : match.quality);
+    const tones = qualities.find(([quality]) => quality === match.quality)[1];
+    const inversion = tones.indexOf((match.bass-match.root+12)%12);
+    if (inversion > 0 && ['','m','dim','aug'].includes(match.quality)) suffix += ['','6','6/4'][inversion];
+    if (inversion > 0 && ['7','maj7','m7','m(maj7)','dim7','m7♭5'].includes(match.quality)) {
+      const quality = { '7':'', maj7:'maj', m7:'', 'm(maj7)':'(maj)', dim7:'°', 'm7♭5':'ø' }[match.quality];
+      suffix = quality + ['','6/5','4/3','4/2'][inversion];
+    }
+    if (match.bass !== match.root && ['6','m6','sus2','sus4'].includes(match.quality)) suffix += ` [bass ${names[match.bass]}]`;
+    return (minor ? degree.toLowerCase() : degree) + suffix;
+  }
+  function romanReadings(match, key) {
+    if (!match) return [];
+    const options = [{label:romanLabel(match,key),kind:'Ordinary degree',detail:`${match.name}. Actual bass: ${names[match.bass]}. Triads: 6 = first inversion, 6 over 4 = second. Sevenths: 6 over 5 = first, 4 over 3 = second, 4 over 2 = third.`}];
+    if (['','7'].includes(match.quality)) {
+      const target = (match.root+5)%12, offset = (target-key.tonic+12)%12;
+      const stem = romanLabel(match,{tonic:target});
+      if (offset !== 0) for (const mode of ['major','minor']) {
+        const degree = mode === 'minor' ? degrees[offset].toLowerCase() : degrees[offset];
+        options.push({label:`${stem}/${degree}`,kind:'Secondary dominant',detail:`Possible dominant of ${names[target]} ${mode}. This reading does not require the next chord to resolve there.`});
+      }
+    }
+    if (match.quality === '7') {
+      const target = (match.root+11)%12, offset = (target-key.tonic+12)%12;
+      const stem = romanLabel(match,{tonic:(match.root+5)%12});
+      for (const mode of ['major','minor']) {
+        const degree = mode === 'minor' ? degrees[offset].toLowerCase() : degrees[offset];
+        options.push({label:`sub${stem}/${degree}`,kind:'Tritone substitute',detail:`Possible substitute dominant toward ${names[target]} ${mode}, a semitone below this chord's root. Actual bass: ${names[match.bass]}.`});
+      }
+    }
+    if (['dim','dim7','m7♭5'].includes(match.quality)) {
+      const target = (match.root+1)%12, offset = (target-key.tonic+12)%12;
+      const stem = romanLabel(match,{tonic:target});
+      if (offset !== 0) for (const mode of ['major','minor']) {
+        const degree = mode === 'minor' ? degrees[offset].toLowerCase() : degrees[offset];
+        options.push({label:`${stem}/${degree}`,kind:'Leading-tone diminished',detail:`Possible leading-tone chord toward ${names[target]} ${mode}.${match.quality==='m7♭5'?' Half-diminished leading-tone readings are less usual; consider the surrounding music.':''} Choose another chord name to inspect another root.`});
+      }
+    }
+    const modes = [
+      ['Ionian',[0,2,4,5,7,9,11]], ['Dorian',[0,2,3,5,7,9,10]],
+      ['Phrygian',[0,1,3,5,7,8,10]], ['Lydian',[0,2,4,6,7,9,11]],
+      ['Mixolydian',[0,2,4,5,7,9,10]], ['Aeolian',[0,2,3,5,7,8,10]],
+      ['Locrian',[0,1,3,5,6,8,10]],
+    ];
+    const tones = qualities.find(([quality])=>quality===match.quality)[1].map(interval=>(match.root+interval-key.tonic+12)%12);
+    const activeScale = modes[key.mode==='minor'?5:0][1];
+    if (!tones.every(tone=>activeScale.includes(tone))) for (const [mode,scale] of modes) {
+      if (tones.every(tone=>scale.includes(tone))) options.push({label:`${romanLabel(match,key)} · ${mode}`,kind:'Modal interchange',detail:`Possible borrowing from ${names[key.tonic]} ${mode}: every chord tone belongs to that mode. This choice leaves the key and color collection unchanged.`});
+    }
+    if (match.bass !== match.root) for (const option of options.slice(1)) option.detail += ' Triad figures: 6 = first inversion, 6 over 4 = second. Seventh figures: 6 over 5 = first, 4 over 3 = second, 4 over 2 = third.';
+    for (const option of options) {
+      const notation = option.label.match(/^((?:sub)?♭?[IViv]+(?:°|ø|\+|maj|\(maj\))?)(6\/4|6\/5|4\/3|4\/2|6|7)(.*)$/);
+      const prefix = notation?.[1] ?? option.label, figures = notation ? notation[2].split('/') : [], suffix = notation?.[3] ?? '';
+      option.display = { prefix, figures, suffix, text: figures.length ? `${prefix} (${figures.join(' over ')})${suffix}` : option.label };
+    }
+    return options;
+  }
+  function createComposer() {
+    let state = { notes: [], labels: [], cuts: [4, 8, 12], end: 16, meter: [{ at: 0, n: 4, d: 4 }], key: [{ at: 0, tonic: 0, mode: 'major' }], collection: [{ at: 0, tonic: 0, mode: 'major' }] };
+    const past = [], future = [];
+    let serial = 0;
+    function rejectOverlap(note, exceptId, notes = state.notes) {
+      const start = Math.round(note.start*24), end = Math.round((note.start+note.duration)*24);
+      if (notes.some(other => other.id !== exceptId && other.part === note.part && other.pitch === note.pitch && Math.round(other.start*24) < end && start < Math.round((other.start+other.duration)*24))) throw new Error('This pitch would overlap another note in the same part. Move or shorten it first.');
+    }
+    function measures(data = state) {
+      const result = [];
+      for (let start = 0; start < data.end;) {
+        const meter = data.meter.filter(marker => marker.at <= start).at(-1);
+        const nextMarker = data.meter.find(marker => marker.at > start)?.at ?? Infinity;
+        const end = Math.min(start + meter.n * 4 / meter.d, nextMarker);
+        const edges = [start, ...data.cuts.filter(at => at > start && at < end), end].sort((a, b) => a - b);
+        result.push({ start, end, n: meter.n, d: meter.d, short: end - start < meter.n * 4 / meter.d, boxes: edges.slice(0, -1).map((at, i) => ({ start: at, end: edges[i + 1] })) });
+        start = end;
+      }
+      return result;
+    }
+    function harmonySpan(position) {
+      const contextPoints = [...state.key, ...state.collection].map(marker => marker.at);
+      const points = [...new Set([0, state.end, ...contextPoints, ...state.notes.filter(note => note.part !== 'melody').flatMap(note => [note.start, note.start + note.duration])])].sort((a, b) => a - b);
+      const spans = [];
+      for (let i = 0; i < points.length - 1; i++) {
+        const harmony = recognize(state.notes, points[i]);
+        const signature = `${harmony.pcs.join(',')}:${harmony.bass}`;
+        const previous = spans.at(-1);
+        if (previous?.signature === signature && !contextPoints.includes(points[i])) previous.end = points[i + 1];
+        else spans.push({ start: points[i], end: points[i + 1], signature });
+      }
+      return spans.find(span => span.start <= position && span.end > position) ?? { start: position, end: state.end, signature: ':null' };
+    }
+    return {
+      dispatch(action) {
+        if (action.type === 'delete-at') {
+          if (!['bass','chord','melody'].includes(action.part) || !Number.isInteger(action.pitch) || action.pitch < 0 || action.pitch > 127 || !Number.isFinite(action.at) || action.at < 0 || action.at > 256) throw new Error('Choose a part, piano pitch, and position inside the song.');
+          const note = state.notes.find(note => note.part === action.part && note.pitch === action.pitch && note.start <= action.at && note.start + note.duration > action.at);
+          if (!note) return false;
+          this.dispatch({type:'delete',id:note.id});
+          return true;
+        }
+        if (action.type === 'enter') {
+          if (action.advance !== undefined && typeof action.advance !== 'boolean') throw new Error('Choose whether to advance after entry.');
+          this.dispatch({ ...action, type: 'add' });
+          return { position: (action.advance ?? action.part === 'melody') ? Math.round((action.start + action.duration)*24)/24 : action.start };
+        }
+        if (action.type === 'seek') {
+          if (!Number.isFinite(action.at) || ![1, .5, 2/3, 1/3].includes(action.snap) || !Number.isFinite(action.tolerance) || action.tolerance < 0) throw new Error('Choose a valid cursor position and snap grid.');
+          const at = Math.max(0, Math.min(state.end, action.at));
+          const boundary = state.notes.flatMap(note => [note.start, note.start + note.duration]).sort((a,b) => Math.abs(a-at)-Math.abs(b-at) || a-b)[0];
+          if (boundary !== undefined && Math.abs(boundary-at) <= action.tolerance) return boundary;
+          return Math.min(state.end, Math.round(Math.round(at/action.snap)*action.snap*24)/24);
+        }
+        if (action.type === 'undo') { if (past.length) { future.push(state); state = past.pop(); } return; }
+        if (action.type === 'redo') { if (future.length) { past.push(state); state = future.pop(); } return; }
+        if (action.type === 'key-boxes') {
+          const available = measures().flatMap(measure => measure.boxes);
+          if (!Array.isArray(action.boxes) || !action.boxes.length || action.boxes.some(box => !box || !available.some(current => current.start === box.start && current.end === box.end))) throw new Error('Select existing chord boxes before changing their key.');
+          if (!Number.isInteger(action.tonic) || action.tonic < 0 || action.tonic > 11 || !['major','minor'].includes(action.mode)) throw new Error('Choose a valid tonic and major or minor.');
+          const ranges = [];
+          for (const box of [...action.boxes].sort((a,b)=>a.start-b.start)) {
+            const previous = ranges.at(-1);
+            if (previous && box.start <= previous.end) previous.end = Math.max(previous.end,box.end);
+            else ranges.push({start:box.start,end:box.end});
+          }
+          const next = structuredClone(state);
+          for (const range of ranges) {
+            const restore = state.key.filter(marker => marker.at <= range.end).at(-1);
+            next.key = next.key.filter(marker => marker.at < range.start || marker.at > range.end);
+            next.key.push({at:range.start,tonic:action.tonic,mode:action.mode},{...restore,at:range.end});
+          }
+          next.key.sort((a,b)=>a.at-b.at);
+          past.push(state); state=next; future.length=0;
+          return;
+        }
+        if (['move','resize'].includes(action.type) && action.ids !== undefined) {
+          const moving = action.type === 'move';
+          if (!Array.isArray(action.ids) || !action.ids.length || !action.ids.includes(action.id) || action.ids.some(id=>!state.notes.some(note=>note.id===id)) || ![1,.5,2/3,1/3].includes(action.snap) || !Number.isFinite(moving?action.start:action.end)) throw new Error('Select existing notes and a valid snap position.');
+          const ids = new Set(action.ids), anchor = state.notes.find(note=>note.id===action.id);
+          const field = moving ? 'start' : 'duration';
+          const requested = moving ? action.start : action.end-anchor.start;
+          const delta = Math.round(Math.round(requested/action.snap)*action.snap*24)-Math.round(anchor[field]*24);
+          const notes = state.notes.map(note=>ids.has(note.id)?{...note,[field]:(Math.round(note[field]*24)+delta)/24}:note);
+          const changed = notes.filter(note=>ids.has(note.id));
+          for (const note of changed) {
+            if (note.start < 0 || note.duration <= 0 || Math.round((note.start+note.duration)*24) > 256*24) throw new Error('Every selected note must keep a positive duration and stay within the song limit.');
+            rejectOverlap(note,note.id,notes);
+          }
+          if (action.preview) return changed.map(note=>({...note,lengthLabel:lengthLabel(note.duration)}));
+          if (!delta) return;
+          const next = {...state,notes,end:Math.max(state.end,...notes.map(note=>note.start+note.duration))};
+          next.end=measures(next).at(-1).end;
+          past.push(state);state=next;future.length=0;
+          return;
+        }
+        if (action.type === 'move') {
+          const note = state.notes.find(note => note.id === action.id);
+          if (!note || !Number.isFinite(action.start) || ![1, .5, 2/3, 1/3].includes(action.snap)) throw new Error('Select a note and a valid snap duration.');
+          const start = Math.round(Math.max(0, Math.round(action.start / action.snap)) * action.snap * 24) / 24;
+          if (start + note.duration > 256) throw new Error('This prototype ends at 256 quarter notes.');
+          if (action.preview) { rejectOverlap({ ...note, start }, note.id); return { ...note, start }; }
+          if (Math.abs(start - note.start) < 1e-8) return;
+          action = { type: 'edit', id: note.id, start };
+        }
+        if (action.type === 'resize') {
+          const note = state.notes.find(note => note.id === action.id);
+          if (!note || !Number.isFinite(action.end) || ![1, .5, 2/3, 1/3].includes(action.snap)) throw new Error('Select a note and a valid snap duration.');
+          const length = Math.round(Math.max(1, Math.round((action.end - note.start) / action.snap)) * action.snap * 24) / 24;
+          if (note.start + length > 256) throw new Error('This prototype ends at 256 quarter notes.');
+          if (action.preview) { rejectOverlap({ ...note, duration: length }, note.id); return { ...note, duration: length, lengthLabel: lengthLabel(length) }; }
+          if (Math.abs(length - note.duration) < 1e-8) return;
+          action = { type: 'edit', id: note.id, duration: length };
+        }
+        const validTime = value => Number.isFinite(value) && value >= 0 && value <= 256 && Math.abs(value * 24 - Math.round(value * 24)) < 1e-7;
+        if (!['add', 'edit', 'delete', 'split', 'merge', 'context', 'label'].includes(action.type)) throw new Error('Unknown editing action.');
+        if (['add', 'edit'].includes(action.type)) {
+          const original = state.notes.find(note => note.id === action.id);
+          if (action.type === 'edit' && !original) throw new Error('Select a note to edit.');
+          const note = { ...original, ...action };
+          if (!['bass', 'chord', 'melody'].includes(note.part) || !Number.isInteger(note.pitch) || note.pitch < 0 || note.pitch > 127) throw new Error('Choose a part and a pitch from MIDI 0–127.');
+          if (!validTime(note.start) || !validTime(note.duration) || note.duration <= 0 || note.start + note.duration > 256) throw new Error('Use positive note lengths on the rhythm grid, within this prototype’s 256-quarter-note limit.');
+          rejectOverlap(note, action.type === 'edit' ? original.id : undefined);
+        }
+        if (['split', 'merge', 'context', 'label'].includes(action.type) && (!validTime(action.at) || action.at >= state.end)) throw new Error('Choose a position inside the song on the rhythm grid.');
+        if (['split', 'merge'].includes(action.type)) {
+          if (measures().some(measure => measure.start === action.at)) throw new Error('A measure boundary cannot be split or merged. Choose a position inside a measure.');
+          if (action.type === 'merge' && !state.cuts.includes(action.at)) throw new Error('Select an existing box boundary to merge.');
+        }
+        if (action.type === 'context') {
+          if (!['meter', 'key', 'collection'].includes(action.kind)) throw new Error('Choose key, meter, or collection.');
+          if (action.kind === 'meter' && !['2/4', '3/4', '4/4', '6/8'].includes(`${action.n}/${action.d}`)) throw new Error('Choose 2/4, 3/4, 4/4, or 6/8.');
+          if (action.kind !== 'meter' && (!Number.isInteger(action.tonic) || action.tonic < 0 || action.tonic > 11 || !['major', 'minor'].includes(action.mode))) throw new Error('Choose a valid tonic and major or minor.');
+        }
+        if (action.type === 'label' && (typeof action.name !== 'string' || !action.name.trim() || action.name.length > 80 || (!action.custom && !recognize(state.notes, action.at).alternatives.includes(action.name)))) throw new Error('Choose a detected name or enter a custom label of up to 80 characters.');
+        if (action.type === 'label' && action.roman != null) {
+          const match = recognize(state.notes, action.at).matches.find(match => match.name === action.name);
+          const key = state.key.filter(marker => marker.at <= action.at).at(-1);
+          if (action.custom || !romanReadings(match,key).some(option => option.label === action.roman)) throw new Error('Choose a Roman interpretation offered for this chord and key.');
+          if (action.roman === romanLabel(match,key)) action = { ...action, roman:null };
+        }
+        const next = structuredClone(state);
+        if (action.type === 'add') next.notes.push({ id: `n${++serial}`, part: action.part, pitch: action.pitch, start: action.start, duration: action.duration });
+        if (action.type === 'edit') {
+          const note = next.notes.find(note => note.id === action.id);
+          for (const field of ['pitch', 'start', 'duration']) if (action[field] !== undefined) note[field] = action[field];
+        }
+        if (action.type === 'delete') next.notes = next.notes.filter(note => note.id !== action.id);
+        if (action.type === 'split' && !next.cuts.includes(action.at)) next.cuts.push(action.at);
+        if (action.type === 'merge') next.cuts = next.cuts.filter(at => at !== action.at);
+        if (action.type === 'context' && action.kind === 'meter') {
+          next.cuts = [...new Set([...next.cuts, ...measures().map(measure => measure.end)])];
+          next.meter = [...next.meter.filter(marker => marker.at !== action.at), { at: action.at, n: action.n, d: action.d }].sort((a, b) => a.at - b.at);
+        }
+        if (action.type === 'context' && ['key', 'collection'].includes(action.kind)) {
+          next[action.kind] = [...next[action.kind].filter(marker => marker.at !== action.at), { at: action.at, tonic: action.tonic, mode: action.mode }].sort((a, b) => a.at - b.at);
+        }
+        if (action.type === 'label') {
+          const span = harmonySpan(action.at);
+          next.labels = next.labels.flatMap(label => {
+            if (label.end <= span.start || label.start >= span.end) return [label];
+            return [label.start < span.start ? { ...label, end: span.start } : null, label.end > span.end ? { ...label, start: span.end } : null].filter(Boolean);
+          });
+          next.labels.push({ ...span, name: action.name, custom: action.custom, roman: action.roman ?? null });
+        }
+        next.end = Math.max(next.end, ...next.notes.map(note => note.start + note.duration));
+        next.end = measures(next).at(-1).end;
+        past.push(state); state = next; future.length = 0;
+      },
+      inspect(position = 0) {
+        const context = Object.fromEntries(['key', 'collection', 'meter'].map(kind => [kind, state[kind].filter(marker => marker.at <= position).at(-1)]));
+        const sixth = context.collection.mode === 'minor' ? [0, 3, 7, 9] : [0, 4, 7, 9];
+        const families = Array.from({ length: 12 }, (_, pc) => {
+          const relative = (pc - context.collection.tonic + 12) % 12;
+          return sixth.includes(relative) ? 'sixth' : [2, 5, 8, 11].includes(relative) ? 'diminished' : 'outside';
+        });
+        const harmony = recognize(state.notes, position);
+        harmony.span = harmonySpan(position);
+        harmony.chosen = state.labels.find(label => label.start <= position && label.end > position) ?? null;
+        if (harmony.chosen) {
+          const chosen = harmony.chosen;
+          const matches = harmony.alternatives.includes(chosen.name);
+          harmony.chosen = { ...chosen, valid: !chosen.custom && matches, needsReview: chosen.custom ? chosen.signature !== harmony.span.signature : !matches };
+        }
+        const interpretation = harmony.chosen?.valid ? harmony.matches.find(match => match.name === harmony.chosen.name) : harmony.matches[0];
+        harmony.romanReadings = harmony.chosen?.custom ? [] : romanReadings(interpretation, context.key);
+        harmony.romanOptions = harmony.romanReadings.map(option => option.label);
+        const chosenRoman = harmony.chosen?.roman;
+        const romanValid = harmony.chosen?.valid && harmony.romanOptions.includes(chosenRoman);
+        harmony.romanNeedsReview = !!chosenRoman && !romanValid;
+        harmony.roman = romanValid ? chosenRoman : harmony.romanOptions[0] ?? null;
+        harmony.romanDisplay = harmony.romanReadings.find(reading => reading.label === harmony.roman)?.display ?? null;
+        const layout = measures();
+        const activeBox = layout.flatMap(measure => measure.boxes).find(box => box.start <= position && box.end > position) ?? null;
+        return structuredClone({ ...state, activeBox, lengthLabels: Object.fromEntries(state.notes.map(note => [note.id, lengthLabel(note.duration)])), measures: layout, context, families, harmony, active: state.notes.filter(note => note.start <= position && note.start + note.duration > position), canUndo: past.length > 0, canRedo: future.length > 0 });
+      }
+    };
+  }
+  function planPlayback(song, { from, to, bpm, metronome = false }) {
+    if (![from, to, bpm].every(Number.isFinite) || from < 0 || to <= from || to > song.end || bpm <= 0 || bpm > 300) throw new Error('Choose a valid playback range and tempo from 1 to 300 BPM.');
+    const seconds = 60 / bpm;
+    const notes = song.notes.filter(note => note.start < to && note.start + note.duration > from).map(note => ({
+      id: note.id, part: note.part, pitch: note.pitch,
+      start: (Math.max(note.start, from) - from) * seconds,
+      duration: (Math.min(note.start + note.duration, to) - Math.max(note.start, from)) * seconds,
+      continued: note.start < from,
+    })).sort((a, b) => a.start - b.start || a.pitch - b.pitch);
+    const clicks = [];
+    if (metronome) for (const measure of song.measures) {
+      const pulse = measure.n === 6 && measure.d === 8 ? 1.5 : 1;
+      for (let beat = 0; measure.start + beat * pulse < measure.end - 1e-8; beat++) {
+        const at = measure.start + beat * pulse;
+        if (at >= from - 1e-8 && at < to - 1e-8) clicks.push({ start: (at-from)*seconds, accent: beat === 0 });
+      }
+    }
+    return { from, to, bpm, duration: (to - from) * seconds, notes, clicks };
+  }
+  return { createComposer, planPlayback, durationChoices };
+})();
+</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const flat = ['C','D♭','D','E♭','E','F','G♭','G','A♭','A','B♭','B'];
+  const sharp = ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+  const symbol = { sixth: '●', diminished: '◆', outside: '–' };
+  const esc = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  function romanMarkup(display) {
+    if (!display) return '—';
+    const figures = display.figures.length ? `<span class="roman-figures${display.figures.length>1?' stacked':''}">${display.figures.map(figure=>`<span>${esc(figure)}</span>`).join('')}</span>` : '';
+    return `<span role="img" aria-label="${esc(display.text)}"><span aria-hidden="true">${esc(display.prefix)}${figures}${esc(display.suffix)}</span></span>`;
+  }
+  const pitchName = pitch => flat[pitch % 12] + (Math.floor(pitch / 12) - 1);
+  const number = value => Number.isInteger(value) ? String(value) : Number(value.toFixed(3)).toString();
+  const collectionName = context => `${flat[context.tonic]} ${context.mode} sixth-diminished`;
+  let song = Composer.createComposer(), position = 0, part = 'chord', duration = 2, selected = null, keyboardBase = 48, beatWidth = 48;
+  let audio, master, transport = null, timer = null, pausedAt = null, startingAudio = false;
+  const voices = new Set();
+  const advanceAfterEntry = { melody:true, chord:false, bass:false };
+  const entryDurations = { melody:1, chord:2, bass:1 }, selectedNotes = new Set();
+  const collapsedParts = new Set();
+  const selectedBoxes = new Set(), partVolumes = {melody:1,chord:1,bass:1}, partGains = {};
+  let boxAnchor = null;
+  let scene = null, step = 0, keyboardBuiltAt = null;
+  let drag = null, dragFrame = 0, ignoreTimelineClickUntil = 0;
+
+  const durations = Composer.durationChoices;
+  for (const id of ['duration','piano-duration']) {
+    $(id).innerHTML = durations.map(([name, value]) => `<option value="${value}">${name}</option>`).join('');
+    $(id).value = duration;
+  }
+  for (const id of ['key-tonic','collection-tonic']) $(id).innerHTML = flat.map((name, i) => `<option value="${i}">${name}</option>`).join('');
+  $('note-pitch').innerHTML = Array.from({length:128}, (_, pitch) => `<option value="${pitch}">${pitchName(pitch)}${flat[pitch%12] !== sharp[pitch%12] ? ' / ' + sharp[pitch%12] + (Math.floor(pitch/12)-1) : ''}</option>`).join('');
+
+  function status(message, error = false) { $('status').textContent = message; $('status').classList.toggle('error', error); }
+  function entryHint() {
+    return `Write into ${part[0].toUpperCase()+part.slice(1)} at position ${number(position)}. New notes: ${durations.find(([,value])=>value===duration)[0]}. ${advanceAfterEntry[part]?'Each click advances to the note’s end.':'Position stays fixed; Next step moves time forward.'} Right-click a piano key to delete its note in this part at the orange cursor.`;
+  }
+  function locationName(at, data = song.inspect(at)) {
+    const index = data.measures.findIndex(measure => at >= measure.start && at < measure.end);
+    if (index < 0) return 'After the last measure';
+    const measure = data.measures[index];
+    return `Measure ${index + 1}, beat ${number((at - measure.start) * measure.d / 4 + 1)}${measure.d === 8 ? ' (eighth-note beats)' : ''}`;
+  }
+  function labelName(harmony) {
+    const chosen = harmony.chosen;
+    return chosen && (chosen.custom || chosen.valid) ? chosen.name : harmony.suggested;
+  }
+  function mutate(action, message) {
+    try {
+      stopTransport();
+      song.dispatch(action);
+      render();
+      status(message);
+      return true;
+    } catch (error) { status(error.message, true); return false; }
+  }
+  function seek(at, role = part) {
+    stopTransport();
+    position = Math.max(0, Math.min(256, Math.round(at * 24) / 24));
+    part = role; selectedNotes.clear();
+    render();
+  }
+
+  function centerCursor() {
+    if(transport||drag)return;
+    const scroll=$('timeline-scroll');
+    // Leave viewing room after the song without adding musical time.
+    $('timeline').style.setProperty('--cursor-room',`${scroll.clientWidth/2+16}px`);
+    scroll.scrollTo({left:Math.max(0,position*beatWidth-scroll.clientWidth/2),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  }
+
+  function renderEntry() {
+    duration = entryDurations[part];
+    $('part').value = part; $('position').value = position; $('duration').value = duration; $('piano-duration').value = duration;
+    $('advance-entry').checked = advanceAfterEntry[part];
+    $('keyboard-hint').textContent = transport?'Playback is running. Piano keys audition only; pause playback to write notes.':entryHint();
+    document.querySelectorAll('.lane').forEach(lane=>{
+      const active=lane.dataset.role===part;
+      lane.classList.toggle('entry-part',active);
+      lane.querySelector('.entry-badge').hidden=!active;
+    });
+  }
+  function render() {
+    const data = song.inspect(position);
+    for(const id of selectedNotes)if(!data.notes.some(note=>note.id===id))selectedNotes.delete(id);
+    if(!selectedNotes.has(selected))selected=[...selectedNotes].at(-1)??null;
+    const boxIds = new Set(data.measures.flatMap(measure=>measure.boxes).map(box=>`${box.start}:${box.end}`));
+    for(const id of selectedBoxes)if(!boxIds.has(id))selectedBoxes.delete(id);
+    if(boxAnchor&&!boxIds.has(boxAnchor))boxAnchor=null;
+    $('box-selection-count').textContent=selectedBoxes.size?`${selectedBoxes.size} boxes selected`:'No boxes selected';
+    $('clear-box-selection').disabled=!selectedBoxes.size;
+    $('apply-key').textContent=selectedBoxes.size?`Set key for ${selectedBoxes.size} selected ${selectedBoxes.size===1?'box':'boxes'}`:'Set key from cursor';
+    $('key-scope').textContent=selectedBoxes.size?'Key change: selected boxes only. Unselected passages keep their key.':'Key change: from the entry position until the next key marker. Select boxes to limit it.';
+    $('undo').disabled = !data.canUndo; $('redo').disabled = !data.canRedo;
+    $('position-readout').textContent = `${locationName(position, data)} · ${data.notes.length} notes · ${data.measures.length} measures`;
+    for (const kind of ['key','collection']) {
+      $(`${kind}-tonic`).value = data.context[kind].tonic;
+      $(`${kind}-mode`).value = data.context[kind].mode;
+    }
+    $('meter').value = `${data.context.meter.n}/${data.context.meter.d}`;
+    const measureBoundary = data.measures.some(measure => measure.start === position);
+    $('split').disabled = position >= data.end || measureBoundary || data.cuts.includes(position);
+    $('merge').disabled = measureBoundary || !data.cuts.includes(position);
+    const oldFrom = $('loop-from').value || '0', oldTo = $('loop-to').value || '1';
+    const options = data.measures.map((_, i) => `<option value="${i}">${i+1}</option>`).join('');
+    $('loop-from').innerHTML = options; $('loop-to').innerHTML = options;
+    $('loop-from').value = Math.min(+oldFrom, data.measures.length-1);
+    $('loop-to').value = Math.min(+oldTo, data.measures.length-1);
+    renderTimeline(data);
+    renderEntry();
+    renderSelection(data);
+    renderKeyboard(data);
+    updateLive(transport?playPosition():position);
+    $('notes-table').innerHTML = data.notes.length ? [...data.notes].sort((a,b)=>a.start-b.start || a.pitch-b.pitch).map(note => `<tr><td>${note.part}</td><td>${pitchName(note.pitch)}</td><td>${number(note.start)}</td><td>${data.lengthLabels[note.id]}</td></tr>`).join('') : '<tr><td colspan="4">No notes yet.</td></tr>';
+    $('markers-list').innerHTML = ['key','collection','meter'].map(kind => `<p><strong>${kind[0].toUpperCase()+kind.slice(1)}</strong>: ${data[kind].map(marker => `at ${number(marker.at)}: ${kind === 'meter' ? `${marker.n}/${marker.d}` : `${flat[marker.tonic]} ${marker.mode}`}`).join('; ')}</p>`).join('');
+    centerCursor();
+  }
+  function renderTimeline(data) {
+    const width = Math.max(data.end,position) * beatWidth;
+    const headers = data.measures.map((measure, i) => `<div class="measure-head" style="left:${measure.start*beatWidth}px;width:${(measure.end-measure.start)*beatWidth}px">${i+1}<span>${measure.n}/${measure.d}${measure.short?' · short':''}</span></div>`).join('');
+    const beats = data.measures.flatMap(measure => Array.from({length:Math.ceil((measure.end-measure.start)*measure.d/4)},(_,i)=>`<span class="beat-mark" style="left:${(measure.start+i*4/measure.d)*beatWidth}px">${i+1}</span>`)).join('');
+    const boxes = data.measures.flatMap(measure => measure.boxes).map(box => {
+      const segments=[];
+      for(let at=box.start;at<box.end;){
+        const snapshot=song.inspect(at), harmony=snapshot.harmony, key=snapshot.context.key;
+        const name=labelName(harmony)||'—';
+        const end=Math.min(box.end,harmony.span.end,...data.labels.flatMap(label=>[label.start,label.end]).filter(boundary=>boundary>at));
+        const signature=JSON.stringify([harmony.span.signature,name,harmony.roman,key.tonic,key.mode]);
+        const previous=segments.at(-1);
+        if(previous?.signature===signature)previous.end=end;
+        else segments.push({start:at,end,name,roman:harmony.roman,romanDisplay:harmony.romanDisplay,detail:harmony.romanReadings.find(reading=>reading.label===harmony.roman)?.detail,key,signature});
+        at=end;
+      }
+      const boxId=`${box.start}:${box.end}`;
+      return segments.map(segment=>{
+        const context=`${flat[segment.key.tonic]} ${segment.key.mode}`;
+        const title=`${segment.name}${segment.romanDisplay?' · '+segment.romanDisplay.text:''} · ${context} · ${locationName(segment.start,data)}. ${segment.detail||''} Click to select this box; Ctrl/Cmd-click toggles, Shift-click selects a range. Use Zoom for narrow passages.`;
+        return `<button class="box${segment.start===box.start?'':' harmony-change'}${selectedBoxes.has(boxId)?' box-selected':''}" data-box="${boxId}" aria-pressed="${selectedBoxes.has(boxId)}" data-at="${segment.start}" style="left:${segment.start*beatWidth}px;width:${(segment.end-segment.start)*beatWidth}px" title="${esc(title)}" aria-label="${esc(title)}"><span class="box-chord">${esc(segment.name)}</span><span class="box-roman">${romanMarkup(segment.romanDisplay)}</span><span class="small box-key">${esc(context)}</span></button>`;
+      }).join('');
+    }).join('');
+    const lanes = ['melody','chord','bass'].map(role => {
+      const ends = [];
+      const placements = [...data.notes].filter(note => note.part === role).sort((a,b)=>a.start-b.start || b.pitch-a.pitch).map(note => {
+        let row = ends.findIndex(end => end <= note.start + 1e-8);
+        if (row < 0) row = ends.length;
+        ends[row] = note.start + note.duration;
+        return {note, row};
+      });
+      const lines = data.measures.flatMap(measure => [
+        `<span class="bar-line" style="left:${measure.start*beatWidth}px"></span>`,
+        ...measure.boxes.slice(1).map(box => `<span class="box-line" style="left:${box.start*beatWidth}px"></span>`)
+      ]).join('');
+      const notes = placements.map(({note,row}) => {
+        const family = song.inspect(note.start).families[note.pitch%12];
+        const held = data.measures.some(measure => measure.end > note.start && measure.end < note.start + note.duration);
+        return `<button class="note ${family}${selectedNotes.has(note.id)?' selected':''}" data-note="${note.id}" data-pitch="${note.pitch}" aria-pressed="${selectedNotes.has(note.id)}" aria-label="${role} ${pitchName(note.pitch)}, start ${number(note.start)}, ${data.lengthLabels[note.id]}" style="left:${note.start*beatWidth+1}px;width:${Math.max(8,note.duration*beatWidth-3)}px;top:${27+row*25}px" title="${pitchName(note.pitch)} · ${role} · ${data.lengthLabels[note.id]}${held?' · continues across measures':''}">${symbol[family]} ${pitchName(note.pitch)}${held?' ↔':''}<span class="resize-handle" aria-hidden="true" title="Drag to resize this note"></span></button>`;
+      }).join('');
+      const collapsed = collapsedParts.has(role), name = role[0].toUpperCase()+role.slice(1);
+      return `<div class="lane${collapsed?' collapsed':''}${role===part?' entry-part':''}" data-role="${role}" style="height:${collapsed?30:Math.max(96,32+ends.length*25)}px"><div class="lane-controls"><button class="lane-label" data-collapse-role="${role}" aria-expanded="${!collapsed}" aria-controls="lane-content-${role}" aria-label="${collapsed?'Expand':'Collapse'} ${name} row" title="${collapsed?'Expand':'Collapse'} this row; its notes still play">${collapsed?'▸':'▾'} ${name}${collapsed?` · ${placements.length} notes`:''}</button><label class="part-volume">Vol <input type="range" data-volume="${role}" min="0" max="100" step="5" value="${Math.round(partVolumes[role]*100)}" aria-label="${name} volume" aria-valuetext="${Math.round(partVolumes[role]*100)} percent"><output>${Math.round(partVolumes[role]*100)}%</output></label><span class="entry-badge"${role===part?'':' hidden'}>Piano entry</span></div><div id="lane-content-${role}"${collapsed?' hidden':''}>${lines}${notes}</div></div>`;
+    }).join('');
+    $('timeline').style.width = `${width}px`;
+    $('timeline').style.setProperty('--beat-width', `${beatWidth}px`);
+    $('timeline').innerHTML = `<div class="boxes">${boxes}</div><div class="lanes">${lanes}</div><div class="ruler">${beats}${headers}</div><div class="cursor" id="edit-cursor" style="left:${position*beatWidth}px"><button class="cursor-handle" style="left:${Math.max(-position*beatWidth,-8)}px" aria-label="Drag editing cursor; arrow keys move by the snap grid" title="Drag to seek · snaps to nearby note starts and ends">↔</button></div><div class="cursor playhead" id="playhead"></div>${data.notes.length||collapsedParts.size?'':'<div class="empty-help">Start with a bass, a melody, or a handful of chord tones.<br>Click a row for time, then use the keyboard below.</div>'}`;
+  }
+  function renderSelection(data) {
+    const grouped = selectedNotes.size>1;
+    const note = !grouped && data.notes.find(note => note.id === selected);
+    $('note-form').hidden = !note;
+    $('selection-help').hidden = !!note;
+    $('selection-title').textContent = grouped ? `${selectedNotes.size} notes selected` : note ? `${pitchName(note.pitch)} · ${note.part}` : 'No note selected';
+    $('selection-help').classList.remove('length-preview');
+    $('selection-help').textContent = grouped ? 'Drag any selected note to move the group; drag its right edge to change every length by the same amount. Ctrl/Cmd-click or Shift-click toggles notes. Click empty space to clear.' : 'Drag a note to move it; drag its right edge to resize. Ctrl/Cmd-click or Shift-click toggles notes in a group. Right-click deletes the clicked note. Undo restores it.';
+    if (!note) return;
+    const choices = durations.some(([,value])=>Math.abs(value-note.duration)<1e-8) ? durations : [...durations,[data.lengthLabels[note.id],note.duration]];
+    $('note-length').innerHTML = choices.map(([name,value])=>`<option value="${value}">${name}</option>`).join('');
+    $('note-pitch').value = note.pitch; $('note-start').value = note.start; $('note-length').value = note.duration;
+    $('note-span').classList.remove('length-preview');
+    $('note-span').textContent = `${data.lengthLabels[note.id]}. Editing changes the complete note, including any earlier held portion.`;
+  }
+  function renderKeyboard(data) {
+    if (keyboardBuiltAt !== keyboardBase) {
+      const pitches = Array.from({length:37}, (_,i)=>keyboardBase+i);
+      const white = pitches.filter(pitch=>![1,3,6,8,10].includes(pitch%12));
+      let whiteIndex = 0;
+      $('keyboard').innerHTML = pitches.map(pitch => {
+        const black = [1,3,6,8,10].includes(pitch%12);
+        const style = black ? `left:${(whiteIndex-.32)*100/white.length}%;width:${.64*100/white.length}%` : '';
+        if (!black) whiteIndex++;
+        return `<button class="key${black?' black':''}" data-key="${pitch}" style="${style}" aria-label="Add ${pitchName(pitch)}"><span class="family-symbol"></span><span class="pitch-name">${pitchName(pitch)}</span></button>`;
+      }).join('');
+      keyboardBuiltAt = keyboardBase;
+    }
+    $('keyboard-range').textContent = `${pitchName(keyboardBase)}–${pitchName(keyboardBase+36)}`;
+    $('keyboard').classList.toggle('names-hidden',!$('note-names').checked);
+    $('keyboard').classList.toggle('symbols-hidden',!$('piano-symbols').checked);
+    $('octave-down').disabled = keyboardBase <= 0; $('octave-up').disabled = keyboardBase >= 84;
+  }
+  function updateLive(at) {
+    const data = song.inspect(at), harmony = data.harmony;
+    $('collection-name').textContent = collectionName(data.context.collection) + (transport ? ' · following playback' : '');
+    $('chord-name').textContent = labelName(harmony) || (harmony.pcs.length ? 'No exact match' : 'No bass/chord notes');
+    $('roman-name').innerHTML = romanMarkup(harmony.romanDisplay);
+    $('roman-context').textContent = `Key: ${flat[data.context.key.tonic]} ${data.context.key.mode} · ${locationName(at,data)}`;
+    $('harmony-notes').textContent = harmony.pcs.length ? `Sounding: ${harmony.pcs.map(pc=>flat[pc]).join(' · ')}. Melody excluded.` : 'Add bass or chord notes to identify harmony.';
+    const choice = harmony.chosen;
+    $('label-review').textContent = choice?.custom ? `Custom label${choice.needsReview?' · notes changed; review it.':''}` : choice?.needsReview ? `Previous choice ${choice.name} no longer fits these notes.` : choice ? 'Your chosen interpretation.' : '';
+    if(harmony.romanNeedsReview)$('label-review').textContent+=` Previous ${choice.roman} no longer fits this chord and key. Choose a Roman interpretation again.`;
+    const reading=harmony.romanReadings.find(option=>option.label===harmony.roman);
+    $('roman-name').title=reading?.detail||'Choose a recognized chord to see its Roman interpretation.';
+    $('roman-detail').textContent=reading?.detail||'';
+    const romanState=JSON.stringify([harmony.romanReadings,harmony.romanNeedsReview]);
+    if($('roman-choice').dataset.options!==romanState){
+      const groups=[...new Set(harmony.romanReadings.map(option=>option.kind))];
+      $('roman-choice').innerHTML=(harmony.romanNeedsReview?'<option value="" disabled>Choose again…</option>':'')+groups.map(kind=>`<optgroup label="${esc(kind)}">${harmony.romanReadings.filter(option=>option.kind===kind).map(option=>`<option value="${esc(option.label)}" title="${esc(option.detail)}">${esc(option.display.text)}</option>`).join('')}</optgroup>`).join('');
+      if(!harmony.romanOptions.length)$('roman-choice').innerHTML='<option value="">No automatic interpretation</option>';
+      $('roman-choice').dataset.options=romanState;
+    }
+    $('roman-choice').value=harmony.romanNeedsReview?'':harmony.roman||'';
+    $('roman-choice').disabled=!!transport||!harmony.romanOptions.length||(harmony.romanOptions.length===1&&!harmony.romanNeedsReview);
+    const currentOptions = JSON.stringify(harmony.alternatives);
+    if ($('alternatives').dataset.options !== currentOptions) {
+      $('alternatives').innerHTML = '<option value="">Choose an interpretation…</option>' + harmony.alternatives.map(name=>`<option value="${esc(name)}">${esc(name)}</option>`).join('');
+      $('alternatives').dataset.options = currentOptions;
+    }
+    $('alternatives').value = choice?.valid ? choice.name : '';
+    $('alternatives').disabled = !!transport || !harmony.alternatives.length;
+    $('set-label').disabled = !!transport;
+    document.querySelectorAll('[data-box]').forEach(button=>{
+      const playing=!!transport&&!!data.activeBox&&button.dataset.box===`${data.activeBox.start}:${data.activeBox.end}`;
+      button.classList.toggle('box-playing',playing);
+      if(playing)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current');
+    });
+    const soundingIds = new Set(data.active.map(note=>note.id));
+    const soundingPitches = new Set(data.active.map(note=>note.pitch));
+    document.querySelectorAll('[data-note]').forEach(button=>button.classList.toggle('sounding',soundingIds.has(button.dataset.note)));
+    document.querySelectorAll('[data-key]').forEach(button=>{
+      const pitch = +button.dataset.key, family = data.families[pitch%12];
+      for (const name of ['sixth','diminished','outside']) button.classList.toggle(name, name===family);
+      button.classList.toggle('sounding',soundingPitches.has(pitch));
+      button.setAttribute('aria-label',`${transport?'Audition':'Add'} ${pitchName(pitch)}${soundingPitches.has(pitch)?transport?' · playing':' · active at editing cursor':''}`);
+      button.querySelector('.family-symbol').textContent = symbol[family];
+      button.title = `${pitchName(pitch)}${flat[pitch%12]!==sharp[pitch%12]?' / '+sharp[pitch%12]+(Math.floor(pitch/12)-1):''} · ${family==='sixth'?'sixth-chord tone':family==='diminished'?'diminished-chord tone':'outside the collection'} · Right-click: delete in ${part} at the orange cursor` ;
+    });
+    return data;
+  }
+
+  async function activateAudio() {
+    if (!audio) {
+      const Audio = window.AudioContext || window.webkitAudioContext;
+      if (!Audio) throw new Error('This browser does not provide Web Audio. Try a current desktop browser.');
+      audio = new Audio(); master = audio.createGain(); master.gain.value = .55;
+      const compressor=audio.createDynamicsCompressor();
+      compressor.threshold.value=-6;compressor.knee.value=0;compressor.ratio.value=20;
+      compressor.attack.value=.003;compressor.release.value=.1;
+      master.connect(compressor);compressor.connect(audio.destination);
+      for(const role of ['melody','chord','bass']){
+        partGains[role]=audio.createGain();partGains[role].gain.value=partVolumes[role];partGains[role].connect(master);
+      }
+    }
+    await audio.resume();
+    if (audio.state !== 'running') throw new Error('Audio is suspended. Press Play again to activate it.');
+  }
+  function sound(pitch, when, length, kind = 'note', accent = false, role = part) {
+    const start = Math.max(audio.currentTime, when), end = when + length;
+    if (end <= start) return;
+    const oscillator = audio.createOscillator(), gain = audio.createGain();
+    oscillator.type = kind === 'metronome' ? 'sine' : 'triangle'; oscillator.frequency.value = 440 * 2 ** ((pitch-69)/12);
+    oscillator.connect(gain); gain.connect(kind==='metronome'?master:partGains[role]);
+    const attackEnd = Math.min(start+.008,end), decayEnd = Math.min(start+.13,end);
+    const peak = kind === 'metronome' ? (accent ? .16 : .07) : .255;
+    const sustain = kind === 'metronome' ? peak*.15 : .105;
+    gain.gain.setValueAtTime(0,start); gain.gain.linearRampToValueAtTime(peak,attackEnd); gain.gain.linearRampToValueAtTime(sustain,decayEnd);
+    gain.gain.setValueAtTime(sustain,Math.max(decayEnd,end-.012)); gain.gain.linearRampToValueAtTime(0,end);
+    oscillator.start(start); oscillator.stop(end+.002);
+    const voice = { oscillator, gain, kind }; voices.add(voice);
+    oscillator.onended = () => { voices.delete(voice); oscillator.disconnect(); gain.disconnect(); };
+  }
+  function cancelVoices(kind) {
+    for (const voice of voices) {
+      if(kind && voice.kind !== kind)continue;
+      try { voice.gain.gain.cancelScheduledValues(0); voice.gain.gain.setValueAtTime(0,audio.currentTime); voice.oscillator.stop(); } catch {}
+      voices.delete(voice);
+    }
+  }
+  function playPosition() {
+    if (!transport) return position;
+    const elapsed = Math.max(0,audio.currentTime-transport.epoch);
+    if (elapsed < transport.first.duration || !transport.loop) return Math.min(transport.first.to, transport.first.from + elapsed * transport.bpm/60);
+    return transport.repeat.from + ((elapsed-transport.first.duration) % transport.repeat.duration) * transport.bpm/60;
+  }
+  function stopTransport(keepPause = false) {
+    if (timer) clearInterval(timer); timer = null;
+    if(transport){const scroll=$('timeline-scroll');scroll.scrollTo({left:scroll.scrollLeft,behavior:'auto'});}
+    transport = null; cancelVoices();
+    if (!keepPause) pausedAt = null;
+    $('play').textContent = '▶ Play'; $('play').setAttribute('aria-pressed','false');
+    const head = $('playhead'); if (head) head.style.display = 'none';
+    if ($('keyboard').children.length) updateLive(position);
+    $('keyboard-hint').textContent = entryHint();
+  }
+  async function play() {
+    if (transport || startingAudio) return;
+    startingAudio = true; $('play').disabled = true;
+    try {
+      await activateAudio();
+      const data = song.inspect(position), bpm = +$('bpm').value, looping = $('loop').checked;
+      const fromIndex = +$('loop-from').value, toIndex = +$('loop-to').value;
+      if (looping && toIndex < fromIndex) throw new Error('The last loop measure must come after or equal the first.');
+      const from = looping ? data.measures[fromIndex].start : position;
+      const to = looping ? data.measures[toIndex].end : data.end;
+      if(from>=to)throw new Error('The editing cursor is at the song’s end. Choose an earlier position to play.');
+      const repeat = Composer.planPlayback(data,{from,to,bpm,metronome:true});
+      const requested = pausedAt ?? position;
+      const startAt = requested >= from && requested < to ? requested : from;
+      const first = Composer.planPlayback(data,{from:startAt,to,bpm,metronome:true});
+      selectedBoxes.clear();boxAnchor=null;render();
+      const epoch = audio.currentTime+.04;
+      transport = {first,repeat,bpm,loop:looping,epoch,scheduleOrigin:epoch,plan:first,index:0,clickIndex:0};
+      pausedAt = null; $('play').textContent = 'Ⅱ Pause'; $('play').setAttribute('aria-pressed','true');
+      $('keyboard-hint').textContent = 'Playback is running. Piano keys audition only; pause playback to write notes.';
+      timer = setInterval(tick,25); tick();
+      status(looping ? `Looping measures ${fromIndex+1}–${toIndex+1}. Held notes restart at the loop start.` : `Playing from ${locationName(startAt,data)}.`);
+    } catch(error) { stopTransport(); status(error.message,true); }
+    finally { startingAudio = false; $('play').disabled = false; }
+  }
+  function tick() {
+    if (!transport) return;
+    const now = audio.currentTime, horizon = now+.12;
+    while (transport.scheduleOrigin < horizon) {
+      const plan = transport.plan;
+      while (transport.index < plan.notes.length && transport.scheduleOrigin+plan.notes[transport.index].start < horizon) {
+        const note = plan.notes[transport.index++];
+        sound(note.pitch,transport.scheduleOrigin+note.start,note.duration,'note',false,note.part);
+      }
+      while (transport.clickIndex < plan.clicks.length && transport.scheduleOrigin+plan.clicks[transport.clickIndex].start < horizon) {
+        const click = plan.clicks[transport.clickIndex++];
+        if($('metronome').checked) sound(click.accent ? 96 : 84,transport.scheduleOrigin+click.start,.035,'metronome',click.accent);
+      }
+      if (transport.scheduleOrigin+plan.duration >= horizon || !transport.loop) break;
+      transport.scheduleOrigin += plan.duration; transport.plan = transport.repeat; transport.index = 0; transport.clickIndex = 0;
+    }
+    if (!transport.loop && now >= transport.epoch+transport.first.duration) { stopTransport(); render(); status('Playback finished.'); return; }
+    const at = playPosition();
+    const head = $('playhead'); head.style.display='block'; head.style.left=`${at*beatWidth}px`;
+    const data=updateLive(at);
+    const scroll=$('timeline-scroll'), x=at*beatWidth;
+    const next=data.activeBox?.end, right=scroll.scrollLeft+scroll.clientWidth;
+    const approaching=next<transport.first.to&&next-at<=Math.max(1,transport.bpm/60*.75);
+    const nextClipped=approaching&&next*beatWidth+Math.min(160,scroll.clientWidth*.25)>right;
+    if(drag?.type!=='pan'&&(x<scroll.scrollLeft+16||x>scroll.scrollLeft+scroll.clientWidth*.65||nextClipped)&&now-(transport.followAt??-Infinity)>.4){
+      const left=Math.max(0,Math.min(scroll.scrollWidth-scroll.clientWidth,x-scroll.clientWidth*.2));
+      if(Math.abs(left-scroll.scrollLeft)>1){
+        scroll.scrollTo({left,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+        transport.followAt=now;
+      }
+    }
+  }
+
+  $('play').onclick=()=>{
+    if(!transport){play();return;}
+    pausedAt=playPosition();stopTransport(true);centerCursor();status('Paused. Play resumes here; choose a timeline position to start elsewhere.');
+  };
+  $('metronome').onchange=()=>{
+    cancelVoices('metronome');
+    if(transport){
+      transport.clickIndex=0;
+      while(transport.clickIndex<transport.plan.clicks.length&&transport.scheduleOrigin+transport.plan.clicks[transport.clickIndex].start<audio.currentTime)transport.clickIndex++;
+      tick();
+    }
+    status($('metronome').checked?'Metronome on during playback. The first beat of each measure is accented.':'Metronome off.');
+  };
+  $('piano-symbols').onchange=()=>{$('keyboard').classList.toggle('symbols-hidden',!$('piano-symbols').checked);};
+  $('advance-entry').onchange=()=>{advanceAfterEntry[part]=$('advance-entry').checked;$('keyboard-hint').textContent=transport?'Playback is running. Piano keys audition only; pause playback to write notes.':entryHint();};
+  $('note-names').onchange=()=>{$('keyboard').classList.toggle('names-hidden',!$('note-names').checked);};
+  for (const id of ['bpm','loop','loop-from','loop-to']) $(id).onchange=()=>{stopTransport();centerCursor();status('Playback settings updated.');};
+  $('part').onchange=()=>{part=$('part').value;selectedNotes.clear();render();};
+  $('position').onchange=()=>seek(+$('position').value);
+  for (const id of ['duration','piano-duration']) $(id).onchange=()=>{
+    duration=+$(id).value;entryDurations[part]=duration;
+    $('duration').value=duration;$('piano-duration').value=duration;
+    if(!transport)$('keyboard-hint').textContent=entryHint();
+  };
+  $('next').onclick=()=>seek(position+duration);
+  $('zoom').oninput=()=>{beatWidth=+$('zoom').value;renderTimeline(song.inspect(position));updateLive(transport?playPosition():position);centerCursor();};
+  $('show-box-keys').onclick=()=>{
+    const show=$('show-box-keys').getAttribute('aria-pressed')!=='true';
+    $('show-box-keys').setAttribute('aria-pressed',String(show));
+    $('show-box-keys').textContent=`Key labels: ${show?'On':'Off'}`;
+    $('timeline').classList.toggle('hide-box-keys',!show);
+  };
+  $('split').onclick=()=>mutate({type:'split',at:position},'Box split. Every note keeps its timing.');
+  $('merge').onclick=()=>mutate({type:'merge',at:position},'Boundary merged. Every note keeps its timing.');
+  $('undo').onclick=()=>mutate({type:'undo'},'Last musical edit undone.');
+  $('redo').onclick=()=>mutate({type:'redo'},'Musical edit restored.');
+  $('clear-box-selection').onclick=()=>{selectedBoxes.clear();boxAnchor=null;render();};
+  $('timeline').oninput=event=>{
+    const slider=event.target.closest('[data-volume]');if(!slider)return;
+    const role=slider.dataset.volume, level=Number(slider.value)/100;
+    if(!Object.hasOwn(partVolumes,role)||!Number.isFinite(level)||level<0||level>1)return;
+    partVolumes[role]=level;slider.nextElementSibling.textContent=`${Math.round(level*100)}%`;
+    slider.setAttribute('aria-valuetext',`${Math.round(level*100)} percent`);
+    if(partGains[role])partGains[role].gain.setTargetAtTime(level,audio.currentTime,.01);
+  };
+  $('timeline').onclick=event=>{
+    if((event.detail>0&&Date.now()<ignoreTimelineClickUntil)||event.target.closest('.part-volume'))return;
+    const collapseButton=event.target.closest('[data-collapse-role]');
+    if(collapseButton){
+      const role=collapseButton.dataset.collapseRole;
+      if(collapsedParts.has(role))collapsedParts.delete(role);else collapsedParts.add(role);
+      renderTimeline(song.inspect(position));updateLive(transport?playPosition():position);
+      document.querySelector(`[data-collapse-role="${role}"]`).focus();return;
+    }
+    const noteButton=event.target.closest('[data-note]');
+    if(noteButton){
+      stopTransport();const note=song.inspect().notes.find(note=>note.id===noteButton.dataset.note);
+      if(event.ctrlKey||event.metaKey||event.shiftKey){
+        if(selectedNotes.has(note.id))selectedNotes.delete(note.id);else selectedNotes.add(note.id);
+      }else{selectedNotes.clear();selectedNotes.add(note.id);}
+      selected=note.id;part=note.part;position=note.start;render();
+      document.querySelector(`[data-note="${note.id}"]`).focus({preventScroll:true});
+      status(`${selectedNotes.size} ${selectedNotes.size===1?'note':'notes'} selected. Piano entry is in ${part}.`);return;
+    }
+    const box=event.target.closest('[data-box]');if(box){
+      const id=box.dataset.box;
+      const ids=song.inspect().measures.flatMap(measure=>measure.boxes).map(box=>`${box.start}:${box.end}`);
+      if(event.shiftKey&&boxAnchor&&ids.includes(boxAnchor)){
+        const a=ids.indexOf(boxAnchor), b=ids.indexOf(id);
+        selectedBoxes.clear();for(const key of ids.slice(Math.min(a,b),Math.max(a,b)+1))selectedBoxes.add(key);
+      }else if(event.ctrlKey||event.metaKey){
+        if(selectedBoxes.has(id))selectedBoxes.delete(id);else selectedBoxes.add(id);
+        boxAnchor=id;
+      }else{selectedBoxes.clear();selectedBoxes.add(id);boxAnchor=id;}
+      seek(+box.dataset.at);
+      document.querySelector(`[data-box="${id}"]`).focus({preventScroll:true});return;
+    }
+    if(event.target.closest('.ruler')){
+      seek(song.dispatch({type:'seek',at:(event.clientX-$('timeline').getBoundingClientRect().left)/beatWidth,snap:+$('snap').value,tolerance:6/beatWidth}));return;
+    }
+    const lane=event.target.closest('[data-role]');if(lane&&!collapsedParts.has(lane.dataset.role)){const x=event.clientX-lane.getBoundingClientRect().left;const grid=+$('snap').value;seek(Math.floor(x/beatWidth/grid)*grid,lane.dataset.role);}
+  };
+  // Some browsers open the context menu on press, before a right drag can start.
+  $('timeline-scroll').oncontextmenu=event=>event.preventDefault();
+  $('timeline-scroll').onpointerdown=event=>{
+    if(drag)return;
+    if(event.button===2&&!event.target.closest('.lane-controls')){
+      event.preventDefault();
+      const scroll=$('timeline-scroll');
+      scroll.scrollTo({left:scroll.scrollLeft,behavior:'auto'});
+      drag={type:'pan',pointer:event.pointerId,x:event.clientX,clientX:event.clientX,y:event.clientY,clientY:event.clientY,scroll:scroll.scrollLeft,noteId:event.target.closest('[data-note]')?.dataset.note,moved:false};
+      $('timeline').classList.add('panning');
+      $('timeline').setPointerCapture(event.pointerId);return;
+    }
+    if(event.button!==0)return;
+    const scroll=$('timeline-scroll');scroll.scrollTo({left:scroll.scrollLeft,behavior:'auto'});
+    ignoreTimelineClickUntil=0;
+    if(event.target.closest('#edit-cursor')){
+      event.preventDefault();stopTransport();
+      drag={type:'seek',pointer:event.pointerId,x:event.clientX,clientX:event.clientX,scroll:$('timeline-scroll').scrollLeft,original:position,selection:selected,selections:[...selectedNotes],snap:+$('snap').value,moved:false,valid:true};
+      $('timeline').setPointerCapture(event.pointerId);dragFrame=requestAnimationFrame(scrollDrag);return;
+    }
+    const element=event.target.closest('[data-note]');
+    if(!element||event.ctrlKey||event.metaKey||event.shiftKey)return;
+    event.preventDefault();event.stopPropagation();stopTransport();
+    const note=song.inspect().notes.find(note=>note.id===element.dataset.note);
+    const type=event.target.closest('.resize-handle')?'resize':'move';
+    if(!selectedNotes.has(note.id)){selectedNotes.clear();selectedNotes.add(note.id);}
+    selected=note.id;part=note.part;position=note.start;
+    renderEntry();
+    const elements=new Map();
+    document.querySelectorAll('[data-note]').forEach(button=>{
+      const active=selectedNotes.has(button.dataset.note);
+      button.classList.toggle('selected',active);button.setAttribute('aria-pressed',String(active));
+      button.classList.toggle('resizing',active);
+      if(active)elements.set(button.dataset.note,button);
+    });
+    renderSelection(song.inspect(position));updateLive(position);
+    drag={type,id:note.id,ids:[...selectedNotes],elements,note,pointer:event.pointerId,x:event.clientX,clientX:event.clientX,scroll:$('timeline-scroll').scrollLeft,snap:+$('snap').value,end:note.start+note.duration,start:note.start,moved:false,valid:true};
+    $('timeline').setPointerCapture(event.pointerId);
+    dragFrame=requestAnimationFrame(scrollDrag);
+  };
+  $('timeline').onpointermove=event=>{
+    if(!drag||event.pointerId!==drag.pointer)return;
+    drag.clientX=event.clientX;drag.clientY=event.clientY;updateDrag();
+  };
+  function updateDrag(){
+    if(drag.type==='pan'){
+      if(Math.hypot(drag.clientX-drag.x,drag.clientY-drag.y)<4&&!drag.moved)return;
+      drag.moved=true;
+      $('timeline-scroll').scrollLeft=drag.scroll+drag.x-drag.clientX;
+      return;
+    }
+    const delta=drag.clientX-drag.x+$('timeline-scroll').scrollLeft-drag.scroll;
+    if(Math.abs(delta)<2&&!drag.moved)return;
+    drag.moved=true;
+    if(drag.type==='seek'){
+      position=song.dispatch({type:'seek',at:drag.original+delta/beatWidth,snap:drag.snap,tolerance:6/beatWidth});
+      selected=null;selectedNotes.clear();
+      document.querySelectorAll('[data-note].selected').forEach(button=>{button.classList.remove('selected');button.setAttribute('aria-pressed','false');});
+      renderSelection(song.inspect(position));
+      $('position').value=position;
+      $('edit-cursor').style.left=`${position*beatWidth}px`;
+      document.querySelector('.cursor-handle').style.left=`${Math.max(-position*beatWidth,-8)}px`;
+      $('position-readout').textContent=locationName(position);
+      $('keyboard-hint').textContent=`Write into ${part} at position ${number(position)}. Release to place the cursor; Escape cancels.`;
+      updateLive(position);return;
+    }
+    drag.end=drag.note.start+drag.note.duration+delta/beatWidth;
+    drag.start=drag.note.start+delta/beatWidth;
+    try{
+      const preview=song.dispatch({type:drag.type,id:drag.id,ids:drag.ids,start:drag.start,end:drag.end,snap:drag.snap,preview:true});
+      drag.valid=true;drag.preview=preview;
+      for(const note of preview){
+        const element=drag.elements.get(note.id);
+        element.style.width=`${Math.max(8,note.duration*beatWidth-3)}px`;
+        element.style.left=`${note.start*beatWidth+1}px`;
+        element.classList.remove('drag-invalid');
+      }
+      $('timeline').style.width=`${Math.max(song.inspect().end*beatWidth,...preview.map(note=>(note.start+note.duration)*beatWidth),$('timeline-scroll').scrollLeft+$('timeline-scroll').clientWidth)}px`;
+      const anchor=preview.find(note=>note.id===drag.id), readout=$(drag.ids.length>1?'selection-help':'note-span');
+      readout.textContent=`Preview for ${preview.length} ${preview.length===1?'note':'notes'}: ${pitchName(anchor.pitch)} ${drag.type==='move'?`starts at ${number(anchor.start)} ♩`:`has length ${anchor.lengthLabel}`}. ${preview.length>1?'The same change applies to the group. ':''}Release to apply; Escape cancels.`;
+      readout.classList.add('length-preview');
+    }catch(error){
+      drag.valid=false;drag.error=error.message;
+      for(const element of drag.elements.values())element.classList.add('drag-invalid');
+      $(drag.ids.length>1?'selection-help':'note-span').textContent=`Cannot apply this drag: ${error.message} Move back to a valid position or press Escape.`;
+      status(error.message,true);
+    }
+  }
+  function scrollDrag(){
+    if(!drag)return;
+    const scroll=$('timeline-scroll'), bounds=scroll.getBoundingClientRect();
+    const speed=Math.min(12,Math.max(0,drag.clientX-bounds.right+28))-Math.min(12,Math.max(0,bounds.left+28-drag.clientX));
+    if(speed&&drag.moved){
+      if(drag.type!=='seek'&&speed>0)$('timeline').style.width=`${Math.min(256*beatWidth,Math.max($('timeline').offsetWidth,scroll.scrollLeft+scroll.clientWidth+speed))}px`;
+      const before=scroll.scrollLeft;scroll.scrollLeft+=speed;
+      if(scroll.scrollLeft!==before)updateDrag();
+    }
+    dragFrame=requestAnimationFrame(scrollDrag);
+  }
+  function finishDrag(commit){
+    if(!drag)return;
+    const gesture=drag;drag=null;
+    cancelAnimationFrame(dragFrame);
+    if($('timeline').hasPointerCapture(gesture.pointer))$('timeline').releasePointerCapture(gesture.pointer);
+    ignoreTimelineClickUntil=Date.now()+250;
+    if(gesture.type==='pan'){
+      $('timeline').classList.remove('panning');
+      if(!commit)$('timeline-scroll').scrollLeft=gesture.scroll;
+      if(transport)transport.followAt=audio.currentTime;
+      if(commit&&!gesture.moved&&gesture.noteId)mutate({type:'delete',id:gesture.noteId},'Note deleted. Undo restores the complete note.');
+      return;
+    }
+    if(gesture.type==='seek'){
+      if(!commit){position=gesture.original;selected=gesture.selection;selectedNotes.clear();for(const id of gesture.selections)selectedNotes.add(id);}
+      render();status(commit?`Editing cursor at ${locationName(position)}. No notes changed.`:'Cursor drag cancelled.');return;
+    }
+    if(commit&&gesture.valid&&gesture.moved){
+      if(gesture.type==='move')position=gesture.preview.find(note=>note.id===gesture.id).start;
+      mutate({type:gesture.type,id:gesture.id,ids:gesture.ids,start:gesture.start,end:gesture.end,snap:gesture.snap},`${gesture.ids.length} ${gesture.ids.length===1?'note':'notes'} ${gesture.type==='move'?'moved':'resized'} with snap. One Undo restores the whole edit.`);
+    }else{render();status(!gesture.valid?`Drag not applied: ${gesture.error}`:commit?'Selection ready. Drag a selected body to move, or its right edge to resize.':'Drag cancelled. All notes are unchanged.',!gesture.valid);}
+  }
+  $('timeline').onpointerup=event=>{if(drag&&event.pointerId===drag.pointer){drag.clientX=event.clientX;drag.clientY=event.clientY;updateDrag();finishDrag(true);}};
+  $('timeline').onpointercancel=()=>finishDrag(false);
+  $('timeline').onlostpointercapture=()=>{if(drag)finishDrag(false);};
+  $('apply-note').onclick=()=>mutate({type:'edit',id:selected,pitch:+$('note-pitch').value,start:+$('note-start').value,duration:+$('note-length').value},'Selected note updated. Its complete span changed.');
+  $('delete-note').onclick=()=>mutate({type:'delete',id:selected},'Selected note deleted. Undo restores it.');
+  $('apply-key').onclick=()=>{
+    const tonic=+$('key-tonic').value, mode=$('key-mode').value;
+    if(selectedBoxes.size){
+      const boxes=song.inspect().measures.flatMap(measure=>measure.boxes).filter(box=>selectedBoxes.has(`${box.start}:${box.end}`));
+      mutate({type:'key-boxes',boxes,tonic,mode},'Key changed only in the selected boxes. Undo restores all their previous keys.');
+    }else mutate({type:'context',kind:'key',at:position,tonic,mode},'Key changed from the cursor until the next key marker.');
+  };
+  $('apply-collection').onclick=()=>mutate({type:'context',kind:'collection',at:position,tonic:+$('collection-tonic').value,mode:$('collection-mode').value},`Collection changed at position ${number(position)}. Written notes are unchanged.`);
+  $('apply-meter').onclick=()=>{const [n,d]=$('meter').value.split('/').map(Number);mutate({type:'context',kind:'meter',at:position,n,d},'Measure boundaries rebuilt. Notes keep their musical positions.');};
+  $('alternatives').onchange=()=>{if($('alternatives').value)mutate({type:'label',at:position,name:$('alternatives').value,custom:false},'Interpretation chosen. Notes are unchanged.');};
+  $('roman-choice').onchange=()=>{
+    const roman=$('roman-choice').value;
+    if(roman)mutate({type:'label',at:position,name:labelName(song.inspect(position).harmony),custom:false,roman},'Roman interpretation chosen for this harmony passage. Notes and key are unchanged.');
+  };
+  $('set-label').onclick=()=>{if(mutate({type:'label',at:position,name:$('custom-label').value.trim(),custom:true},'Custom label set for this harmony span.'))$('custom-label').value='';};
+  $('keyboard').oncontextmenu=event=>{
+    const key=event.target.closest('[data-key]');if(!key)return;
+    event.preventDefault();
+    if(drag)finishDrag(false);
+    const pitch=+key.dataset.key;
+    if(!song.inspect(position).active.some(note=>note.part===part&&note.pitch===pitch)){
+      status(`No ${pitchName(pitch)} note in ${part} at the orange cursor. Choose a position inside the note to delete it.`);return;
+    }
+    mutate({type:'delete-at',part,pitch,at:position},`${pitchName(pitch)} deleted from ${part}. Undo restores the complete note.`);
+  };
+  $('keyboard').onclick=async event=>{
+    const key=event.target.closest('[data-key]');if(!key)return;
+    const pitch=+key.dataset.key, auditionPart=part;
+    if(!transport){
+      try{
+        stopTransport();
+        const start=position;
+        position=song.dispatch({type:'enter',part,pitch,start,duration,advance:advanceAfterEntry[part]}).position;
+        selectedNotes.clear();render();
+        status(`Added ${pitchName(pitch)} to ${part} at ${number(start)}. ${advanceAfterEntry[part]?'Cursor moved to its end.':'Position stays fixed.'}`);
+      }catch(error){status(error.message,true);return;}
+    }
+    try{await activateAudio();sound(pitch,audio.currentTime,.3,'note',false,auditionPart);}catch(error){status(error.message,true);}
+  };
+  $('octave-down').onclick=()=>{keyboardBase=Math.max(0,keyboardBase-12);renderKeyboard(song.inspect(position));updateLive(transport?playPosition():position);};
+  $('octave-up').onclick=()=>{keyboardBase=Math.min(84,keyboardBase+12);renderKeyboard(song.inspect(position));updateLive(transport?playPosition():position);};
+  function reset() {stopTransport();song=Composer.createComposer();position=0;selectedNotes.clear();part='chord';selectedBoxes.clear();boxAnchor=null;render();}
+  $('blank').onclick=()=>{
+    if(song.inspect().notes.length&&!confirm('Replace this scratch composition? This prototype does not save work.'))return;
+    reset();scene=null;step=0;renderWalkthrough();status('Blank composition ready.');
+  };
+  const add=(role,pitches,start,length)=>{for(const pitch of pitches)song.dispatch({type:'add',part:role,pitch,start,duration:length});};
+  const scenarios={
+    bass:{description:'Hold C3 through two measures while chord tones and a melody move above it. A box split should leave the phrase unchanged.',steps:[
+      ['Add the held bass',()=>{add('bass',[48],0,8);position=0;part='bass';}],
+      ['Add E–G–A above C',()=>{add('chord',[64,67,69],0,4);part='chord';}],
+      ['Add a moving melody',()=>{add('melody',[72],0,1);add('melody',[74],1,1);add('melody',[76],2,2);part='melody';}],
+      ['Split the first box',()=>{song.dispatch({type:'split',at:2});position=2;}],
+      ['Listen to the loop',()=>{$('loop').checked=true;$('loop-from').value=0;$('loop-to').value=1;play();}]
+    ]},
+    inner:{description:'Hold the high melody while the inner voices change halfway through the first measure. Select a held note to see its full editable span.',steps:[
+      ['Hold the melody and bass',()=>{add('melody',[79],0,4);add('bass',[48],0,4);position=0;}],
+      ['Write the first voicing',()=>{add('chord',[60,64,69],0,2);part='chord';}],
+      ['Move the inner voices',()=>{add('chord',[60,65,68],2,2);position=2;}],
+      ['Listen to the phrase',()=>{$('loop').checked=true;$('loop-from').value=0;$('loop-to').value=0;play();}]
+    ]},
+    context:{description:'Keep C–E–G–A sounding. Change the collection so E changes family, then place 3/4 halfway through the first measure. The written phrase should stay in place.',steps:[
+      ['Hold C6 for two measures',()=>{add('bass',[48],0,8);add('chord',[64,67,69],0,8);position=0;}],
+      ['Use F collection at position 2',()=>{song.dispatch({type:'context',kind:'collection',at:2,tonic:5,mode:'major'});position=2;}],
+      ['Start 3/4 at position 2',()=>{song.dispatch({type:'context',kind:'meter',at:2,n:3,d:4});position=2;}],
+      ['Change the key separately',()=>{song.dispatch({type:'context',kind:'key',at:5,tonic:7,mode:'major'});position=5;}],
+      ['Listen across the markers',()=>{position=0;$('loop').checked=false;play();}]
+    ]}
+  };
+  function renderWalkthrough(){
+    document.querySelectorAll('[data-scene]').forEach(button=>button.setAttribute('aria-selected',button.dataset.scene===scene?'true':'false'));
+    if(!scene){$('walk-next').hidden=true;$('walk-progress').textContent='';$('walk-description').textContent='Choose an example to start from a blank composition, then add its phrase one step at a time. These examples replace the current scratch work.';return;}
+    const current=scenarios[scene];$('walk-description').textContent=current.description;
+    $('walk-progress').textContent=`${step} of ${current.steps.length} steps`;
+    $('walk-next').hidden=false;$('walk-next').disabled=step>=current.steps.length;
+    $('walk-next').textContent=current.steps[step]?.[0]||'Example complete';
+  }
+  document.querySelectorAll('[data-scene]').forEach(button=>button.onclick=()=>{
+    if(song.inspect().notes.length&&!confirm('Start this example from blank? Current scratch work will be replaced.'))return;
+    reset();scene=button.dataset.scene;step=0;renderWalkthrough();status('Example ready. Use the next step button, then try your own edits.');
+  });
+  $('walk-next').onclick=()=>{try{const [title,action]=scenarios[scene].steps[step];action();step++;render();renderWalkthrough();status(title+'. Inspect the notes and listen for the result.');}catch(error){status(error.message,true);}};
+  window.addEventListener('keydown',event=>{
+    if(drag&&event.key==='Escape'){event.preventDefault();finishDrag(false);return;}
+    if(drag)return;
+    if(event.target.closest('.cursor-handle')&&['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){
+      event.preventDefault();
+      const target=event.key==='Home'?0:event.key==='End'?song.inspect().end:position+(event.key==='ArrowLeft'?-1:1)*+$('snap').value;
+      seek(song.dispatch({type:'seek',at:target,snap:+$('snap').value,tolerance:0}));
+      document.querySelector('.cursor-handle').focus({preventScroll:true});return;
+    }
+    if(event.target.matches('input,select,textarea'))return;
+    if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z'){event.preventDefault();mutate({type:event.shiftKey?'redo':'undo'},event.shiftKey?'Edit restored.':'Edit undone.');}
+  });
+  new ResizeObserver(()=>{
+    if($('timeline').style.getPropertyValue('--cursor-room')!==`${$('timeline-scroll').clientWidth/2+16}px`){
+      $('timeline').style.setProperty('--cursor-room',`${$('timeline-scroll').clientWidth/2+16}px`);
+      centerCursor();
+    }
+  }).observe($('timeline-scroll'));
+  render();
+})();
+</script>
+</body></html>
