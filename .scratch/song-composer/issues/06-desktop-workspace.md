@@ -307,3 +307,19 @@ Scope reaches document structure/styles, dynamic coaching writes, selection prev
 A document-level check for the accessible help launcher and native dismissible panel failed before implementation and passed afterward. Source assertions also verify the new heading, tutorials and inspector inside help, removed coaching elements, valid nesting, unique IDs, and consistent element references. Both scripts compile; all 43 existing musical tests pass. The Netlify build still produces only the unchanged app-page copy.
 
 Local browser use was disabled in Work settings. The agent could not run the agreed visible-control trial or capture a current screenshot; static checks do not establish rendered layout or actual focus/dismissal behavior. The owner trial should open help, close it with × and Escape, click outside, continue an example after reopening help, and confirm that piano entry, group drag previews, and error messages still work. Keep this ticket claimed pending that trial.
+
+### Twelfth revision: dark mode and plain piano keys
+
+October 29, 2026: the owner requested dark mode, Help beside New composition at the top right, piano keys at the bottom of the dock, and removal of the small lines on each key.
+
+- Add a native Dark mode checkbox in the header. It starts off and controls a CSS palette for the whole workspace and help panel. Retain the amber editing position, green playback box, purple selection and Roman labels, and teal/purple note families with readable dark backgrounds. Keep white and black piano surfaces in both modes.
+- Move the existing question-mark launcher beside New composition and anchor the help panel at the upper right. Remove the bottom space reserved for the floating launcher. Keep native close, Escape, and outside-click behavior.
+- Remove the color-strip pseudo-elements completely. Interpret “plain white and black by default” as Note names and Symbols both starting off. Both existing options remain available, with colored symbols identifying the note families. Use an open circle for an outside-collection piano symbol instead of a dash. Keep accessible pitch names, tooltips, and active-note highlights.
+
+Scope is appearance, native controls, one piano-symbol display expression, and usage documentation. The composition model, playback scheduling, and musical undo remain unchanged. The theme uses native CSS and adds no dependency, custom state layer, or persistence. Display preferences last for the open page.
+
+#### Verification and remaining trial
+
+A document check reported the missing Dark mode control before the edit. Afterward, document assertions check the native labeled checkbox, Help in the header, hidden-by-default piano labels, and removal of the old key strips. All 43 existing musical tests pass. The inline scripts compile, element references resolve, and the core script is unchanged.
+
+The agreed visible browser-control seam is unavailable because local browser use is disabled in Work settings. Static checks do not prove rendered contrast, layout, or gesture behavior. The owner trial should switch themes with written notes present, open and dismiss Help, toggle both piano labels, and check silent preview and playback highlights. Keep this ticket claimed pending that trial; reload still clears scratch music.
