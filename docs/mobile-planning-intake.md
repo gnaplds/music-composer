@@ -10,7 +10,7 @@ Q76: develop on the computer and test on the Android phone. Development directly
 
 ## Existing reference
 
-The [desktop prototype](../.scratch/song-composer/prototype/README.md) is the current behavior reference. Preserve it while planning mobile. Its 43 command/inspection and playback-plan tests cover musical behavior, not mobile usability, touch gestures, or Android audio performance.
+The [desktop prototype](../.scratch/song-composer/prototype/README.md) is the current behavior reference. Preserve its desktop behavior while adding the phone layout to the same website. Its 45 command/inspection and playback-plan tests cover musical behavior, not mobile usability, touch gestures, or Android audio performance.
 
 Use the existing [glossary](../GLOSSARY.md) for musical terms. Mobile layout does not change the meanings of a note, part, chord box, key, collection, harmony span, or note selection. No engine ADR is justified before the trade-off is examined and a choice is accepted.
 
@@ -22,12 +22,18 @@ Use the existing [glossary](../GLOSSARY.md) for musical terms. Mobile layout doe
 
 The [mobile planning map](../.scratch/song-composer-mobile/map.md) indexes the decision tickets. Open layout and gesture decisions live there, not as an implied agreement in this intake.
 
+## Current direction: the same website
+
+The owner has resumed the mobile effort and explicitly requested that the current website work when opened on a phone. The current build adapts the existing page and musical logic for touch and phone dimensions. It will not require a separate mobile site or a Godot build for this trial. Godot remains a later candidate under the existing engine decision, rather than a prerequisite for this work.
+
+The accepted landscape-first orientation, Redmi Note 9 test device, and musical rules carry forward. The owner accepted Q80–Q88 in [Define the phone writing workflow](../.scratch/song-composer-mobile/issues/01-touch-workflow.md). Opening the same site on a phone is not proof that the current desktop gestures work with touch; the owner's physical-device trial remains necessary.
+
 ## Areas to investigate
 
 - Touch alternatives for right-click deletion and modifier-key selection; conflicts between scrolling, note movement, resizing, and cursor movement.
 - The amount of timeline, part information, harmonic analysis, and keyboard visible at once.
 - Godot's Android UI, touch input, audio timing, project/file handling, testing, and deployment capabilities, including limits requiring physical-device evidence.
-- How to reach the prototype on the phone. The current loopback URL on the computer is not a phone-accessible address.
+- Phone delivery uses the owner-provided site, https://simplecomposer.netlify.app/. The computer loopback URL remains local only.
 - The device trial and pass criteria needed before choosing an engine or expanding the mobile build.
 
 ## Standing constraints

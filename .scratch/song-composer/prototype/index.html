@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Simple Composer</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Simple Composer</title>
 <style>
 .keyboard.names-hidden .pitch-name{visibility:hidden}.keyboard.symbols-hidden .family-symbol{visibility:hidden}.name-toggle{display:flex;align-items:center;gap:5px}
 .timeline::after{content:"";position:absolute;left:100%;top:0;width:var(--cursor-room,0px);height:1px;pointer-events:none}
@@ -52,8 +52,41 @@
 .key.sixth .family-symbol{color:#16736a}.key.diminished .family-symbol{color:#7555a1}.key.outside .family-symbol{color:#667581}
 .key.black.sixth .family-symbol{color:#78ceba}.key.black.diminished .family-symbol{color:#c7a4ee}.key.black.outside .family-symbol{color:#acb8c2}
 .keyboard .key:is(.sounding,:hover) .family-symbol{color:inherit}
+
+.mobile-only{display:none}
+#mobile-tools{padding:0;width:min(720px,calc(100vw - 24px));max-height:calc(100dvh - 24px);border:1px solid var(--line);border-radius:10px;background:#f8fbfd;color:inherit;overscroll-behavior:contain}
+#mobile-tools::backdrop{background:#101c2ba8}
+.tools-header{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;background:inherit;border-bottom:1px solid var(--line);padding:8px 14px}.tools-header h2{margin:0}
+.tools-body{padding:12px 14px}.tools-body>section{padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--line)}
+.tools-body .toolbar,.tools-body .entry,.tools-body .timeline-footer,.tools-body .box-tools{margin:0;padding:0;border:0;background:transparent;flex-wrap:wrap;justify-content:start}
+.tools-body .inspector{border:0;padding:0;display:block}.tools-body .keyboard-actions{font-size:14px}.tools-body #tools-project{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+:root:has(#dark-mode:checked) #mobile-tools{background:#22313f;color:#e4edf3}
+body.phone{height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.phone .mobile-only{display:flex}.phone button,.phone select,.phone input{min-height:40px}.phone button,.phone select,.phone .key{touch-action:manipulation}
+.phone .top{flex:none;padding:2px 8px;gap:6px;min-height:44px}.phone .top h1{font-size:16px;white-space:nowrap;letter-spacing:-.3px}.phone .top-actions{flex-wrap:nowrap;gap:5px}.phone #phone-transport{gap:5px}.phone .top button{padding:5px 9px}.phone .top .help-button{width:40px;height:40px}
+.phone .touch-actions{flex:none;gap:6px;align-items:center;padding:2px 8px;min-height:44px;overflow-x:auto;white-space:nowrap;border-block:1px solid var(--line)}
+.phone .touch-actions button,.phone .touch-actions select{flex:none}.phone .touch-actions [hidden],.phone .touch-actions[hidden],.phone #touch-select[hidden]{display:none}.phone #touch-count{font-size:12px}.phone #touch-preview{font-size:12px;font-weight:600}.phone #touch-select-kind{max-width:100px}
+.phone #touch-select[aria-pressed=true]{outline:2px solid #bf811a;outline-offset:-2px}
+.phone .workspace{flex:1;min-height:0;display:block;margin:0 8px}.phone .canvas-area{height:100%;display:flex;flex-direction:column;min-height:0}.phone .scroll{flex:1;min-height:0;border-radius:0;overscroll-behavior:contain;touch-action:none;scrollbar-width:none}.phone .scroll::-webkit-scrollbar{display:none}
+.phone .timeline,.phone .timeline *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.phone .note{height:28px;min-height:28px;font-size:12px;line-height:22px;cursor:pointer}.phone .resize-handle{display:none}
+.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:56px}.phone .boxes{position:sticky;top:0;z-index:5;background:inherit}.phone .box{padding:4px 0}.phone .box-chord{font-size:18px;line-height:1.1}.phone .box-roman{font-size:14px;line-height:1.15;margin:0}.phone .box .small{font-size:10px;line-height:1.1}
+.phone .ruler{position:sticky;bottom:0;height:42px;z-index:5}.phone .measure-head{height:22px;padding:3px 6px}.phone .beat-mark{height:20px;padding:2px 5px}
+.phone .lane-controls{height:32px}.phone .lane-label{height:32px;min-height:32px;line-height:24px}.phone .part-volume input{min-height:30px;width:88px}.phone .entry-badge{display:none}
+.phone .cursor{z-index:6}.phone .cursor-handle{position:sticky;top:0;bottom:auto;width:34px;height:40px;min-height:40px;margin-left:-8px;touch-action:none}.phone .timeline.touch-edit .note.selected{cursor:ew-resize;outline-width:3px}
+.phone .keyboard-dock{position:relative;flex:none;padding:2px 8px 0}.phone .keyboard-top{flex-wrap:nowrap;gap:6px;margin:0 0 2px}.phone .keyboard-top>.keyboard-context{display:none}.phone .keyboard-actions{flex-wrap:nowrap;gap:4px}.phone .keyboard-actions button{padding:4px 8px}.phone #keyboard-range,.phone .piano-duration-field{display:none}
+.phone #phone-entry{flex:1;min-width:0}.phone .entry{margin:0;padding:0;border:0;gap:8px;align-items:center;flex-wrap:nowrap}.phone .entry .field{flex-direction:row;align-items:center;gap:4px}.phone .entry select{max-width:160px;font-size:13px}.phone .keyboard-scroll{overflow:hidden}.phone .keyboard{height:86px;min-width:0}.phone .key{height:86px;min-width:0;font-size:11px;padding-bottom:6px}.phone .key.black{height:54px;font-size:10px;padding-bottom:4px}
+.phone .status{flex:none;margin:2px 8px;padding:5px 8px;min-height:0}.phone #help-panel{inset:48px 12px auto auto;max-height:calc(100dvh - 60px)}
+.phone .portrait-notice{display:none}.phone.portrait .portrait-notice{display:block;padding:6px 10px;margin:0;font-size:12px;background:#e6edf3;color:#243747}.phone.portrait .keyboard-dock,.phone.portrait .touch-actions,.phone.portrait #touch-select{display:none}.phone.portrait .workspace{margin-bottom:8px}
+@media(max-height:360px){.phone .keyboard,.phone .key{height:64px}.phone .key.black{height:44px}.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:46px}.phone .box{padding-block:1px}.phone .box-chord{font-size:16px}.phone .box-roman{font-size:12px}.phone .ruler{height:30px}.phone .measure-head{height:17px;padding:1px 6px;font-size:10px}.phone .beat-mark{height:13px;padding:0 5px;font-size:9px}}
+@media(max-width:460px){.phone .top h1{font-size:14px}.phone .top button{font-size:12px;padding-inline:7px}.phone .top .help-button{font-size:21px}.phone .top,.phone .top-actions,.phone #phone-transport{gap:4px}}
 </style></head><body>
-<header class="top"><h1>Simple Composer</h1><div class="top-actions"><label class="name-toggle"><input id="dark-mode" type="checkbox">Dark mode</label><button id="blank">New composition</button><button id="help-button" class="help-button" type="button" popovertarget="help-panel" aria-label="Help and tutorials" title="Help and tutorials">?</button></div></header>
+<header class="top"><h1>Simple Composer</h1><div class="top-actions"><div class="mobile-only" id="phone-transport"></div><button class="mobile-only" id="touch-select" aria-pressed="false">Select</button><button class="mobile-only" id="open-tools" aria-haspopup="dialog">Tools</button><label class="name-toggle"><input id="dark-mode" type="checkbox">Dark mode</label><button id="blank">New composition</button><button id="help-button" class="help-button" type="button" popovertarget="help-panel" aria-label="Help and tutorials" title="Help and tutorials">?</button></div></header>
+<div class="touch-actions mobile-only" aria-label="Touch selection and editing">
+<select id="touch-select-kind" aria-label="Selection type" hidden><option value="notes">Notes</option><option value="boxes">Boxes</option></select>
+<output id="touch-count" aria-live="polite"></output><button id="touch-clear" hidden>Clear</button>
+<button id="touch-move" hidden>Move</button><button id="touch-resize" hidden>Resize</button><button id="touch-delete" class="danger" hidden>Delete</button>
+<button id="touch-cancel" hidden>Cancel</button><output id="touch-preview" aria-live="polite"></output></div>
+<p class="portrait-notice mobile-only">Portrait review · Turn your phone sideways to compose.</p>
 <div class="toolbar"><button class="primary" id="play" aria-pressed="false">▶ Play</button><span class="separator"></span><label>♩ BPM <input id="bpm" type="number" min="1" max="300" value="96" aria-label="Quarter-note BPM"></label><label><input id="metronome" type="checkbox">Metronome</label><label><input id="loop" type="checkbox">Loop measures</label><label>From <select id="loop-from" aria-label="First loop measure"></select></label><label>to <select id="loop-to" aria-label="Last loop measure"></select></label><span class="separator"></span><button id="undo" disabled>Undo</button><button id="redo" disabled>Redo</button></div>
 <main class="workspace"><div class="canvas-area"><div class="scroll" id="timeline-scroll"><div class="timeline" id="timeline" aria-label="Composition timeline"></div></div><div class="timeline-footer"><span id="position-readout"></span><label>Zoom <input type="range" id="zoom" min="28" max="160" value="48" aria-label="Timeline zoom"></label></div><div class="entry"><label class="field">Part<select id="part"><option value="melody">Melody</option><option value="chord" selected>Chord</option><option value="bass">Bass</option></select></label><label class="field">Position in quarter notes<input id="position" type="number" value="0" min="0" max="256" step="0.25"></label><label class="field">Note duration<select id="duration"></select></label><label class="field">Snap<select id="snap"><option value="1" selected>Quarter</option><option value="0.5">Eighth</option><option value="0.6666666666666666">Quarter triplet</option><option value="0.3333333333333333">Eighth triplet</option></select></label><label class="name-toggle"><input id="advance-entry" type="checkbox">Advance after entry</label><button id="next">Next step</button></div><div class="box-tools"><button id="split">Split box here</button><button id="merge">Merge boundary here</button><button id="show-box-keys" aria-pressed="true" title="Show or hide the local song key beneath chord labels">Key labels: On</button><button id="clear-box-selection" disabled>Clear box selection</button><span id="box-selection-count" class="muted small" style="align-self:center">No boxes selected</span></div></div>
 <aside class="inspector"><section><h2>Sounding harmony</h2><div class="harmony-heading"><div class="chord-name" id="chord-name">No harmony yet</div><span class="roman-name" id="roman-name" aria-label="Roman numeral">—</span></div><p class="small muted" id="roman-context"></p><p class="small muted" id="harmony-notes">Bass + chord notes determine the name.</p><select id="alternatives" class="recognition-select" aria-label="Choose a chord interpretation"></select><label class="field">Roman interpretation<select id="roman-choice" aria-label="Choose a Roman interpretation"></select></label><div class="custom-row"><input id="custom-label" placeholder="Custom label" maxlength="80" aria-label="Custom chord label"><button id="set-label">Set</button></div><p class="small warning" id="label-review"></p></section>
@@ -62,7 +95,15 @@
 
 <div class="status" id="status" role="status" aria-live="polite" hidden></div>
 
-<footer class="keyboard-dock"><div class="keyboard-top"><div><div class="collection-name" id="collection-name">C major sixth-diminished</div><div class="legend"><span class="sixth">● Sixth-chord tone</span><span class="diminished">◆ Diminished-chord tone</span><span class="outside">○ Outside collection</span></div></div><div class="keyboard-actions"><label class="name-toggle">Default duration<select id="piano-duration" aria-label="Default duration for new piano notes"></select></label><label class="name-toggle"><input id="note-names" type="checkbox">Note names</label><label class="name-toggle"><input id="piano-symbols" type="checkbox">Symbols</label><span id="keyboard-range"></span><button id="octave-down" aria-label="Keyboard down one octave">− Octave</button><button id="octave-up" aria-label="Keyboard up one octave">+ Octave</button></div></div><div class="keyboard-scroll"><div class="keyboard names-hidden symbols-hidden" id="keyboard" aria-label="Piano note entry"></div></div></footer>
+<footer class="keyboard-dock"><div class="keyboard-top"><div class="mobile-only" id="phone-entry"></div><div class="keyboard-context"><div class="collection-name" id="collection-name">C major sixth-diminished</div><div class="legend"><span class="sixth">● Sixth-chord tone</span><span class="diminished">◆ Diminished-chord tone</span><span class="outside">○ Outside collection</span></div></div><div class="keyboard-actions"><label class="name-toggle piano-duration-field">Default duration<select id="piano-duration" aria-label="Default duration for new piano notes"></select></label><label class="name-toggle"><input id="note-names" type="checkbox">Note names</label><label class="name-toggle"><input id="piano-symbols" type="checkbox">Symbols</label><span id="keyboard-range"></span><button id="octave-down" aria-label="Keyboard down one octave">− Octave</button><button id="octave-up" aria-label="Keyboard up one octave">+ Octave</button></div></div><div class="keyboard-scroll"><div class="keyboard names-hidden symbols-hidden" id="keyboard" aria-label="Piano note entry"></div></div></footer>
+<dialog id="mobile-tools" aria-labelledby="tools-title"><div class="tools-header"><h2 id="tools-title">Tools</h2><button id="close-tools" autofocus>Close</button></div><div class="tools-body">
+<section><h3>Playback</h3><div id="tools-playback"></div></section>
+<section><h3>Entry and view</h3><div id="tools-entry" class="entry"></div><div id="tools-view"></div></section>
+<section><h3>Chord boxes</h3><div id="tools-boxes"></div></section>
+<div id="tools-inspector"></div>
+<section><h3>Piano display</h3><div id="tools-piano" class="keyboard-actions"></div></section>
+<section><h3>Composition and appearance</h3><div id="tools-project"></div></section>
+</div></dialog>
 <aside id="help-panel" popover="auto" role="dialog" aria-labelledby="help-title">
   <div class="help-header"><h2 id="help-title">Help &amp; tutorials</h2><button type="button" popovertarget="help-panel" popovertargetaction="hide" aria-label="Close help" autofocus>×</button></div>
   <div class="help-body">
@@ -77,6 +118,7 @@
       <p>Pitch, part, and duration stay fixed when moving. Resize snaps from the note’s start. Same-pitch notes cannot overlap within one part, but may meet at an end/start boundary. Invalid group edits are rejected together.</p>
       <p>Notes can sustain across boxes and measures. Editing a held note changes its complete span. Moving or extending notes past the end adds measures.</p>
     </details>
+    <details><summary>Compose on a phone</summary><p>Turn the phone sideways to write. Choose a part and duration above the two-octave piano. Use the octave buttons for other pitches. Tap a row’s arrow to expand or collapse it.</p><p>Swipe the timeline to scroll, including from notes. Tap a note to select it without moving the orange cursor. Select → Notes or Boxes lets taps add or remove items; Clear empties the selection. Note selections survive part changes.</p><p>Choose Move or Resize, then drag a selected note to preview the group edit. Release applies one edit and returns to scrolling. Cancel or an interrupted touch discards the preview. Delete shows the note count; one Undo restores the whole group. A long press never deletes music.</p><p>Tap a beat or empty row, or drag the orange handle, to set the cursor. Seeking pauses playback. Tools contains harmony, context, loop, view, and display settings. Portrait supports review; rotating preserves the current scratch composition, but reloading still clears it.</p></details>
     <details><summary>Navigate the timeline</summary>
       <p>Click a row to choose a part and position. Drag the orange cursor to seek silently: it snaps to nearby note starts and ends, then the selected rhythm grid. The piano highlights all notes active at that position.</p>
       <p>Hold the right mouse button and drag to pan, including from a note. A drag does not delete notes; Escape restores the previous view. Use Zoom for short passages. Note entry and navigation smoothly center the cursor; manual panning remains free until the next edit.</p>
@@ -313,6 +355,10 @@ var Composer = (() => {
         }
         const validTime = value => Number.isFinite(value) && value >= 0 && value <= 256 && Math.abs(value * 24 - Math.round(value * 24)) < 1e-7;
         if (!['add', 'edit', 'delete', 'split', 'merge', 'context', 'label'].includes(action.type)) throw new Error('Unknown editing action.');
+        if (action.type === 'delete') {
+          const ids = action.ids === undefined ? [action.id] : action.ids;
+          if (!Array.isArray(ids) || !ids.length || ids.some(id=>!state.notes.some(note=>note.id===id))) throw new Error('Select existing notes to delete.');
+        }
         if (['add', 'edit'].includes(action.type)) {
           const original = state.notes.find(note => note.id === action.id);
           if (action.type === 'edit' && !original) throw new Error('Select a note to edit.');
@@ -344,7 +390,7 @@ var Composer = (() => {
           const note = next.notes.find(note => note.id === action.id);
           for (const field of ['pitch', 'start', 'duration']) if (action[field] !== undefined) note[field] = action[field];
         }
-        if (action.type === 'delete') next.notes = next.notes.filter(note => note.id !== action.id);
+        if (action.type === 'delete') next.notes = next.notes.filter(note => !(action.ids ?? [action.id]).includes(note.id));
         if (action.type === 'split' && !next.cuts.includes(action.at)) next.cuts.push(action.at);
         if (action.type === 'merge') next.cuts = next.cuts.filter(at => at !== action.at);
         if (action.type === 'context' && action.kind === 'meter') {
@@ -443,6 +489,97 @@ var Composer = (() => {
   let scene = null, step = 0, keyboardBuiltAt = null;
   let drag = null, dragFrame = 0, ignoreTimelineClickUntil = 0;
 
+  const phoneQuery = matchMedia('(max-width: 1100px) and (pointer: coarse), (max-width: 1100px) and (max-height: 520px), (max-width: 720px)');
+  const portraitQuery = matchMedia('(orientation: portrait)');
+  let isPhone = false, selectionMode = '', touchEdit = '', visiblePart = null, desktopCollapsed = [];
+  const phonePlacements = [
+    [document.querySelector('.toolbar'),$('tools-playback')],
+    [$('play'),$('phone-transport')],[$('undo'),$('phone-transport')],
+    [document.querySelector('.inspector'),$('tools-inspector')],
+    [document.querySelector('.entry'),$('phone-entry')],
+    [$('position').closest('label'),$('tools-entry')],[$('snap').closest('label'),$('tools-entry')],
+    [$('advance-entry').closest('label'),$('tools-entry')],[$('next'),$('tools-entry')],
+    [document.querySelector('.timeline-footer'),$('tools-view')],
+    [document.querySelector('.box-tools'),$('tools-boxes')],
+    [document.querySelector('.keyboard-context'),$('tools-piano')],
+    [$('note-names').closest('label'),$('tools-piano')],[$('piano-symbols').closest('label'),$('tools-piano')],
+    [$('dark-mode').closest('label'),$('tools-project')],[$('blank'),$('tools-project')],
+  ].map(([element,destination])=>{
+    const home=document.createComment('control home');element.before(home);
+    return {element,destination,home};
+  });
+  function updatePhoneLayout(){
+    const next=phoneQuery.matches;
+    if(drag)finishDrag(false);
+    touchEdit='';
+    if(next!==isPhone){
+      if(next){
+        desktopCollapsed=[...collapsedParts];visiblePart=null;
+        for(const {element,destination} of phonePlacements)destination.append(element);
+      }else{
+        $('mobile-tools').close();
+        for(const {element,home} of phonePlacements)home.after(element);
+        collapsedParts.clear();for(const role of desktopCollapsed)collapsedParts.add(role);
+      }
+      isPhone=next;keyboardBuiltAt=null;selectionMode='';
+    }
+    document.body.classList.toggle('phone',isPhone);
+    document.body.classList.toggle('portrait',isPhone&&portraitQuery.matches);
+    keyboardBase=Math.min(keyboardBase,isPhone?96:84);
+    render();
+  }
+  function renderTouchControls(){
+    const count=selectedNotes.size, boxes=selectedBoxes.size, editing=!!touchEdit;
+    $('touch-select').hidden=editing;
+    document.querySelector('.touch-actions').hidden=!(editing||selectionMode||count||boxes);
+    $('touch-select').setAttribute('aria-pressed',String(!!selectionMode));
+    $('touch-select').textContent=selectionMode?'Done':'Select';
+    $('touch-select-kind').hidden=!selectionMode||editing;
+    $('touch-count').textContent=boxes?`${boxes} ${boxes===1?'box':'boxes'}`:count?`${count} ${count===1?'note':'notes'}`:'';
+    $('touch-count').hidden=editing;
+    $('touch-clear').hidden=editing||!(count||boxes);
+    for(const id of ['touch-move','touch-resize','touch-delete'])$(id).hidden=editing||!count;
+    $('touch-delete').textContent=`Delete ${count} ${count===1?'note':'notes'}`;
+    $('touch-cancel').hidden=!editing;
+    $('touch-preview').textContent=editing?`${touchEdit==='move'?'Move':'Resize'} · drag a selected note`:'';
+    $('timeline').classList.toggle('touch-edit',editing);
+    $('open-tools').disabled=editing;
+    $('play').disabled=startingAudio||editing;
+    $('undo').disabled=editing||!song.inspect().canUndo;
+    if(isPhone)document.querySelectorAll('[data-key]').forEach(key=>key.disabled=editing);
+  }
+  $('open-tools').onclick=()=>{$('mobile-tools').showModal();};
+  $('close-tools').onclick=()=>{$('mobile-tools').close();};
+  $('touch-select').onclick=()=>{
+    touchEdit='';selectionMode=selectionMode?'':$('touch-select-kind').value;
+    if(selectionMode==='notes')selectedBoxes.clear();
+    if(selectionMode==='boxes')selectedNotes.clear();
+    render({center:false});
+  };
+  $('touch-select-kind').onchange=()=>{
+    selectionMode=$('touch-select-kind').value;selectedNotes.clear();selectedBoxes.clear();boxAnchor=null;
+    render({center:false});
+  };
+  $('touch-clear').onclick=()=>{selectedNotes.clear();selectedBoxes.clear();boxAnchor=null;render({center:false});};
+  for(const action of ['move','resize'])$(`touch-${action}`).onclick=()=>{
+    if(!selectedNotes.size)return;
+    stopTransport();selectionMode='';touchEdit=action;renderTouchControls();
+  };
+  $('touch-cancel').onclick=()=>{
+    if(drag)finishDrag(false);
+    touchEdit='';render({center:false});status('');
+  };
+  $('touch-delete').onclick=()=>{
+    if(selectedNotes.size)mutate({type:'delete',ids:[...selectedNotes]},'Selected notes deleted. Undo restores the group.');
+  };
+  phoneQuery.addEventListener('change',updatePhoneLayout);
+  portraitQuery.addEventListener('change',updatePhoneLayout);
+  window.addEventListener('pointerdown',event=>{
+    if(isPhone&&drag&&event.pointerId!==drag.pointer){
+      finishDrag(false);event.preventDefault();event.stopPropagation();
+    }
+  },true);
+
   const durations = Composer.durationChoices;
   for (const id of ['duration','piano-duration']) {
     $(id).innerHTML = durations.map(([name, value]) => `<option value="${value}">${name}</option>`).join('');
@@ -486,6 +623,16 @@ var Composer = (() => {
     scroll.scrollTo({left:Math.max(0,position*beatWidth-scroll.clientWidth/2),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
   }
 
+  function revealPhoneNote(id){
+    if(!isPhone)return;
+    const note=document.querySelector(`[data-note="${id}"]`);if(!note||note.closest('[hidden]'))return;
+    const scroll=$('timeline-scroll'), rect=note.getBoundingClientRect();
+    const top=document.querySelector('.boxes').getBoundingClientRect().bottom+2;
+    const bottom=document.querySelector('.ruler').getBoundingClientRect().top-2;
+    if(rect.bottom>bottom)scroll.scrollTop+=rect.bottom-bottom;
+    else if(rect.top<top)scroll.scrollTop-=top-rect.top;
+  }
+
   function renderEntry() {
     duration = entryDurations[part];
     $('part').value = part; $('position').value = position; $('duration').value = duration; $('piano-duration').value = duration;
@@ -496,7 +643,12 @@ var Composer = (() => {
       lane.querySelector('.entry-badge').hidden=!active;
     });
   }
-  function render() {
+  function render({center=true}={}) {
+    const changedPart=isPhone&&visiblePart!==part;
+    if(changedPart){
+      collapsedParts.clear();for(const role of ['melody','chord','bass'])if(role!==part)collapsedParts.add(role);
+      visiblePart=part;
+    }
     const data = song.inspect(position);
     for(const id of selectedNotes)if(!data.notes.some(note=>note.id===id))selectedNotes.delete(id);
     if(!selectedNotes.has(selected))selected=[...selectedNotes].at(-1)??null;
@@ -528,7 +680,14 @@ var Composer = (() => {
     updateLive(transport?playPosition():position);
     $('notes-table').innerHTML = data.notes.length ? [...data.notes].sort((a,b)=>a.start-b.start || a.pitch-b.pitch).map(note => `<tr><td>${note.part}</td><td>${pitchName(note.pitch)}</td><td>${number(note.start)}</td><td>${data.lengthLabels[note.id]}</td></tr>`).join('') : '<tr><td colspan="4">No notes yet.</td></tr>';
     $('markers-list').innerHTML = ['key','collection','meter'].map(kind => `<p><strong>${kind[0].toUpperCase()+kind.slice(1)}</strong>: ${data[kind].map(marker => `at ${number(marker.at)}: ${kind === 'meter' ? `${marker.n}/${marker.d}` : `${flat[marker.tonic]} ${marker.mode}`}`).join('; ')}</p>`).join('');
-    centerCursor();
+    renderTouchControls();
+    if(changedPart){
+      const lane=document.querySelector(`[data-role="${part}"]`);
+      $('timeline-scroll').scrollTop=lane.offsetTop;
+      const first=lane.querySelector('[data-note]');if(first)revealPhoneNote(first.dataset.note);
+    }
+    if(selected)revealPhoneNote(selected);
+    if(center)centerCursor();
   }
   function renderTimeline(data) {
     const width = Math.max(data.end,position) * beatWidth;
@@ -549,7 +708,7 @@ var Composer = (() => {
       const boxId=`${box.start}:${box.end}`;
       return segments.map(segment=>{
         const context=`${flat[segment.key.tonic]} ${segment.key.mode}`;
-        const title=`${segment.name}${segment.romanDisplay?' · '+segment.romanDisplay.text:''} · ${context} · ${locationName(segment.start,data)}. ${segment.detail||''} Click to select this box; Ctrl/Cmd-click toggles, Shift-click selects a range. Use Zoom for narrow passages.`;
+        const title=`${segment.name}${segment.romanDisplay?' · '+segment.romanDisplay.text:''} · ${context} · ${locationName(segment.start,data)}. ${segment.detail||''} ${isPhone?'Tap to select this box; use Select → Boxes for a group.':'Click to select this box; Ctrl/Cmd-click toggles, Shift-click selects a range.'} Use Zoom for narrow passages.`;
         return `<button class="box${segment.start===box.start?'':' harmony-change'}${selectedBoxes.has(boxId)?' box-selected':''}" data-box="${boxId}" aria-pressed="${selectedBoxes.has(boxId)}" data-at="${segment.start}" style="left:${segment.start*beatWidth}px;width:${(segment.end-segment.start)*beatWidth}px" title="${esc(title)}" aria-label="${esc(title)}"><span class="box-chord">${esc(segment.name)}</span><span class="box-roman">${romanMarkup(segment.romanDisplay)}</span><span class="small box-key">${esc(context)}</span></button>`;
       }).join('');
     }).join('');
@@ -568,10 +727,10 @@ var Composer = (() => {
       const notes = placements.map(({note,row}) => {
         const family = song.inspect(note.start).families[note.pitch%12];
         const held = data.measures.some(measure => measure.end > note.start && measure.end < note.start + note.duration);
-        return `<button class="note ${family}${selectedNotes.has(note.id)?' selected':''}" data-note="${note.id}" data-pitch="${note.pitch}" aria-pressed="${selectedNotes.has(note.id)}" aria-label="${role} ${pitchName(note.pitch)}, start ${number(note.start)}, ${data.lengthLabels[note.id]}" style="left:${note.start*beatWidth+1}px;width:${Math.max(8,note.duration*beatWidth-3)}px;top:${27+row*25}px" title="${pitchName(note.pitch)} · ${role} · ${data.lengthLabels[note.id]}${held?' · continues across measures':''}">${symbol[family]} ${pitchName(note.pitch)}${held?' ↔':''}<span class="resize-handle" aria-hidden="true" title="Drag to resize this note"></span></button>`;
+        return `<button class="note ${family}${selectedNotes.has(note.id)?' selected':''}" data-note="${note.id}" data-pitch="${note.pitch}" aria-pressed="${selectedNotes.has(note.id)}" aria-label="${role} ${pitchName(note.pitch)}, start ${number(note.start)}, ${data.lengthLabels[note.id]}" style="left:${note.start*beatWidth+1}px;width:${Math.max(8,note.duration*beatWidth-3)}px;top:${(isPhone?34:27)+row*(isPhone?31:25)}px" title="${pitchName(note.pitch)} · ${role} · ${data.lengthLabels[note.id]}${held?' · continues across measures':''}">${symbol[family]} ${pitchName(note.pitch)}${held?' ↔':''}<span class="resize-handle" aria-hidden="true" title="Drag to resize this note"></span></button>`;
       }).join('');
       const collapsed = collapsedParts.has(role), name = role[0].toUpperCase()+role.slice(1);
-      return `<div class="lane${collapsed?' collapsed':''}${role===part?' entry-part':''}" data-role="${role}" style="height:${collapsed?30:Math.max(96,32+ends.length*25)}px"><div class="lane-controls"><button class="lane-label" data-collapse-role="${role}" aria-expanded="${!collapsed}" aria-controls="lane-content-${role}" aria-label="${collapsed?'Expand':'Collapse'} ${name} row" title="${collapsed?'Expand':'Collapse'} this row; its notes still play">${collapsed?'▸':'▾'} ${name}${collapsed?` · ${placements.length} notes`:''}</button><label class="part-volume">Vol <input type="range" data-volume="${role}" min="0" max="100" step="5" value="${Math.round(partVolumes[role]*100)}" aria-label="${name} volume" aria-valuetext="${Math.round(partVolumes[role]*100)} percent"><output>${Math.round(partVolumes[role]*100)}%</output></label><span class="entry-badge"${role===part?'':' hidden'}>Piano entry</span></div><div id="lane-content-${role}"${collapsed?' hidden':''}>${lines}${notes}</div></div>`;
+      return `<div class="lane${collapsed?' collapsed':''}${role===part?' entry-part':''}" data-role="${role}" style="height:${collapsed?(isPhone?34:30):Math.max(isPhone?72:96,(isPhone?38:32)+ends.length*(isPhone?31:25))}px"><div class="lane-controls"><button class="lane-label" data-collapse-role="${role}" aria-expanded="${!collapsed}" aria-controls="lane-content-${role}" aria-label="${collapsed?'Expand':'Collapse'} ${name} row" title="${collapsed?'Expand':'Collapse'} this row; its notes still play">${collapsed?'▸':'▾'} ${name}${collapsed?` · ${placements.length} notes`:''}</button><label class="part-volume">Vol <input type="range" data-volume="${role}" min="0" max="100" step="5" value="${Math.round(partVolumes[role]*100)}" aria-label="${name} volume" aria-valuetext="${Math.round(partVolumes[role]*100)} percent"><output>${Math.round(partVolumes[role]*100)}%</output></label><span class="entry-badge"${role===part?'':' hidden'}>Piano entry</span></div><div id="lane-content-${role}"${collapsed?' hidden':''}>${lines}${notes}</div></div>`;
     }).join('');
     $('timeline').style.width = `${width}px`;
     $('timeline').style.setProperty('--beat-width', `${beatWidth}px`);
@@ -594,8 +753,9 @@ var Composer = (() => {
     $('note-span').textContent = '';
   }
   function renderKeyboard(data) {
-    if (keyboardBuiltAt !== keyboardBase) {
-      const pitches = Array.from({length:37}, (_,i)=>keyboardBase+i);
+    const span=isPhone?24:36, range=`${keyboardBase}:${span}`;
+    if (keyboardBuiltAt !== range) {
+      const pitches = Array.from({length:span+1}, (_,i)=>keyboardBase+i);
       const white = pitches.filter(pitch=>![1,3,6,8,10].includes(pitch%12));
       let whiteIndex = 0;
       $('keyboard').innerHTML = pitches.map(pitch => {
@@ -604,12 +764,12 @@ var Composer = (() => {
         if (!black) whiteIndex++;
         return `<button class="key${black?' black':''}" data-key="${pitch}" style="${style}" aria-label="Add ${pitchName(pitch)}"><span class="family-symbol"></span><span class="pitch-name">${pitchName(pitch)}</span></button>`;
       }).join('');
-      keyboardBuiltAt = keyboardBase;
+      keyboardBuiltAt = range;
     }
-    $('keyboard-range').textContent = `${pitchName(keyboardBase)}–${pitchName(keyboardBase+36)}`;
+    $('keyboard-range').textContent = `${pitchName(keyboardBase)}–${pitchName(keyboardBase+span)}`;
     $('keyboard').classList.toggle('names-hidden',!$('note-names').checked);
     $('keyboard').classList.toggle('symbols-hidden',!$('piano-symbols').checked);
-    $('octave-down').disabled = keyboardBase <= 0; $('octave-up').disabled = keyboardBase >= 84;
+    $('octave-down').disabled = keyboardBase <= 0; $('octave-up').disabled = keyboardBase >= (isPhone?96:84);
   }
   function updateLive(at) {
     const data = song.inspect(at), harmony = data.harmony;
@@ -655,7 +815,7 @@ var Composer = (() => {
       button.classList.toggle('sounding',soundingPitches.has(pitch));
       button.setAttribute('aria-label',`${transport?'Audition':'Add'} ${pitchName(pitch)}${soundingPitches.has(pitch)?transport?' · playing':' · active at editing cursor':''}`);
       button.querySelector('.family-symbol').textContent = family==='outside'?'○':symbol[family];
-      button.title = `${pitchName(pitch)}${flat[pitch%12]!==sharp[pitch%12]?' / '+sharp[pitch%12]+(Math.floor(pitch/12)-1):''} · ${family==='sixth'?'sixth-chord tone':family==='diminished'?'diminished-chord tone':'outside the collection'} · Right-click: delete in ${part} at the orange cursor` ;
+      button.title = `${pitchName(pitch)}${flat[pitch%12]!==sharp[pitch%12]?' / '+sharp[pitch%12]+(Math.floor(pitch/12)-1):''} · ${family==='sixth'?'sixth-chord tone':family==='diminished'?'diminished-chord tone':'outside the collection'}${isPhone?'':` · Right-click: delete in ${part} at the orange cursor`}` ;
     });
     return data;
   }
@@ -787,7 +947,7 @@ var Composer = (() => {
   $('advance-entry').onchange=()=>{advanceAfterEntry[part]=$('advance-entry').checked;};
   $('note-names').onchange=()=>{$('keyboard').classList.toggle('names-hidden',!$('note-names').checked);};
   for (const id of ['bpm','loop','loop-from','loop-to']) $(id).onchange=()=>{stopTransport();centerCursor();status('Playback settings updated.');};
-  $('part').onchange=()=>{part=$('part').value;selectedNotes.clear();render();};
+  $('part').onchange=()=>{part=$('part').value;if(!isPhone)selectedNotes.clear();render();};
   $('position').onchange=()=>seek(+$('position').value);
   for (const id of ['duration','piano-duration']) $(id).onchange=()=>{
     duration=+$(id).value;entryDurations[part]=duration;
@@ -814,16 +974,33 @@ var Composer = (() => {
     slider.setAttribute('aria-valuetext',`${Math.round(level*100)} percent`);
     if(partGains[role])partGains[role].gain.setTargetAtTime(level,audio.currentTime,.01);
   };
-  $('timeline').onclick=event=>{
+  function timelineClick(event){
     if((event.detail>0&&Date.now()<ignoreTimelineClickUntil)||event.target.closest('.part-volume'))return;
     const collapseButton=event.target.closest('[data-collapse-role]');
     if(collapseButton){
       const role=collapseButton.dataset.collapseRole;
       if(collapsedParts.has(role))collapsedParts.delete(role);else collapsedParts.add(role);
       renderTimeline(song.inspect(position));updateLive(transport?playPosition():position);
-      document.querySelector(`[data-collapse-role="${role}"]`).focus();return;
+      document.querySelector(`[data-collapse-role="${role}"]`).focus({preventScroll:true});return;
     }
     const noteButton=event.target.closest('[data-note]');
+    if(isPhone&&noteButton){
+      if(selectionMode==='boxes'||touchEdit)return;
+      stopTransport();const note=song.inspect().notes.find(note=>note.id===noteButton.dataset.note);
+      selectedBoxes.clear();boxAnchor=null;
+      if(selectionMode==='notes'){
+        if(selectedNotes.has(note.id))selectedNotes.delete(note.id);else selectedNotes.add(note.id);
+      }else{selectedNotes.clear();selectedNotes.add(note.id);}
+      selected=note.id;part=note.part;render({center:false});return;
+    }
+    const phoneBox=isPhone&&event.target.closest('[data-box]');
+    if(phoneBox&&selectionMode){
+      if(selectionMode!=='boxes'||touchEdit)return;
+      stopTransport();selectedNotes.clear();
+      const id=phoneBox.dataset.box;
+      if(selectedBoxes.has(id))selectedBoxes.delete(id);else selectedBoxes.add(id);
+      boxAnchor=id;render({center:false});return;
+    }
     if(noteButton){
       stopTransport();const note=song.inspect().notes.find(note=>note.id===noteButton.dataset.note);
       if(event.ctrlKey||event.metaKey||event.shiftKey){
@@ -850,12 +1027,24 @@ var Composer = (() => {
       seek(song.dispatch({type:'seek',at:(event.clientX-$('timeline').getBoundingClientRect().left)/beatWidth,snap:+$('snap').value,tolerance:6/beatWidth}));return;
     }
     const lane=event.target.closest('[data-role]');if(lane&&!collapsedParts.has(lane.dataset.role)){const x=event.clientX-lane.getBoundingClientRect().left;const grid=+$('snap').value;seek(Math.floor(x/beatWidth/grid)*grid,lane.dataset.role);}
-  };
+  }
+  $('timeline').onclick=timelineClick;
   // Some browsers open the context menu on press, before a right drag can start.
   $('timeline-scroll').oncontextmenu=event=>event.preventDefault();
   $('timeline-scroll').onpointerdown=event=>{
     if(drag)return;
-    if(event.button===2&&!event.target.closest('.lane-controls')){
+    if(isPhone){
+      if(event.button!==0||event.target.closest('.lane-controls'))return;
+      const target=event.target, note=target.closest('[data-note]');
+      const editing=touchEdit&&note&&selectedNotes.has(note.dataset.note)&&!portraitQuery.matches;
+      if(!target.closest('#edit-cursor')&&!editing){
+        event.preventDefault();
+        const scroll=$('timeline-scroll');scroll.scrollTo({left:scroll.scrollLeft,behavior:'auto'});
+        drag={type:'pan',touch:true,target,pointer:event.pointerId,x:event.clientX,clientX:event.clientX,y:event.clientY,clientY:event.clientY,scroll:scroll.scrollLeft,scrollTop:scroll.scrollTop,moved:false};
+        $('timeline').setPointerCapture(event.pointerId);return;
+      }
+    }
+    if(!isPhone&&event.button===2&&!event.target.closest('.lane-controls')){
       event.preventDefault();
       const scroll=$('timeline-scroll');
       scroll.scrollTo({left:scroll.scrollLeft,behavior:'auto'});
@@ -875,9 +1064,9 @@ var Composer = (() => {
     if(!element||event.ctrlKey||event.metaKey||event.shiftKey)return;
     event.preventDefault();event.stopPropagation();stopTransport();
     const note=song.inspect().notes.find(note=>note.id===element.dataset.note);
-    const type=event.target.closest('.resize-handle')?'resize':'move';
+    const type=isPhone?touchEdit:event.target.closest('.resize-handle')?'resize':'move';
     if(!selectedNotes.has(note.id)){selectedNotes.clear();selectedNotes.add(note.id);}
-    selected=note.id;part=note.part;position=note.start;
+    selected=note.id;part=note.part;if(!isPhone)position=note.start;
     renderEntry();
     const elements=new Map();
     document.querySelectorAll('[data-note]').forEach(button=>{
@@ -897,13 +1086,14 @@ var Composer = (() => {
   };
   function updateDrag(){
     if(drag.type==='pan'){
-      if(Math.hypot(drag.clientX-drag.x,drag.clientY-drag.y)<4&&!drag.moved)return;
+      if(Math.hypot(drag.clientX-drag.x,drag.clientY-drag.y)<(drag.touch?8:4)&&!drag.moved)return;
       drag.moved=true;
       $('timeline-scroll').scrollLeft=drag.scroll+drag.x-drag.clientX;
+      if(drag.touch)$('timeline-scroll').scrollTop=drag.scrollTop+drag.y-drag.clientY;
       return;
     }
     const delta=drag.clientX-drag.x+$('timeline-scroll').scrollLeft-drag.scroll;
-    if(Math.abs(delta)<2&&!drag.moved)return;
+    if(Math.abs(delta)<(isPhone?8:2)&&!drag.moved)return;
     drag.moved=true;
     if(drag.type==='seek'){
       position=song.dispatch({type:'seek',at:drag.original+delta/beatWidth,snap:drag.snap,tolerance:6/beatWidth});
@@ -920,7 +1110,7 @@ var Composer = (() => {
     drag.start=drag.note.start+delta/beatWidth;
     try{
       const preview=song.dispatch({type:drag.type,id:drag.id,ids:drag.ids,start:drag.start,end:drag.end,snap:drag.snap,preview:true});
-      drag.valid=true;drag.preview=preview;
+      drag.valid=true;drag.preview=preview;status('');
       for(const note of preview){
         const element=drag.elements.get(note.id);
         element.style.width=`${Math.max(8,note.duration*beatWidth-3)}px`;
@@ -931,12 +1121,14 @@ var Composer = (() => {
       const anchor=preview.find(note=>note.id===drag.id), readout=$(drag.ids.length>1?'selection-help':'note-span');
       readout.textContent=`${preview.length} ${preview.length===1?'note':'notes'} · ${pitchName(anchor.pitch)} ${drag.type==='move'?`at ${number(anchor.start)} ♩`:anchor.lengthLabel}`;
       readout.hidden=false;readout.classList.add('length-preview');
+      if(isPhone)$('touch-preview').textContent=readout.textContent;
     }catch(error){
       drag.valid=false;drag.error=error.message;
       for(const element of drag.elements.values())element.classList.add('drag-invalid');
       $(drag.ids.length>1?'selection-help':'note-span').hidden=false;
       $(drag.ids.length>1?'selection-help':'note-span').textContent=error.message;
       status(error.message,true);
+      if(isPhone)$('touch-preview').textContent='Invalid edit';
     }
   }
   function scrollDrag(){
@@ -958,11 +1150,17 @@ var Composer = (() => {
     ignoreTimelineClickUntil=Date.now()+250;
     if(gesture.type==='pan'){
       $('timeline').classList.remove('panning');
-      if(!commit)$('timeline-scroll').scrollLeft=gesture.scroll;
+      if(!commit){
+        $('timeline-scroll').scrollLeft=gesture.scroll;
+        if(gesture.touch)$('timeline-scroll').scrollTop=gesture.scrollTop;
+      }
       if(transport)transport.followAt=audio.currentTime;
-      if(commit&&!gesture.moved&&gesture.noteId)mutate({type:'delete',id:gesture.noteId},'Note deleted. Undo restores the complete note.');
+      if(gesture.touch){
+        if(commit&&!gesture.moved&&!touchEdit)timelineClick({target:gesture.target,clientX:gesture.clientX,clientY:gesture.clientY,detail:0});
+      }else if(commit&&!gesture.moved&&gesture.noteId)mutate({type:'delete',id:gesture.noteId},'Note deleted. Undo restores the complete note.');
       return;
     }
+    if(isPhone)touchEdit='';
     if(gesture.type==='seek'){
       if(!commit){position=gesture.original;selected=gesture.selection;selectedNotes.clear();for(const id of gesture.selections)selectedNotes.add(id);}
       render();status(commit?`Editing cursor at ${locationName(position)}. No notes changed.`:'Cursor drag cancelled.');return;
@@ -973,7 +1171,7 @@ var Composer = (() => {
     }else{render();status(!gesture.valid?`Drag not applied: ${gesture.error}`:commit?'Selection ready. Drag a selected body to move, or its right edge to resize.':'Drag cancelled. All notes are unchanged.',!gesture.valid);}
   }
   $('timeline').onpointerup=event=>{if(drag&&event.pointerId===drag.pointer){drag.clientX=event.clientX;drag.clientY=event.clientY;updateDrag();finishDrag(true);}};
-  $('timeline').onpointercancel=()=>finishDrag(false);
+  $('timeline').onpointercancel=event=>{if(drag&&event.pointerId===drag.pointer)finishDrag(false);};
   $('timeline').onlostpointercapture=()=>{if(drag)finishDrag(false);};
   $('apply-note').onclick=()=>mutate({type:'edit',id:selected,pitch:+$('note-pitch').value,start:+$('note-start').value,duration:+$('note-length').value},'Selected note updated. Its complete span changed.');
   $('delete-note').onclick=()=>mutate({type:'delete',id:selected},'Selected note deleted. Undo restores it.');
@@ -995,6 +1193,7 @@ var Composer = (() => {
   $('keyboard').oncontextmenu=event=>{
     const key=event.target.closest('[data-key]');if(!key)return;
     event.preventDefault();
+    if(isPhone)return;
     if(drag)finishDrag(false);
     const pitch=+key.dataset.key;
     if(!song.inspect(position).active.some(note=>note.part===part&&note.pitch===pitch)){
@@ -1003,21 +1202,21 @@ var Composer = (() => {
     mutate({type:'delete-at',part,pitch,at:position},`${pitchName(pitch)} deleted from ${part}. Undo restores the complete note.`);
   };
   $('keyboard').onclick=async event=>{
-    const key=event.target.closest('[data-key]');if(!key)return;
+    const key=event.target.closest('[data-key]');if(!key||touchEdit)return;
     const pitch=+key.dataset.key, auditionPart=part;
     if(!transport){
       try{
         stopTransport();
         const start=position;
         position=song.dispatch({type:'enter',part,pitch,start,duration,advance:advanceAfterEntry[part]}).position;
-        selectedNotes.clear();render();
+        selectedNotes.clear();render();revealPhoneNote(song.inspect().notes.at(-1).id);
         status(`Added ${pitchName(pitch)} to ${part} at ${number(start)}. ${advanceAfterEntry[part]?'Cursor moved to its end.':'Position stays fixed.'}`);
       }catch(error){status(error.message,true);return;}
     }
     try{await activateAudio();sound(pitch,audio.currentTime,.3,'note',false,auditionPart);}catch(error){status(error.message,true);}
   };
   $('octave-down').onclick=()=>{keyboardBase=Math.max(0,keyboardBase-12);renderKeyboard(song.inspect(position));updateLive(transport?playPosition():position);};
-  $('octave-up').onclick=()=>{keyboardBase=Math.min(84,keyboardBase+12);renderKeyboard(song.inspect(position));updateLive(transport?playPosition():position);};
+  $('octave-up').onclick=()=>{keyboardBase=Math.min(isPhone?96:84,keyboardBase+12);renderKeyboard(song.inspect(position));updateLive(transport?playPosition():position);};
   function reset() {stopTransport();song=Composer.createComposer();position=0;selectedNotes.clear();part='chord';selectedBoxes.clear();boxAnchor=null;render();}
   $('blank').onclick=()=>{
     if(song.inspect().notes.length&&!confirm('Replace this scratch composition? This prototype does not save work.'))return;
@@ -1060,8 +1259,8 @@ var Composer = (() => {
   });
   $('walk-next').onclick=()=>{try{const [title,action]=scenarios[scene].steps[step];action();step++;render();renderWalkthrough();status(title+'. Inspect the notes and listen for the result.');}catch(error){status(error.message,true);}};
   window.addEventListener('keydown',event=>{
-    if(event.target.closest('#help-panel'))return;
-    if(drag&&event.key==='Escape'){event.preventDefault();finishDrag(false);return;}
+    if(event.target.closest('#help-panel,#mobile-tools'))return;
+    if((drag||touchEdit)&&event.key==='Escape'){event.preventDefault();if(drag)finishDrag(false);touchEdit='';render({center:false});return;}
     if(drag)return;
     if(event.target.closest('.cursor-handle')&&['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){
       event.preventDefault();
@@ -1078,7 +1277,7 @@ var Composer = (() => {
       centerCursor();
     }
   }).observe($('timeline-scroll'));
-  render();
+  updatePhoneLayout();
 })();
 </script>
 </body></html>

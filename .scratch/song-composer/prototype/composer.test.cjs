@@ -9,6 +9,40 @@ vm.runInContext(script, context);
 const { createComposer, planPlayback } = context.Composer;
 const plain = value => JSON.parse(JSON.stringify(value));
 
+test('deleting a selected group removes complete notes across parts with one undo', () => {
+  const song = createComposer();
+  for (const note of [
+    {part:'bass',pitch:48,start:0,duration:8},
+    {part:'chord',pitch:64,start:2,duration:2},
+    {part:'melody',pitch:72,start:3,duration:1},
+  ]) song.dispatch({type:'add',...note});
+  song.dispatch({type:'split',at:2});
+  song.dispatch({type:'context',kind:'key',at:4,tonic:7,mode:'major'});
+  const before = plain(song.inspect());
+  song.dispatch({type:'delete',ids:[before.notes[0].id,before.notes[2].id]});
+  const after = plain(song.inspect());
+  assert.deepEqual(after.notes,[before.notes[1]]);
+  assert.deepEqual(after.key,before.key);
+  assert.deepEqual(after.cuts,before.cuts);
+  assert.equal(after.end,before.end);
+  song.dispatch({type:'undo'});
+  assert.deepEqual(plain(song.inspect().notes),before.notes);
+  song.dispatch({type:'redo'});
+  assert.deepEqual(plain(song.inspect().notes),after.notes);
+});
+
+test('invalid group deletion leaves notes and undo history unchanged', () => {
+  const song = createComposer();
+  song.dispatch({type:'add',part:'chord',pitch:60,start:0,duration:2});
+  const before = plain(song.inspect()), id = before.notes[0].id;
+  for (const ids of [[],[id,'missing'],'not-a-selection',null]) {
+    assert.throws(()=>song.dispatch({type:'delete',ids}));
+    assert.deepEqual(plain(song.inspect()),before);
+  }
+  song.dispatch({type:'undo'});
+  assert.deepEqual(plain(song.inspect().notes),[]);
+});
+
 test('moving selected notes snaps the dragged note and preserves group spacing across parts in one undo step', () => {
   const song=createComposer();
   for(const note of [

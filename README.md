@@ -1,8 +1,10 @@
 # Music Composer
 
-A playable desktop browser prototype for writing songs with chord boxes and independent Melody, Chord, and Bass parts. Enter notes on the piano, arrange them on the timeline, inspect chord names and Roman numerals, and hear the result.
+A playable desktop and phone browser prototype for writing songs with chord boxes and independent Melody, Chord, and Bass parts. Enter notes on the piano, arrange them on the timeline, inspect chord names and Roman numerals, and hear the result.
 
-**Prototype status:** compositions stay in memory. Reloading or closing the page loses the notes. Saving, MIDI export, final piano sound, and the Android touch layout are planned but not implemented.
+**Prototype status:** compositions stay in memory. Reloading or closing the page loses the notes. Saving, MIDI export, and final piano sound are planned but not implemented. The phone layout supports landscape writing and portrait review; physical-device acceptance is pending.
+
+Open [Simple Composer](https://simplecomposer.netlify.app/) on a computer or phone. On a phone, turn it sideways to write. Select notes, then choose Move or Resize before dragging; ordinary swipes scroll. Tools contains the secondary controls. The [phone guide](.scratch/song-composer/prototype/README.md#phone-workflow) covers the trial.
 
 ## Run locally
 
@@ -24,7 +26,7 @@ With a current Node.js LTS release installed:
 node .scratch/song-composer/prototype/composer.test.cjs
 ```
 
-The 43 tests cover musical editing and playback planning. Browser interaction evidence and its limits are recorded in the [workspace ticket](.scratch/song-composer/issues/06-desktop-workspace.md).
+The 45 tests cover musical editing and playback planning. Browser interaction evidence and its limits are recorded in the [desktop ticket](.scratch/song-composer/issues/06-desktop-workspace.md) and [phone trial ticket](.scratch/song-composer-mobile/issues/03-phone-touch-prototype.md).
 
 ## Deploy on Netlify
 

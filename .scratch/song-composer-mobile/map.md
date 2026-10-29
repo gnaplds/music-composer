@@ -10,17 +10,19 @@ An agreed Android-first composition design, tested with a playable touch prototy
 ## Notes
 
 - The owner accepted the destination and starting conditions in [Mobile planning intake](../../docs/mobile-planning-intake.md): develop on the computer, test on a Redmi Note 9 with Android 12, begin with landscape writing, and adapt the browser prototype before choosing an engine. Portrait initially covers basic navigation and review.
-- This is a separate effort from [Plan a playable desktop song composer](../song-composer/map.md). Preserve that prototype as the desktop reference. Mobile interaction work carries forward the existing musical rules; differences require an explicit decision.
+- This is a separate effort from [Plan a playable desktop song composer](../song-composer/map.md). Adapt the same website for phones while preserving its desktop behavior; the owner explicitly resumed this shared-site direction in [Mobile planning intake](../../docs/mobile-planning-intake.md#current-direction-the-same-website). Mobile interaction work carries forward the existing musical rules; differences require an explicit decision.
 - Use Wayfinder with the local Markdown tracker, Grill with Docs (Grilling and Domain Modeling) for human decisions, Research for outside facts, and Prototype for disposable interaction experiments. Continue the user's TDD requirement at the agreed command/inspection and playback-plan seams; touch and audio claims require device evidence.
-- The map includes disposable prototypes to resolve decisions, not production implementation or publication. A browser touch trial does not by itself validate Godot, native audio latency, or Android lifecycle behavior.
+- The next prototype adapts the existing website and can use its authorized GitHub/hosting workflow for the phone trial after the touch agreement. It remains a disposable interaction prototype, rather than a production release. The Godot engine decision follows that trial. A browser touch trial does not by itself validate Godot, native audio latency, or Android lifecycle behavior.
 - Reuse the shared [musical glossary](../../GLOSSARY.md). Keep layout preferences and engine choices in their decision tickets, rather than adding implementation details to the glossary.
 - Child tickets live in `issues/`. `Blocked by` lists local ticket identities; all blockers must be resolved. Open, unclaimed, unblocked tickets form the frontier, ordered by number. Claim a ticket before working it; the owner supplies usability verdicts.
 - The owner authorized a public `gnaplds/music-composer` repository on October 29, 2026. Keep research and prototypes linked from their tickets. The separate local `barry-harris/` study and unrelated files remain outside the publication scope.
-- The computer's loopback preview address is not a phone-accessible URL. Establish and verify a local delivery path before asking the owner to try the phone prototype. Prior browser-inspection approval limits are not evidence of a successful mobile check.
+- The computer's loopback preview address is not a phone-accessible URL. The owner supplied https://simplecomposer.netlify.app/ for delivery; verify the deployed page before the phone trial. Prior browser-inspection approval limits are not evidence of a successful mobile check.
 
 ## Decisions so far
 
 - [Assess Godot for the Android composer](issues/02-godot-android-feasibility.md): Android export, touch, polyphony, and file APIs are documented; local export setup is incomplete, and audio scheduling, latency, and lifecycle behavior need a focused device experiment. The [research report](../../docs/research/godot-android-feasibility.md) preserves source evidence and separates it from unmeasured phone behavior. The engine choice remains open.
+
+- [Define the phone writing workflow](issues/01-touch-workflow.md): the owner accepted a compact landscape layout and explicit touch selection/editing for the same website, with a Redmi trial before usability acceptance.
 
 ## Not yet specified
 

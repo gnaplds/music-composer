@@ -1,6 +1,6 @@
 # Simple Composer interaction prototype
 
-Open `index.html` directly in a desktop browser. It is self-contained: no installation, network assets, account, or build step is needed. The current local preview is also available at `http://127.0.0.1:8765/` while its preview server is running.
+Open [Simple Composer](https://simplecomposer.netlify.app/) on a phone or desktop, or open `index.html` directly in a desktop browser. It is self-contained: no installation, network assets, account, or build step is needed. The current local preview is also available at `http://127.0.0.1:8765/` while its preview server is running.
 
 This is disposable prototype code. It keeps composition state only in memory. Reloading or closing the page loses the scratch composition. The triangle-wave sound is temporary, not the final piano. Note audition and playback now use three times the previous note gain, with shared peak compression for dense chords. The part sliders still range from 0% to 100%; metronome levels are unchanged before compression.
 
@@ -35,6 +35,18 @@ The choice appears in the sounding-harmony panel and timeline and can be undone.
 
 The three guided examples under **? → Guided examples** build a held bass, moving inner voices, and context changes. Choosing an example replaces current scratch work after confirmation. **? → Inspect the composition** shows the written notes and context markers. Help is nonmodal; dismiss it to inspect the timeline, then reopen it to continue the same example.
 
+## Phone workflow
+
+The same page changes layout for phone-sized screens. Write in landscape with Play/Pause, Undo, Select, Tools, and Help at the top; part and duration controls sit above a two-octave piano at the bottom. Only the active part starts expanded; each row can still be opened or collapsed. Swipe vertically to reach notes in a tall voicing and horizontally to move through the song. In short landscape windows the piano and label rows become shorter. The action row appears only when selecting or editing.
+
+- A normal swipe pans, including when it starts on a note. Tap a note to select it without changing the cursor. Tap a beat or empty row to seek, or drag the orange handle with the existing grid and note-boundary snapping.
+- Choose Select, then Notes or Boxes. Taps toggle membership. Clear empties the selection. Selected notes remain selected when switching parts. Box selections support the existing key change limited to those boxes.
+- With notes selected, choose Move or Resize and drag one selected note. The whole group previews the same change. Release commits one Undo step and returns to scrolling. Cancel, an interrupted pointer, or rotation discards an unfinished edit; an invalid edit changes nothing. Delete shows the selected count and removes the group with one Undo.
+- Tools contains playback settings, context and harmony, note inspection, box tools, display choices, and New composition. Close returns to the same position and selection. Help remains separate.
+- Portrait supports review and transport, with the piano hidden. Turning back to landscape keeps the notes and selections. This is not project saving: reload, tab closure, or an Android tab discard can still lose the composition.
+
+The first device trial is the owner's Redmi Note 9 on Android 12. Enter a held bass, a chord, and an advancing melody. Pan from a note and check that it does not move; select, move, resize, and delete a group, then Undo. Change the key of separated selected boxes, play, and rotate. Judge finger target sizes, scrolling, audio, and correction comfort on the device. The [trial ticket](../../song-composer-mobile/issues/03-phone-touch-prototype.md) records the result and remaining checks.
+
 ## Tests and evidence
 
 From the repository root:
@@ -43,7 +55,7 @@ From the repository root:
 node .scratch/song-composer/prototype/composer.test.cjs
 ```
 
-Forty-three behavior tests currently pass. They use the actual inline composer logic through the agreed editor-command/inspection and playback-plan seams. New model behavior was tested in red → green cycles. The fifth revision adds a failing-then-passing check for separate Roman figures and target slashes. Its cursor-boundary regression passed on the existing model; the required preview fix was in the UI playback guard, not note timing. Coverage includes independent rhythms, box edits, complete-note editing, undo/redo, meter changes, collection colors, exact recognition, label scope and mismatch reporting, invalid-edit rejection, song extension, held-note playback, snapped resizing and movement, cursor snapping without musical edits, musical duration labels, metronome timing, Roman numeral conventions and context, advancing step entry, chromatic secondary targets, inversion figures, tritone substitutes, diminished roots, modal sources, chosen-interpretation review rules, same-pitch overlap rejection, piano-key deletion, quarter-triplet snap, selected-box key boundaries and restoration, current-box identification through silence and meter changes, and atomic group movement/resizing with snap, collision rejection, preserved spacing, and one-step undo.
+Forty-five behavior tests currently pass. They use the actual inline composer logic through the agreed editor-command/inspection and playback-plan seams. New model behavior was tested in red → green cycles. The fifth revision adds a failing-then-passing check for separate Roman figures and target slashes. Its cursor-boundary regression passed on the existing model; the required preview fix was in the UI playback guard, not note timing. Coverage includes independent rhythms, box edits, complete-note editing, undo/redo, meter changes, collection colors, exact recognition, label scope and mismatch reporting, invalid-edit rejection, song extension, held-note playback, snapped resizing and movement, cursor snapping without musical edits, musical duration labels, metronome timing, Roman numeral conventions and context, advancing step entry, chromatic secondary targets, inversion figures, tritone substitutes, diminished roots, modal sources, chosen-interpretation review rules, same-pitch overlap rejection, piano-key deletion, quarter-triplet snap, selected-box key boundaries and restoration, current-box identification through silence and meter changes, and atomic group movement/resizing with snap, collision rejection, preserved spacing, and one-step undo.
 
 Both script blocks compile. Static source checks found no duplicate element IDs or stale literal element references. The current preview response is checked separately before each handoff; see the latest evidence in the prototype ticket.
 
@@ -54,6 +66,10 @@ The tenth revision reproduced the offscreen cursor and entry scrolling to the ri
 The eleventh revision checks the help launcher and dismissible panel at the HTML document boundary: the check failed before implementation and passed afterward. Further source checks confirm the Simple Composer heading, moved tutorial/inspector content, removed coaching elements, balanced markup, and consistent script references. All 43 musical tests still pass. Browser access was disabled in Work settings during this revision, so the rendered layout, native popover dismissal/focus behavior, and examples inside the panel still need a browser trial. The help uses the browser's [native automatic popover](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover), without a dependency or custom focus system.
 
 The twelfth revision adds a native Dark mode checkbox, moves Help to the header, removes the footer gap and key strips, and starts piano labels hidden. Theme styling includes the timeline, note families, playing/selected boxes, inspector, errors, native controls, and help. A document check first confirmed the missing theme control, then checked the new control and plain-key defaults. All 43 musical tests pass; the musical model is unchanged. Browser use remains disabled in Work settings, so switching themes, opening help, and piano label/highlight appearance still need a visible browser trial. No screenshot from an older revision represents this appearance.
+
+The thirteenth revision adds the responsive phone workflow and reuses the existing musical state. Two tests first failed for group deletion, then passed after adding validated atomic deletion. All 45 tests pass. Visible browser checks covered entry, panning from notes, multi-selection, shared move/resize, group Delete/Undo, Cancel, invalid resize, cursor dragging, selected-box keys, Tools, playback, rotation, dark mode, and desktop drag/right-click deletion. Checks at 844 × 390 and 844 × 320 CSS pixels exposed and corrected hidden-note spacing; portrait at 390 × 844 preserved the notes and selection. No console warnings or errors were recorded in the final desktop interaction check. See the [mobile landscape view](evidence/mobile-landscape.png).
+
+These checks used a desktop browser with resized viewports and mouse pointers. They do not prove real touch handling, multi-finger cancellation, Android audio behavior, or physical comfort. The owner's Redmi trial remains open; no engine choice is inferred.
 
 ## Deliberate limits
 
