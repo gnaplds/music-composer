@@ -61,28 +61,31 @@
 .tools-body .toolbar,.tools-body .entry,.tools-body .timeline-footer,.tools-body .box-tools{margin:0;padding:0;border:0;background:transparent;flex-wrap:wrap;justify-content:start}
 .tools-body .inspector{border:0;padding:0;display:block}.tools-body .keyboard-actions{font-size:14px}.tools-body #tools-project{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 :root:has(#dark-mode:checked) #mobile-tools{background:#22313f;color:#e4edf3}
-body.phone{height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .phone .mobile-only{display:flex}.phone button,.phone select,.phone input{min-height:40px}.phone button,.phone select,.phone .key{touch-action:manipulation}
-.phone .top{flex:none;padding:2px 8px;gap:6px;min-height:44px}.phone .top h1{font-size:16px;white-space:nowrap;letter-spacing:-.3px}.phone .top-actions{flex-wrap:nowrap;gap:5px}.phone #phone-transport{gap:5px}.phone .top button{padding:5px 9px}.phone .top .help-button{width:40px;height:40px}
+.phone .top{flex:none;padding:2px 8px;gap:6px;min-height:44px}.phone .top h1{font-size:16px;white-space:nowrap;letter-spacing:-.3px}.phone .top-actions{flex-wrap:wrap;gap:8px}.phone #phone-transport{gap:12px}.phone #play,.phone #undo{min-width:80px;min-height:44px}.phone .top button{padding:5px 9px}.phone .top .help-button{width:40px;height:40px}
 .phone .touch-actions{flex:none;gap:6px;align-items:center;padding:2px 8px;min-height:44px;overflow-x:auto;white-space:nowrap;border-block:1px solid var(--line)}
 .phone .touch-actions button,.phone .touch-actions select{flex:none}.phone .touch-actions [hidden],.phone .touch-actions[hidden],.phone #touch-select[hidden]{display:none}.phone #touch-count{font-size:12px}.phone #touch-preview{font-size:12px;font-weight:600}.phone #touch-select-kind{max-width:100px}
 .phone #touch-select[aria-pressed=true]{outline:2px solid #bf811a;outline-offset:-2px}
 .phone .workspace{flex:1;min-height:0;display:block;margin:0 8px}.phone .canvas-area{height:100%;display:flex;flex-direction:column;min-height:0}.phone .scroll{flex:1;min-height:0;border-radius:0;overscroll-behavior:contain;touch-action:none;scrollbar-width:none}.phone .scroll::-webkit-scrollbar{display:none}
-.phone .timeline,.phone .timeline *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.phone .note{height:28px;min-height:28px;font-size:12px;line-height:22px;cursor:pointer}.phone .resize-handle{display:none}
-.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:56px}.phone .boxes{position:sticky;top:0;z-index:5;background:inherit}.phone .box{padding:4px 0}.phone .box-chord{font-size:18px;line-height:1.1}.phone .box-roman{font-size:14px;line-height:1.15;margin:0}.phone .box .small{font-size:10px;line-height:1.1}
-.phone .ruler{position:sticky;bottom:0;height:42px;z-index:5}.phone .measure-head{height:22px;padding:3px 6px}.phone .beat-mark{height:20px;padding:2px 5px}
-.phone .lane-controls{height:32px}.phone .lane-label{height:32px;min-height:32px;line-height:24px}.phone .part-volume input{min-height:30px;width:88px}.phone .entry-badge{display:none}
-.phone .cursor{z-index:6}.phone .cursor-handle{position:sticky;top:0;bottom:auto;width:44px;height:40px;min-height:40px;margin-left:0;touch-action:none}.phone .timeline.touch-edit .note.selected{cursor:ew-resize;outline-width:3px}
+.phone .timeline,.phone .timeline *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.phone .note{height:32px;min-height:32px;font-size:14px;line-height:26px;cursor:pointer}.phone .resize-handle{display:none}
+.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:96px}.phone .boxes{position:sticky;top:0;z-index:5;background:inherit}.phone .box{padding:8px 0}.phone .box-chord{font-size:24px;line-height:1.2}.phone .box-roman{font-size:20px;line-height:1.35;margin:2px 0}.phone .box .small{font-size:14px;line-height:1.2}
+.phone .ruler{position:sticky;bottom:0;height:48px;z-index:7}.phone .measure-head{height:24px;padding:2px 6px;font-size:14px}.phone .beat-mark{height:24px;padding:2px 5px;font-size:12px}
+.phone .lane-controls{height:40px;display:flex;width:min(100%,calc(100vw - 18px))}.phone .lane-label{flex:none;max-width:100px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;height:40px;min-height:40px;font-size:14px;line-height:28px}.phone .part-volume{flex:1;min-width:0;font-size:14px}.phone .part-volume input{flex:1;min-width:0;min-height:40px;width:140px}.phone .part-volume output{min-width:40px}.phone .entry-badge{display:none}
+.phone .cursor{z-index:6}.phone .cursor-handle{position:absolute;top:0;bottom:auto;width:44px;height:44px;min-height:44px;margin-left:0;touch-action:none}.phone .timeline.touch-edit .note.selected{cursor:ew-resize;outline-width:3px}
 .phone .keyboard-dock{position:relative;flex:none;padding:2px 8px 0}.phone .keyboard-top{flex-wrap:nowrap;gap:6px;margin:0 0 2px}.phone .keyboard-top>.keyboard-context{display:none}.phone .keyboard-actions{flex-wrap:nowrap;gap:4px}.phone .keyboard-actions button{padding:4px 8px}.phone #keyboard-range,.phone .piano-duration-field{display:none}
-.phone #phone-entry{flex:1;min-width:0}.phone .entry{margin:0;padding:0;border:0;gap:8px;align-items:center;flex-wrap:nowrap}.phone .entry .field{flex-direction:row;align-items:center;gap:4px}.phone .entry select{max-width:160px;font-size:13px}.phone .keyboard-scroll{overflow:hidden}.phone .keyboard{height:var(--piano-height,86px);min-width:0}.phone .key{height:var(--piano-height,86px);min-width:0;font-size:11px;padding-bottom:6px}.phone .key.black{height:var(--piano-black-height,54px);font-size:10px;padding-bottom:4px}
+.phone #phone-entry{flex:1;min-width:0}.phone .entry{margin:0;padding:0;border:0;gap:8px;align-items:center;flex-wrap:nowrap}.phone .entry .field{flex-direction:row;align-items:center;gap:4px}.phone .entry select{max-width:160px;font-size:16px}.phone .keyboard-scroll{overflow:hidden}.phone .keyboard{height:var(--piano-height,86px);min-width:0}.phone .key{height:var(--piano-height,86px);min-width:0;font-size:11px;padding-bottom:6px}.phone .key.black{height:var(--piano-black-height,54px);font-size:10px;padding-bottom:4px}
 .phone .status{flex:none;margin:2px 8px;padding:5px 8px;min-height:0}.phone #help-panel{inset:48px 12px auto auto;max-height:calc(100dvh - 60px)}
 /* Keep the hosting badge from covering piano keys. */
 #nl-badge-frame{display:none!important}
 .phone.portrait .top{flex-wrap:wrap;align-items:center}.phone.portrait .top h1{width:100%;font-size:16px}.phone.portrait .top-actions{width:100%;justify-content:space-between}
 .phone.portrait .keyboard-top{flex-wrap:wrap}.phone.portrait #phone-entry{flex-basis:100%}.phone.portrait .entry{width:100%}.phone.portrait .entry .field{flex:1;min-width:0;flex-direction:column;align-items:stretch;gap:2px}.phone.portrait .entry select{width:100%;max-width:none}
-.phone.portrait .keyboard-actions{width:100%;justify-content:flex-end}.phone.portrait #keyboard-range{display:block;margin-right:auto;font-size:12px}.phone.portrait .keyboard,.phone.portrait .key{height:var(--piano-height,160px)}.phone.portrait .key.black{height:var(--piano-black-height,101px)}
-@media(max-height:360px){.phone .keyboard,.phone .key{height:var(--piano-height,64px)}.phone .key.black{height:var(--piano-black-height,44px)}.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:46px}.phone .box{padding-block:1px}.phone .box-chord{font-size:16px}.phone .box-roman{font-size:12px}.phone .ruler{height:30px}.phone .measure-head{height:17px;padding:1px 6px;font-size:10px}.phone .beat-mark{height:13px;padding:0 5px;font-size:9px}}
-@media(max-width:460px){.phone .top h1{font-size:14px}.phone .top button{font-size:12px;padding-inline:7px}.phone .top .help-button{font-size:21px}.phone .top,.phone .top-actions,.phone #phone-transport{gap:4px}}
+.phone.portrait .keyboard-actions{width:100%;justify-content:flex-end}.phone.portrait #keyboard-range{display:block;margin-right:auto;font-size:14px}.phone.portrait .keyboard,.phone.portrait .key{height:var(--piano-height,160px)}.phone.portrait .key.black{height:var(--piano-black-height,101px)}
+/* Let chord labels scroll away in short windows so the ruler cannot trap the notes. */
+@media(max-height:360px){.phone .boxes{position:relative}.phone .keyboard,.phone .key{height:var(--piano-height,64px)}.phone .key.black{height:var(--piano-black-height,44px)}.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:80px}.phone .box{padding-block:2px}}
+.phone .small,.phone label.field,.phone .legend,.phone .timeline-footer,.phone .status,.phone #touch-count,.phone #touch-preview{font-size:14px}
+.phone label.field input,.phone label.field select,.phone .keyboard-actions,.phone .tools-body .keyboard-actions{font-size:16px}.phone .help-body,.phone .help-body summary,.phone #help-panel .walkthrough,.phone #help-panel details.state{font-size:16px}.phone h2{font-size:18px}.phone h3{font-size:16px}.phone .key,.phone .key.black{font-size:14px}
+.phone .piano-bar{display:flex;align-items:center;gap:8px}.phone .piano-bar .piano-resize{flex:1;height:44px}.phone #piano-controls-toggle{font-size:14px;min-height:40px}.phone .keyboard-dock.controls-hidden .keyboard-top{display:none}
 .piano-resize{height:14px;cursor:ns-resize;touch-action:none;user-select:none;display:flex;align-items:center;justify-content:center;margin-top:-10px;margin-bottom:4px}
 .piano-resize::after{content:"";width:64px;height:4px;border-radius:2px;background:#738999}
 .piano-resize:hover::after,.piano-resize:focus-visible::after{background:#bf811a}.piano-resize:focus-visible{outline:2px solid #bf811a;outline-offset:-2px}
@@ -102,7 +105,7 @@ body.phone{height:100dvh;display:flex;flex-direction:column;overflow:hidden;padd
 
 <div class="status" id="status" role="status" aria-live="polite" hidden></div>
 
-<footer class="keyboard-dock"><div id="piano-resize" class="piano-resize" role="separator" tabindex="0" aria-label="Piano height" aria-orientation="horizontal" aria-controls="keyboard" aria-valuemin="64" aria-valuemax="320" aria-valuenow="116" title="Drag up or down to resize the piano; arrow keys also adjust height"></div><div class="keyboard-top"><div class="mobile-only" id="phone-entry"></div><div class="keyboard-context"><div class="collection-name" id="collection-name">C major sixth-diminished</div><div class="legend"><span class="sixth">● Sixth-chord tone</span><span class="diminished">◆ Diminished-chord tone</span><span class="outside">○ Outside collection</span></div></div><div class="keyboard-actions"><label class="name-toggle piano-duration-field">Default duration<select id="piano-duration" aria-label="Default duration for new piano notes"></select></label><label class="name-toggle"><input id="note-names" type="checkbox">Note names</label><label class="name-toggle"><input id="piano-symbols" type="checkbox">Symbols</label><span id="keyboard-range"></span><button id="octave-down" aria-label="Keyboard down one octave">− Octave</button><button id="octave-up" aria-label="Keyboard up one octave">+ Octave</button></div></div><div class="keyboard-scroll"><div class="keyboard names-hidden symbols-hidden" id="keyboard" aria-label="Piano note entry"></div></div></footer>
+<footer class="keyboard-dock"><div class="piano-bar"><div id="piano-resize" class="piano-resize" role="separator" tabindex="0" aria-label="Piano height" aria-orientation="horizontal" aria-controls="keyboard" aria-valuemin="64" aria-valuemax="320" aria-valuenow="116" title="Drag up or down to resize the piano; arrow keys also adjust height"></div><button id="piano-controls-toggle" class="mobile-only" aria-expanded="true" aria-controls="keyboard-top">Hide piano controls</button></div><div class="keyboard-top" id="keyboard-top"><div class="mobile-only" id="phone-entry"></div><div class="keyboard-context"><div class="collection-name" id="collection-name">C major sixth-diminished</div><div class="legend"><span class="sixth">● Sixth-chord tone</span><span class="diminished">◆ Diminished-chord tone</span><span class="outside">○ Outside collection</span></div></div><div class="keyboard-actions"><label class="name-toggle piano-duration-field">Default duration<select id="piano-duration" aria-label="Default duration for new piano notes"></select></label><label class="name-toggle"><input id="note-names" type="checkbox">Note names</label><label class="name-toggle"><input id="piano-symbols" type="checkbox">Symbols</label><span id="keyboard-range"></span><button id="octave-down" aria-label="Keyboard down one octave">− Octave</button><button id="octave-up" aria-label="Keyboard up one octave">+ Octave</button></div></div><div class="keyboard-scroll"><div class="keyboard names-hidden symbols-hidden" id="keyboard" aria-label="Piano note entry"></div></div></footer>
 <dialog id="mobile-tools" aria-labelledby="tools-title"><div class="tools-header"><h2 id="tools-title">Tools</h2><button id="close-tools" autofocus>Close</button></div><div class="tools-body">
 <section><h3>Playback</h3><div id="tools-playback"></div></section>
 <section><h3>Entry and view</h3><div id="tools-entry" class="entry"></div><div id="tools-view"></div></section>
@@ -528,10 +531,16 @@ var Composer = (() => {
   let isPhone = false, selectionMode = '', touchEdit = '', visiblePart = null, desktopCollapsed = [];
   const pianoResizer=$('piano-resize'), pianoDock=document.querySelector('.keyboard-dock');
   let pianoHeight=null, pianoDrag=null;
+  $('piano-controls-toggle').onclick=()=>{
+    const hidden=pianoDock.classList.toggle('controls-hidden');
+    $('piano-controls-toggle').setAttribute('aria-expanded',String(!hidden));
+    $('piano-controls-toggle').textContent=hidden?'Show piano controls':'Hide piano controls';
+    syncPianoHeight();
+  };
   function pianoMaximum(){
     if(!isPhone)return Math.max(64,Math.min(320,Math.floor(innerHeight*.4)));
     const controls=pianoDock.getBoundingClientRect().height-$('keyboard').getBoundingClientRect().height;
-    const timelineRoom=document.querySelector('.boxes').getBoundingClientRect().height+document.querySelector('.ruler').getBoundingClientRect().height+72;
+    const timelineRoom=document.querySelector('.boxes').getBoundingClientRect().height+document.querySelector('.ruler').getBoundingClientRect().height+84;
     return Math.max(64,Math.min(320,Math.floor(innerHeight-document.querySelector('.top').getBoundingClientRect().height-document.querySelector('.touch-actions').getBoundingClientRect().height-controls-timelineRoom)));
   }
   function syncPianoHeight(){
@@ -818,15 +827,17 @@ var Composer = (() => {
       const notes = placements.map(({note,row}) => {
         const family = song.inspect(note.start).families[note.pitch%12];
         const held = data.measures.some(measure => measure.end > note.start && measure.end < note.start + note.duration);
-        return `<button class="note ${family}${selectedNotes.has(note.id)?' selected':''}" data-note="${note.id}" data-pitch="${note.pitch}" aria-pressed="${selectedNotes.has(note.id)}" aria-label="${role} ${pitchName(note.pitch)}, start ${number(note.start)}, ${data.lengthLabels[note.id]}" style="left:${note.start*beatWidth+1}px;width:${Math.max(8,note.duration*beatWidth-3)}px;top:${(isPhone?34:27)+row*(isPhone?31:25)}px" title="${pitchName(note.pitch)} · ${role} · ${data.lengthLabels[note.id]}${held?' · continues across measures':''}">${symbol[family]} ${pitchName(note.pitch)}${held?' ↔':''}<span class="resize-handle" aria-hidden="true" title="Drag to resize this note"></span></button>`;
+        return `<button class="note ${family}${selectedNotes.has(note.id)?' selected':''}" data-note="${note.id}" data-pitch="${note.pitch}" aria-pressed="${selectedNotes.has(note.id)}" aria-label="${role} ${pitchName(note.pitch)}, start ${number(note.start)}, ${data.lengthLabels[note.id]}" style="left:${note.start*beatWidth+1}px;width:${Math.max(8,note.duration*beatWidth-3)}px;top:${(isPhone?42:27)+row*(isPhone?35:25)}px" title="${pitchName(note.pitch)} · ${role} · ${data.lengthLabels[note.id]}${held?' · continues across measures':''}">${symbol[family]} ${pitchName(note.pitch)}${held?' ↔':''}<span class="resize-handle" aria-hidden="true" title="Drag to resize this note"></span></button>`;
       }).join('');
       const collapsed = collapsedParts.has(role), name = role[0].toUpperCase()+role.slice(1);
-      return `<div class="lane${collapsed?' collapsed':''}${role===part?' entry-part':''}" data-role="${role}" style="height:${collapsed?(isPhone?34:30):Math.max(isPhone?72:96,(isPhone?38:32)+ends.length*(isPhone?31:25))}px"><div class="lane-controls"><button class="lane-label" data-collapse-role="${role}" aria-expanded="${!collapsed}" aria-controls="lane-content-${role}" aria-label="${collapsed?'Expand':'Collapse'} ${name} row" title="${collapsed?'Expand':'Collapse'} this row; its notes still play">${collapsed?'▸':'▾'} ${name}${collapsed?` · ${placements.length} notes`:''}</button><label class="part-volume">Vol <input type="range" data-volume="${role}" min="0" max="100" step="5" value="${Math.round(partVolumes[role]*100)}" aria-label="${name} volume" aria-valuetext="${Math.round(partVolumes[role]*100)} percent"><output>${Math.round(partVolumes[role]*100)}%</output></label><span class="entry-badge"${role===part?'':' hidden'}>Piano entry</span></div><div id="lane-content-${role}"${collapsed?' hidden':''}>${lines}${notes}</div></div>`;
+      return `<div class="lane${collapsed?' collapsed':''}${role===part?' entry-part':''}" data-role="${role}" style="height:${collapsed?(isPhone?42:30):Math.max(isPhone?84:96,(isPhone?46:32)+ends.length*(isPhone?35:25))}px"><div class="lane-controls"><button class="lane-label" data-collapse-role="${role}" aria-expanded="${!collapsed}" aria-controls="lane-content-${role}" aria-label="${collapsed?'Expand':'Collapse'} ${name} row" title="${collapsed?'Expand':'Collapse'} this row; its notes still play">${collapsed?'▸':'▾'} ${name}${collapsed?` · ${placements.length} notes`:''}</button><label class="part-volume">Vol <input type="range" data-volume="${role}" min="0" max="100" step="5" value="${Math.round(partVolumes[role]*100)}" aria-label="${name} volume" aria-valuetext="${Math.round(partVolumes[role]*100)} percent"><output>${Math.round(partVolumes[role]*100)}%</output></label><span class="entry-badge"${role===part?'':' hidden'}>Piano entry</span></div><div id="lane-content-${role}"${collapsed?' hidden':''}>${lines}${notes}</div></div>`;
     }).join('');
     $('timeline').style.width = `${width}px`;
     $('timeline').style.setProperty('--beat-width', `${beatWidth}px`);
-    $('timeline').innerHTML = `<div class="boxes">${boxes}</div><div class="lanes" id="timeline-lanes">${lanes}</div><div class="ruler">${beats}${headers}</div><div class="cursor" id="edit-cursor" style="left:${position*beatWidth}px"><button class="cursor-handle" style="left:${Math.max(-position*beatWidth,isPhone?-21:-14)}px" aria-label="Drag editing cursor; arrow keys move by the snap grid" title="Drag to seek · snaps to nearby note starts and ends">↔</button></div><div class="cursor playhead" id="playhead"></div>`;
+    const cursorHandle = `<button class="cursor-handle" style="left:${cursorHandleLeft()}px" aria-label="Drag editing cursor; arrow keys move by the snap grid" title="Drag to seek · snaps to nearby note starts and ends">↔</button>`;
+    $('timeline').innerHTML = `<div class="boxes">${boxes}</div><div class="lanes" id="timeline-lanes">${lanes}</div><div class="ruler">${beats}${headers}${isPhone?cursorHandle:''}</div><div class="cursor" id="edit-cursor" style="left:${position*beatWidth}px">${isPhone?'':cursorHandle}</div><div class="cursor playhead" id="playhead"></div>`;
   }
+  function cursorHandleLeft(){return isPhone?Math.max(0,position*beatWidth-21):Math.max(-position*beatWidth,-14);}
   function renderSelection(data) {
     const grouped = selectedNotes.size>1;
     const note = !grouped && data.notes.find(note => note.id === selected);
@@ -1137,7 +1148,7 @@ var Composer = (() => {
       if(event.button!==0||event.target.closest('.lane-controls'))return;
       const target=event.target, note=target.closest('[data-note]');
       const editing=touchEdit&&note&&selectedNotes.has(note.dataset.note);
-      if(!target.closest('#edit-cursor')&&!editing){
+      if(!target.closest('#edit-cursor,.cursor-handle')&&!editing){
         event.preventDefault();
         const scroll=$('timeline-scroll');scroll.scrollTo({left:scroll.scrollLeft,behavior:'auto'});
         drag={type:'pan',touch:true,target,pointer:event.pointerId,x:event.clientX,clientX:event.clientX,y:event.clientY,clientY:event.clientY,scroll:scroll.scrollLeft,scrollTop:scroll.scrollTop,moved:false};
@@ -1155,7 +1166,7 @@ var Composer = (() => {
     if(event.button!==0)return;
     const scroll=$('timeline-scroll');scroll.scrollTo({left:scroll.scrollLeft,behavior:'auto'});
     ignoreTimelineClickUntil=0;
-    if(event.target.closest('#edit-cursor')){
+    if(event.target.closest('#edit-cursor,.cursor-handle')){
       event.preventDefault();stopTransport();
       drag={type:'seek',pointer:event.pointerId,x:event.clientX,clientX:event.clientX,scroll:$('timeline-scroll').scrollLeft,original:position,selection:selected,selections:[...selectedNotes],snap:+$('snap').value,moved:false,valid:true};
       $('timeline').setPointerCapture(event.pointerId);dragFrame=requestAnimationFrame(scrollDrag);return;
@@ -1202,7 +1213,7 @@ var Composer = (() => {
       renderSelection(song.inspect(position));
       $('position').value=position;
       $('edit-cursor').style.left=`${position*beatWidth}px`;
-      document.querySelector('.cursor-handle').style.left=`${Math.max(-position*beatWidth,isPhone?-21:-14)}px`;
+      document.querySelector('.cursor-handle').style.left=`${cursorHandleLeft()}px`;
       $('position-readout').textContent=locationName(position);
       updateLive(position);return;
     }

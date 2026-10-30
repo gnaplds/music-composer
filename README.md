@@ -42,7 +42,7 @@ This is a working prototype. **Notes are not saved:** reloading, closing, or dis
 
 ## Desktop and phone
 
-The same app adapts to both screens. Desktop supports mouse editing and selection shortcuts. On a phone, portrait mode provides a one-octave piano with taller, adjustable keys and octave buttons. Part and duration controls sit above the piano; Play/Pause, Undo, and Tools stay at the top. Touch selection and explicit Move, Resize, and Delete actions support editing; ordinary swipes scroll the timeline.
+The same app adapts to both screens. Desktop supports mouse editing and selection shortcuts. On a phone, portrait mode provides a one-octave piano with taller, adjustable keys and octave buttons. Part and duration controls sit above the piano; a Show/Hide piano controls button hides the whole control area while keeping the keys and resize handle available. Taller chord boxes, larger text, longer volume sliders, and wider, spaced Play/Pause and Undo buttons improve the phone layout. Play/Pause, Undo, and Tools stay at the top. Touch selection and explicit Move, Resize, and Delete actions support editing; ordinary swipes scroll the timeline.
 
 Landscape remains available with a two-octave piano. Both orientations support writing and playback, and rotation preserves notes and selections within the current session.
 

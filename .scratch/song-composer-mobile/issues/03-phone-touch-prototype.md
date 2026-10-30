@@ -68,3 +68,11 @@ Visible-control checks passed for independent bass/chord/melody entry, automatic
 At 320 × 568, the 160-pixel piano and controls still fit, each white key is 38 pixels wide, and the timeline retains about 219 pixels. This establishes layout fit, not finger comfort. Portrait playback highlighted the current F-minor chord box. The new key default was checked through Tools and Next step: an occupied C-major box stayed unchanged, the empty next box became F minor, and entering F–A♭–C displayed Fm and i. No console warnings or errors were recorded.
 
 [Portrait trial screenshot](../../song-composer/prototype/evidence/mobile-portrait.png). All 49 command/inspection and playback-plan tests pass, including four inheritance regressions. Checks use resized desktop browsers and mouse pointers, not physical Android touch/audio. The owner must still assess tap accuracy, scrolling comfort, interruption handling, and audio on the Redmi.
+
+## Mobile readability update — October 30, 2026
+
+The owner confirmed that Hide piano controls should hide the entire area above the keys: Part, Note duration, octave buttons, and pitch range. Controls start visible; the keys, resize handle, and Show piano controls remain available. Settings and notes are retained, and the toggle does not enter musical undo.
+
+Implemented taller chord boxes (96 pixels, or 80 in short landscape), 24-pixel chord names, 20-pixel Roman numerals, 16-pixel main text, and 14-pixel supporting labels. Play and Undo have an 80-pixel minimum width and a 12-pixel gap. Volume sliders use the available row width. The phone cursor handle now sits on the measure ruler to leave chord names clear.
+
+All 49 existing model/playback tests pass; both inline scripts parse. Browser testing was blocked because local browser use is disabled in Work settings. No new screenshot or visual usability result is claimed. Check portrait at 390 × 844 and 320 × 568, landscape at 844 × 390 and 844 × 320, and desktop restoration. Verify hiding/showing controls preserves notes, settings, and undo; piano resizing; cursor dragging and keyboard seeking; slider reach; Play/Undo spacing; and text clipping. The physical Redmi trial remains pending.

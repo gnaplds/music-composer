@@ -12,6 +12,8 @@ Desktop supports piano step entry, independent Melody/Chord/Bass parts, a timeli
 
 ## Latest work and evidence
 
+- Mobile readability changes add taller chord boxes, larger text, wider/spaced transport buttons, longer volume sliders, and the approved Show/Hide piano controls button. The phone cursor handle is on the ruler. All 49 tests pass and inline scripts parse. **This update has not been visually tested:** local browser use was disabled in Work settings. The [trial ticket](.scratch/song-composer-mobile/issues/03-phone-touch-prototype.md#mobile-readability-update--october-30-2026) lists the remaining checks; earlier screenshots show the previous layout.
+
 - The owner approved portrait writing and confirmed that collection-key defaults apply only to empty/new boxes. See the [portrait trial](.scratch/song-composer-mobile/issues/03-phone-touch-prototype.md#portrait-writing-trial--october-30-2026) and [key-default rule](.scratch/song-composer/issues/03-musical-context.md#empty-box-key-defaults--october-30-2026). The earlier resizable piano, global Show/Hide parts, key labels off, and wider cursor handles remain.
 - All 49 musical tests pass. Four inheritance regressions cover scoped defaults, automatic advance and atomic undo, occupied/held notes, invalid/no-op advances, and a new sustain reaching several empty boxes. Browser checks cover portrait entry/editing, panning, piano and cursor drags, small-screen fit, rotation, playback, key inheritance, and restored desktop controls.
 - The owner has not supplied a physical-phone trial verdict. Mouse interaction at resized desktop viewports does not establish touch comfort, Android audio latency, or interruption recovery. Keep the phone trial ticket claimed until that evidence arrives.
