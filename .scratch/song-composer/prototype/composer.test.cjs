@@ -9,6 +9,85 @@ vm.runInContext(script, context);
 const { createComposer, planPlayback } = context.Composer;
 const plain = value => JSON.parse(JSON.stringify(value));
 
+test('advancing into an empty box inherits collection key only within that box and supports undo', () => {
+  const song=createComposer();
+  song.dispatch({type:'context',kind:'collection',at:0,tonic:5,mode:'minor'});
+  song.dispatch({type:'context',kind:'key',at:8,tonic:2,mode:'major'});
+  const before=plain(song.inspect());
+  assert.equal(song.dispatch({type:'advance',at:4}),4);
+  assert.equal(song.inspect(3).context.key.tonic,0);
+  assert.deepEqual(plain(song.inspect(4).context.key),{at:4,tonic:5,mode:'minor'});
+  assert.equal(song.inspect(8).context.key.tonic,2);
+  assert.deepEqual(plain(song.inspect().collection),before.collection);
+  song.dispatch({type:'undo'});
+  assert.deepEqual(plain(song.inspect().key),before.key);
+  song.dispatch({type:'redo'});
+  assert.equal(song.inspect(4).context.key.tonic,5);
+});
+
+test('piano entry inherits the collection for new boxes and automatic advance shares one undo step', () => {
+  const song=createComposer();
+  song.dispatch({type:'context',kind:'collection',at:0,tonic:5,mode:'minor'});
+  const before=plain(song.inspect());
+  const result=song.dispatch({type:'enter',part:'melody',pitch:72,start:3,duration:1});
+  assert.equal(result.position,4);
+  assert.equal(song.inspect(0).context.key.tonic,5);
+  assert.equal(song.inspect(4).context.key.tonic,5);
+  assert.equal(song.inspect(8).context.key.tonic,0);
+  song.dispatch({type:'undo'});
+  assert.deepEqual(plain(song.inspect().notes),before.notes);
+  assert.deepEqual(plain(song.inspect().key),before.key);
+  song.dispatch({type:'redo'});
+  assert.equal(song.inspect(4).context.key.mode,'minor');
+  song.dispatch({type:'enter',part:'chord',pitch:65,start:18,duration:1,advance:false});
+  assert.equal(song.inspect().end,20);
+  assert.deepEqual(plain(song.inspect(18).context.key),{at:16,tonic:5,mode:'minor'});
+  assert.equal(song.inspect(20).context.key.tonic,0);
+  song.dispatch({type:'undo'});
+  assert.equal(song.inspect().end,16);
+  assert.equal(song.inspect(18).context.key.tonic,0);
+});
+
+test('key inheritance preserves occupied boxes, held notes, and invalid or no-op advance history', () => {
+  const song=createComposer();
+  song.dispatch({type:'advance',at:4});
+  assert.equal(song.inspect().canUndo,false);
+  song.dispatch({type:'context',kind:'collection',at:0,tonic:5,mode:'minor'});
+  song.dispatch({type:'add',part:'bass',pitch:48,start:0,duration:8});
+  const before=plain(song.inspect());
+  song.dispatch({type:'advance',at:4});
+  assert.deepEqual(plain(song.inspect()),before);
+  song.dispatch({type:'enter',part:'chord',pitch:65,start:4,duration:1,advance:false});
+  assert.equal(song.inspect(4).context.key.tonic,0);
+  const occupied=plain(song.inspect());
+  for(const at of [-1,257,NaN,Infinity,.1,'4']){
+    assert.throws(()=>song.dispatch({type:'advance',at}));
+    assert.deepEqual(plain(song.inspect()),occupied);
+  }
+  song.dispatch({type:'advance',at:256});
+  assert.deepEqual(plain(song.inspect()),occupied);
+  song.dispatch({type:'advance',at:8});
+  assert.equal(song.inspect(8).context.key.tonic,5);
+  song.dispatch({type:'advance',at:8});
+  song.dispatch({type:'undo'});
+  assert.deepEqual(plain(song.inspect().key),occupied.key);
+});
+
+test('a newly entered sustain gives every empty box it reaches the collection key without fragmenting the passage', () => {
+  const song=createComposer();
+  song.dispatch({type:'context',kind:'collection',at:0,tonic:5,mode:'minor'});
+  song.dispatch({type:'enter',part:'bass',pitch:41,start:18,duration:8,advance:false});
+  assert.equal(song.inspect().end,28);
+  for(const at of [18,20,24,26])assert.equal(song.inspect(at).context.key.tonic,5);
+  assert.deepEqual(plain(song.inspect().key),[
+    {at:0,tonic:0,mode:'major'},{at:16,tonic:5,mode:'minor'},{at:28,tonic:0,mode:'major'},
+  ]);
+  song.dispatch({type:'undo'});
+  assert.equal(song.inspect().end,16);
+  assert.equal(song.inspect().notes.length,0);
+  assert.deepEqual(plain(song.inspect().key),[{at:0,tonic:0,mode:'major'}]);
+});
+
 test('deleting a selected group removes complete notes across parts with one undo', () => {
   const song = createComposer();
   for (const note of [

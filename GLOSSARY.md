@@ -20,6 +20,9 @@ _Avoid_: Switching between “measure” and “bar” in app documentation; use
 **Chord box**:
 A visual span within a measure that groups bass, melody, and chord notes by their start positions. Its boundaries organize the music; notes have their own timing and may sustain beyond those boundaries.
 
+**Empty chord box**:
+A chord box with no note sounding anywhere in its time span, in any part. A note held from an earlier box makes it nonempty.
+
 **Bass part**:
 The musical material assigned to the bass role in a chord box.
 

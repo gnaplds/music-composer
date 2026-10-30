@@ -9,7 +9,7 @@ An agreed Android-first composition design, tested with a playable touch prototy
 
 ## Notes
 
-- The owner accepted the destination and starting conditions in [Mobile planning intake](../../docs/mobile-planning-intake.md): develop on the computer, test on a Redmi Note 9 with Android 12, begin with landscape writing, and adapt the browser prototype before choosing an engine. Portrait initially covers basic navigation and review.
+- The owner accepted the destination and starting conditions in [Mobile planning intake](../../docs/mobile-planning-intake.md): develop on the computer, test on a Redmi Note 9 with Android 12, begin with landscape writing, and adapt the browser prototype before choosing an engine. The owner later accepted [portrait writing](issues/01-touch-workflow.md#current-orientation--october-30-2026) as the primary layout, with one octave and taller keys; landscape remains available.
 - This is a separate effort from [Plan a playable desktop song composer](../song-composer/map.md). Adapt the same website for phones while preserving its desktop behavior; the owner explicitly resumed this shared-site direction in [Mobile planning intake](../../docs/mobile-planning-intake.md#current-direction-the-same-website). Mobile interaction work carries forward the existing musical rules; differences require an explicit decision.
 - Use Wayfinder with the local Markdown tracker, Grill with Docs (Grilling and Domain Modeling) for human decisions, Research for outside facts, and Prototype for disposable interaction experiments. Continue the user's TDD requirement at the agreed command/inspection and playback-plan seams; touch and audio claims require device evidence.
 - The next prototype adapts the existing website and can use its authorized GitHub/hosting workflow for the phone trial after the touch agreement. It remains a disposable interaction prototype, rather than a production release. The Godot engine decision follows that trial. A browser touch trial does not by itself validate Godot, native audio latency, or Android lifecycle behavior.
@@ -22,7 +22,7 @@ An agreed Android-first composition design, tested with a playable touch prototy
 
 - [Assess Godot for the Android composer](issues/02-godot-android-feasibility.md): Android export, touch, polyphony, and file APIs are documented; local export setup is incomplete, and audio scheduling, latency, and lifecycle behavior need a focused device experiment. The [research report](../../docs/research/godot-android-feasibility.md) preserves source evidence and separates it from unmeasured phone behavior. The engine choice remains open.
 
-- [Define the phone writing workflow](issues/01-touch-workflow.md): the owner accepted a compact landscape layout and explicit touch selection/editing for the same website, with a Redmi trial before usability acceptance.
+- [Define the phone writing workflow](issues/01-touch-workflow.md): the owner now prefers portrait writing with one octave, optional landscape with two octaves, and explicit touch selection/editing for the same website, with a Redmi trial before usability acceptance.
 
 ## Not yet specified
 
@@ -35,5 +35,5 @@ An agreed Android-first composition design, tested with a playable touch prototy
 - Writing or building the app directly on the phone; the accepted workflow uses the computer for development.
 - Shipping an APK, a store release, or a production mobile application during this planning effort.
 - Choosing Godot merely because it is the first engine proposed; the choice remains a decision informed by evidence.
-- A full portrait composition workspace in the initial mobile prototype, iOS/tablet-specific work, and new musical features unrelated to adapting the accepted workflow.
+- iOS/tablet-specific work and new musical features unrelated to the accepted workflow.
 - Automatically generating songs or replacing the existing chord-recognition, harmony-label, or independent-part rules during this interaction study.

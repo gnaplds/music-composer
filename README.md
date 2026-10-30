@@ -20,7 +20,7 @@ This is a working prototype. **Notes are not saved:** reloading, closing, or dis
 - Select notes across parts, then move, resize, or delete them together. Group edits preserve relative timing and can be undone in one step.
 - Snap edits to quarter notes, eighth notes, or quarter- and eighth-note triplets. Invalid edits, including overlapping notes of the same pitch in one part, are rejected.
 - Undo and redo musical edits. Pan and zoom the timeline, collapse individual parts, or hide all three part rows while keeping chord labels and the ruler visible.
-- Drag the wider editing cursor handle to inspect active notes silently. Resize the piano vertically by dragging its top handle on desktop or landscape phones.
+- Drag the wider editing cursor handle to inspect active notes silently. Resize the piano vertically by dragging its top handle on desktop or phones in either orientation.
 
 ## Explore harmony
 
@@ -28,6 +28,7 @@ This is a working prototype. **Notes are not saved:** reloading, closing, or dis
 - Recognize 14 chord qualities: major, minor, diminished, augmented, sus2, sus4, 6, m6, 7, maj7, m7, m(maj7), m7♭5, and dim7.
 - Choose an alternative recognized name or write a custom chord label without changing the notes.
 - View Roman numerals and inversion figures relative to the active key. Choose compatible readings for secondary dominants, tritone substitutes, leading-tone diminished chords, and modal interchange.
+- Let empty and new chord boxes inherit the active collection’s tonic and major/minor mode when advancing or entering notes. Boxes with sounding notes keep their key.
 - Change the key from the cursor or apply a key to selected chord boxes, including separated boxes. Key changes and harmonic collections have independent settings.
 - Use major or minor sixth-diminished collections to distinguish sixth-chord tones, diminished-chord tones, and outside tones. Optional piano symbols and note names support this view.
 
@@ -41,9 +42,9 @@ This is a working prototype. **Notes are not saved:** reloading, closing, or dis
 
 ## Desktop and phone
 
-The same app adapts to both screens. Desktop supports mouse editing and selection shortcuts. On a phone, landscape mode provides a two-octave piano, touch selection, and explicit Move, Resize, and Delete actions; ordinary swipes scroll the timeline. Secondary controls are in Tools.
+The same app adapts to both screens. Desktop supports mouse editing and selection shortcuts. On a phone, portrait mode provides a one-octave piano with taller, adjustable keys and octave buttons. Part and duration controls sit above the piano; Play/Pause, Undo, and Tools stay at the top. Touch selection and explicit Move, Resize, and Delete actions support editing; ordinary swipes scroll the timeline.
 
-Portrait mode supports review and playback. Rotating back to landscape preserves notes and selections within the current session.
+Landscape remains available with a two-octave piano. Both orientations support writing and playback, and rotation preserves notes and selections within the current session.
 
 ## Current limits
 

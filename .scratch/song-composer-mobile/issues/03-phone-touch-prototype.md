@@ -45,6 +45,26 @@ The owner supplied https://simplecomposer.netlify.app/. Commit `b5aa831` was pus
 
 ## Owner trial — pending
 
-Use the owner's existing Netlify site: https://simplecomposer.netlify.app/. Turn the Redmi Note 9 sideways and try the accepted Q88 task: held bass, chord, advancing melody; pan from a note; select/move/resize/delete a group and Undo; change the key of separated boxes; play and rotate. Report any missed taps, accidental edits, hidden controls, or audio trouble.
+Use the owner's existing Netlify site: https://simplecomposer.netlify.app/. Hold the Redmi Note 9 in portrait and try the accepted writing task: held bass, chord, advancing melody; pan from a note; select/move/resize/delete a group and Undo; change the key of separated boxes; play and rotate. Report any missed taps, accidental edits, hidden controls, or audio trouble.
 
-Keep this ticket claimed until the owner reports the physical-device result. The engine decision remains open. No mobile usability verdict or Godot choice has been recorded.
+Also try octave switching and piano-height adjustment, then rotate to landscape and back. Keep this ticket claimed until the owner reports the physical-device result. The engine decision remains open. No mobile usability verdict or Godot choice has been recorded.
+
+
+## Portrait writing trial — October 30, 2026
+
+Status: implemented and browser-checked; owner trial pending.
+
+The owner accepted portrait as the primary mobile writing layout: a one-octave piano with octave switching and adjustable height, Part and Note duration directly above it, transport and Tools at the top, and the timeline in the remaining space. The active part starts expanded; individual collapse controls and Show/Hide parts remain. All existing selection and editing actions work in portrait. Landscape remains available with two octaves. This replaces the earlier portrait-review-only restriction and keeps the same-site implementation. The separately requested [empty-box key default](../../song-composer/issues/03-musical-context.md#empty-box-key-defaults--october-30-2026) applies on desktop and phones.
+
+Before implementation, a 390 × 844 browser check confirmed the piano and Select control were hidden, and the keyboard still contained 25 pitches. Source inspection also found a portrait guard blocking move/resize gestures. The checks below exercise the visible controls, note editing, scrolling, resizing, rotation, and retained desktop behavior.
+
+
+### Portrait browser evidence
+
+At 390 × 844, the piano exposes 13 pitches (one octave plus its upper tonic), starts 160 pixels tall, and gives each white key 46.75 pixels of width. The timeline retains about 495 pixels before the selection row appears. The header, Part, duration, pitch range, and octave controls fit without horizontal page overflow.
+
+Visible-control checks passed for independent bass/chord/melody entry, automatic melody advance, two-note selection, group Move, group Resize, Delete/Undo, panning from a note without editing it, cursor dragging, and piano-height adjustment. A 40-pixel upward resize changed the piano from 160 to 200 pixels. Rotation to 844 × 390 exposed 25 pitches and constrained the piano height; returning to portrait restored 13 pitches and the chosen 200-pixel height without changing the notes. The 1280 × 800 desktop layout restored its 37 pitches and controls. At the highest portrait octave, rotation kept all pitches within the existing C9 limit.
+
+At 320 × 568, the 160-pixel piano and controls still fit, each white key is 38 pixels wide, and the timeline retains about 219 pixels. This establishes layout fit, not finger comfort. Portrait playback highlighted the current F-minor chord box. The new key default was checked through Tools and Next step: an occupied C-major box stayed unchanged, the empty next box became F minor, and entering F–A♭–C displayed Fm and i. No console warnings or errors were recorded.
+
+[Portrait trial screenshot](../../song-composer/prototype/evidence/mobile-portrait.png). All 49 command/inspection and playback-plan tests pass, including four inheritance regressions. Checks use resized desktop browsers and mouse pointers, not physical Android touch/audio. The owner must still assess tap accuracy, scrolling comfort, interruption handling, and audio on the Redmi.

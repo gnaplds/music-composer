@@ -62,3 +62,8 @@ The existing command/inspection and playback-plan test seams carry forward. Visi
 The owner accepted Q80–Q88 and explicitly authorized building and testing the shared-site workflow. Use the compact landscape arrangement, two-octave piano, swipe-first navigation, explicit selection/edit/delete actions, larger cursor control, and Tools overlay recorded in the accepted rounds above. Musical rules and test seams remain unchanged except for atomic deletion of a selected note group.
 
 This resolves the workflow decision, not usability on the phone. Continue in [Test the composition workflow on the phone](03-phone-touch-prototype.md); its owner trial supplies that verdict. No engine choice or production persistence is implied.
+
+
+## Current orientation — October 30, 2026
+
+The owner accepted portrait as the primary writing orientation, replacing the earlier Q77/Q80/Q82 portrait restriction. Portrait has a one-octave piano with 160-pixel default key height and octave controls; landscape retains two octaves. Part and duration remain above the piano, with transport and Tools at the top. Both orientations support the same selection, movement, resizing, deletion, and playback. Existing row-collapse and piano-height controls remain. See the [portrait trial](03-phone-touch-prototype.md#portrait-writing-trial--october-30-2026) for browser evidence and the pending physical-phone verdict.

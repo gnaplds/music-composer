@@ -78,7 +78,9 @@ body.phone{height:100dvh;display:flex;flex-direction:column;overflow:hidden;padd
 .phone .status{flex:none;margin:2px 8px;padding:5px 8px;min-height:0}.phone #help-panel{inset:48px 12px auto auto;max-height:calc(100dvh - 60px)}
 /* Keep the hosting badge from covering piano keys. */
 #nl-badge-frame{display:none!important}
-.phone .portrait-notice{display:none}.phone.portrait .portrait-notice{display:block;padding:6px 10px;margin:0;font-size:12px;background:#e6edf3;color:#243747}.phone.portrait .keyboard-dock,.phone.portrait .touch-actions,.phone.portrait #touch-select{display:none}.phone.portrait .workspace{margin-bottom:8px}
+.phone.portrait .top{flex-wrap:wrap;align-items:center}.phone.portrait .top h1{width:100%;font-size:16px}.phone.portrait .top-actions{width:100%;justify-content:space-between}
+.phone.portrait .keyboard-top{flex-wrap:wrap}.phone.portrait #phone-entry{flex-basis:100%}.phone.portrait .entry{width:100%}.phone.portrait .entry .field{flex:1;min-width:0;flex-direction:column;align-items:stretch;gap:2px}.phone.portrait .entry select{width:100%;max-width:none}
+.phone.portrait .keyboard-actions{width:100%;justify-content:flex-end}.phone.portrait #keyboard-range{display:block;margin-right:auto;font-size:12px}.phone.portrait .keyboard,.phone.portrait .key{height:var(--piano-height,160px)}.phone.portrait .key.black{height:var(--piano-black-height,101px)}
 @media(max-height:360px){.phone .keyboard,.phone .key{height:var(--piano-height,64px)}.phone .key.black{height:var(--piano-black-height,44px)}.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:46px}.phone .box{padding-block:1px}.phone .box-chord{font-size:16px}.phone .box-roman{font-size:12px}.phone .ruler{height:30px}.phone .measure-head{height:17px;padding:1px 6px;font-size:10px}.phone .beat-mark{height:13px;padding:0 5px;font-size:9px}}
 @media(max-width:460px){.phone .top h1{font-size:14px}.phone .top button{font-size:12px;padding-inline:7px}.phone .top .help-button{font-size:21px}.phone .top,.phone .top-actions,.phone #phone-transport{gap:4px}}
 .piano-resize{height:14px;cursor:ns-resize;touch-action:none;user-select:none;display:flex;align-items:center;justify-content:center;margin-top:-10px;margin-bottom:4px}
@@ -92,7 +94,6 @@ body.phone{height:100dvh;display:flex;flex-direction:column;overflow:hidden;padd
 <output id="touch-count" aria-live="polite"></output><button id="touch-clear" hidden>Clear</button>
 <button id="touch-move" hidden>Move</button><button id="touch-resize" hidden>Resize</button><button id="touch-delete" class="danger" hidden>Delete</button>
 <button id="touch-cancel" hidden>Cancel</button><output id="touch-preview" aria-live="polite"></output></div>
-<p class="portrait-notice mobile-only">Portrait review · Turn your phone sideways to compose.</p>
 <div class="toolbar"><button class="primary" id="play" aria-pressed="false">▶ Play</button><span class="separator"></span><label>♩ BPM <input id="bpm" type="number" min="1" max="300" value="96" aria-label="Quarter-note BPM"></label><label><input id="metronome" type="checkbox">Metronome</label><label><input id="loop" type="checkbox">Loop measures</label><label>From <select id="loop-from" aria-label="First loop measure"></select></label><label>to <select id="loop-to" aria-label="Last loop measure"></select></label><span class="separator"></span><button id="undo" disabled>Undo</button><button id="redo" disabled>Redo</button></div>
 <main class="workspace"><div class="canvas-area"><div class="scroll" id="timeline-scroll"><div class="timeline hide-box-keys" id="timeline" aria-label="Composition timeline"></div></div><div class="timeline-footer"><span id="position-readout"></span><label>Zoom <input type="range" id="zoom" min="28" max="160" value="48" aria-label="Timeline zoom"></label></div><div class="entry"><label class="field">Part<select id="part"><option value="melody">Melody</option><option value="chord" selected>Chord</option><option value="bass">Bass</option></select></label><label class="field">Position in quarter notes<input id="position" type="number" value="0" min="0" max="256" step="0.25"></label><label class="field">Note duration<select id="duration"></select></label><label class="field">Snap<select id="snap"><option value="1" selected>Quarter</option><option value="0.5">Eighth</option><option value="0.6666666666666666">Quarter triplet</option><option value="0.3333333333333333">Eighth triplet</option></select></label><label class="name-toggle"><input id="advance-entry" type="checkbox">Advance after entry</label><button id="next">Next step</button></div><div class="box-tools"><button id="split">Split box here</button><button id="merge">Merge boundary here</button><button id="show-parts" aria-expanded="true" aria-controls="timeline-lanes">Hide parts</button><button id="show-box-keys" aria-pressed="false" title="Show or hide the local song key beneath chord labels">Key labels: Off</button><button id="clear-box-selection" disabled>Clear box selection</button><span id="box-selection-count" class="muted small" style="align-self:center">No boxes selected</span></div></div>
 <aside class="inspector"><section><h2>Sounding harmony</h2><div class="harmony-heading"><div class="chord-name" id="chord-name">No harmony yet</div><span class="roman-name" id="roman-name" aria-label="Roman numeral">—</span></div><p class="small muted" id="roman-context"></p><p class="small muted" id="harmony-notes">Bass + chord notes determine the name.</p><select id="alternatives" class="recognition-select" aria-label="Choose a chord interpretation"></select><label class="field">Roman interpretation<select id="roman-choice" aria-label="Choose a Roman interpretation"></select></label><div class="custom-row"><input id="custom-label" placeholder="Custom label" maxlength="80" aria-label="Custom chord label"><button id="set-label">Set</button></div><p class="small warning" id="label-review"></p></section>
@@ -124,8 +125,9 @@ body.phone{height:100dvh;display:flex;flex-direction:column;overflow:hidden;padd
       <p>Pitch, part, and duration stay fixed when moving. Resize snaps from the note’s start. Same-pitch notes cannot overlap within one part, but may meet at an end/start boundary. Invalid group edits are rejected together.</p>
       <p>Notes can sustain across boxes and measures. Editing a held note changes its complete span. Moving or extending notes past the end adds measures.</p>
     </details>
-    <details><summary>Adjust the workspace</summary><p>Drag the handle above the piano up or down to change the key height. When the handle has keyboard focus, use Up/Down for small changes or Home/End for the limits. Escape cancels an unfinished drag. Height is limited to keep the timeline usable and lasts for this page session.</p><p>Hide parts hides all Melody, Chord, and Bass rows while keeping chord labels and the measure ruler visible. The notes still play. Show parts restores the rows and their collapse settings. On phones, this button is in Tools. Key labels start off; turn them on with Key labels: Off.</p></details>
-    <details><summary>Compose on a phone</summary><p>Turn the phone sideways to write. Choose a part and duration above the two-octave piano. Use the octave buttons for other pitches. Tap a row’s arrow to expand or collapse it.</p><p>Swipe the timeline to scroll, including from notes. Tap a note to select it without moving the orange cursor. Select → Notes or Boxes lets taps add or remove items; Clear empties the selection. Note selections survive part changes.</p><p>Choose Move or Resize, then drag a selected note to preview the group edit. Release applies one edit and returns to scrolling. Cancel or an interrupted touch discards the preview. Delete shows the note count; one Undo restores the whole group. A long press never deletes music.</p><p>Tap a beat or empty row, or drag the orange handle, to set the cursor. Seeking pauses playback. Tools contains harmony, context, loop, view, and display settings. Portrait supports review; rotating preserves the current scratch composition, but reloading still clears it.</p></details>
+    <details><summary>Adjust the workspace</summary><p>Drag the handle above the piano up or down to change the key height. When the handle has keyboard focus, use Up/Down for small changes or Home/End for the limits. Escape cancels an unfinished drag. Height is limited to keep the timeline usable and lasts for this page session. Portrait phone keys start taller than landscape keys.</p><p>Hide parts hides all Melody, Chord, and Bass rows while keeping chord labels and the measure ruler visible. The notes still play. Show parts restores the rows and their collapse settings. On phones, this button is in Tools. Key labels start off; turn them on with Key labels: Off.</p></details>
+    <details><summary>Keys for new passages</summary><p>Next step and automatic advance give an empty destination box the tonic and major/minor mode of the collection active there. Piano entry also applies this default to empty or new boxes reached by the new note. A box with any sounding note, including one held from an earlier box, keeps its key. Merely seeking or changing the collection does not change keys. You can still set a different key explicitly.</p><p>Advancing beyond the song does not add measures; the key is assigned when a note creates the new boxes. Key changes stay within those boxes. Undo reverses a Next step key change; key defaults during piano entry are undone together with that note.</p></details>
+    <details><summary>Compose on a phone</summary><p>Write in portrait with one piano octave and taller keys. Landscape offers two octaves. Choose a part and duration above the piano. Use the octave buttons for other pitches. Tap a row’s arrow to expand or collapse it.</p><p>Swipe the timeline to scroll, including from notes. Tap a note to select it without moving the orange cursor. Select → Notes or Boxes lets taps add or remove items; Clear empties the selection. Note selections survive part changes.</p><p>Choose Move or Resize, then drag a selected note to preview the group edit. Release applies one edit and returns to scrolling. Cancel or an interrupted touch discards the preview. Delete shows the note count; one Undo restores the whole group. A long press never deletes music.</p><p>Tap a beat or empty row, or drag the orange handle, to set the cursor. Seeking pauses playback. Tools contains harmony, context, loop, view, and display settings. Both orientations support writing and playback. Rotating preserves the current scratch composition, but reloading still clears it.</p></details>
     <details><summary>Navigate the timeline</summary>
       <p>Click a row to choose a part and position. Drag the orange cursor to seek silently: it snaps to nearby note starts and ends, then the selected rhythm grid. The piano highlights all notes active at that position.</p>
       <p>Hold the right mouse button and drag to pan, including from a note. A drag does not delete notes; Escape restores the previous view. Use Zoom for short passages. Note entry and navigation smoothly center the cursor; manual panning remains free until the next edit.</p>
@@ -266,6 +268,18 @@ var Composer = (() => {
       }
       return result;
     }
+    function inheritBoxKey(data, at, notes = data.notes) {
+      const box=measures(data).flatMap(measure=>measure.boxes).find(box=>box.start<=at&&at<box.end);
+      if(!box||notes.some(note=>note.start<box.end&&note.start+note.duration>box.start))return false;
+      const collection=data.collection.filter(marker=>marker.at<=at).at(-1);
+      const current=data.key.filter(marker=>marker.at<=box.start).at(-1);
+      const matches=key=>key.tonic===collection.tonic&&key.mode===collection.mode;
+      if(matches(current)&&data.key.filter(marker=>box.start<marker.at&&marker.at<box.end).every(matches))return false;
+      const restore=data.key.filter(marker=>marker.at<=box.end).at(-1), previous=data.key.filter(marker=>marker.at<box.start).at(-1);
+      data.key=[...data.key.filter(marker=>marker.at<box.start||marker.at>box.end),
+        ...(previous&&matches(previous)?[]:[{at:box.start,tonic:collection.tonic,mode:collection.mode}]),{...restore,at:box.end}].sort((a,b)=>a.at-b.at);
+      return true;
+    }
     function harmonySpan(position) {
       const contextPoints = [...state.key, ...state.collection].map(marker => marker.at);
       const points = [...new Set([0, state.end, ...contextPoints, ...state.notes.filter(note => note.part !== 'melody').flatMap(note => [note.start, note.start + note.duration])])].sort((a, b) => a - b);
@@ -281,6 +295,7 @@ var Composer = (() => {
     }
     return {
       dispatch(action) {
+        const validTime = value => Number.isFinite(value) && value >= 0 && value <= 256 && Math.abs(value * 24 - Math.round(value * 24)) < 1e-7;
         if (action.type === 'delete-at') {
           if (!['bass','chord','melody'].includes(action.part) || !Number.isInteger(action.pitch) || action.pitch < 0 || action.pitch > 127 || !Number.isFinite(action.at) || action.at < 0 || action.at > 256) throw new Error('Choose a part, piano pitch, and position inside the song.');
           const note = state.notes.find(note => note.part === action.part && note.pitch === action.pitch && note.start <= action.at && note.start + note.duration > action.at);
@@ -288,10 +303,23 @@ var Composer = (() => {
           this.dispatch({type:'delete',id:note.id});
           return true;
         }
+        if (action.type === 'advance') {
+          if(!validTime(action.at))throw new Error('Choose an entry position on the rhythm grid within 256 quarter notes.');
+          const next=structuredClone(state);
+          if(inheritBoxKey(next,action.at)){past.push(state);state=next;future.length=0;}
+          return action.at;
+        }
         if (action.type === 'enter') {
           if (action.advance !== undefined && typeof action.advance !== 'boolean') throw new Error('Choose whether to advance after entry.');
+          const notes=state.notes, advance=action.advance ?? action.part === 'melody';
           this.dispatch({ ...action, type: 'add' });
-          return { position: (action.advance ?? action.part === 'melody') ? Math.round((action.start + action.duration)*24)/24 : action.start };
+          // Keep the note and its key defaults in the same undo step.
+          for(const box of measures().flatMap(measure=>measure.boxes)){
+            if(box.start<action.start+action.duration&&box.end>action.start)inheritBoxKey(state,Math.max(action.start,box.start),notes);
+          }
+          const position=advance?Math.round((action.start+action.duration)*24)/24:action.start;
+          if(advance)inheritBoxKey(state,position);
+          return {position};
         }
         if (action.type === 'seek') {
           if (!Number.isFinite(action.at) || ![1, .5, 2/3, 1/3].includes(action.snap) || !Number.isFinite(action.tolerance) || action.tolerance < 0) throw new Error('Choose a valid cursor position and snap grid.');
@@ -360,7 +388,6 @@ var Composer = (() => {
           if (Math.abs(length - note.duration) < 1e-8) return;
           action = { type: 'edit', id: note.id, duration: length };
         }
-        const validTime = value => Number.isFinite(value) && value >= 0 && value <= 256 && Math.abs(value * 24 - Math.round(value * 24)) < 1e-7;
         if (!['add', 'edit', 'delete', 'split', 'merge', 'context', 'label'].includes(action.type)) throw new Error('Unknown editing action.');
         if (action.type === 'delete') {
           const ids = action.ids === undefined ? [action.id] : action.ids;
@@ -508,7 +535,6 @@ var Composer = (() => {
     return Math.max(64,Math.min(320,Math.floor(innerHeight-document.querySelector('.top').getBoundingClientRect().height-document.querySelector('.touch-actions').getBoundingClientRect().height-controls-timelineRoom)));
   }
   function syncPianoHeight(){
-    if(isPhone&&portraitQuery.matches)return;
     const max=pianoMaximum();
     if(pianoHeight===null){
       pianoDock.style.removeProperty('--piano-height');pianoDock.style.removeProperty('--piano-black-height');
@@ -567,6 +593,7 @@ var Composer = (() => {
     const home=document.createComment('control home');element.before(home);
     return {element,destination,home};
   });
+  function keyboardSpan(){return isPhone?(portraitQuery.matches?12:24):36;}
   function updatePhoneLayout(){
     finishPianoResize(false);
     const next=phoneQuery.matches;
@@ -585,7 +612,7 @@ var Composer = (() => {
     }
     document.body.classList.toggle('phone',isPhone);
     document.body.classList.toggle('portrait',isPhone&&portraitQuery.matches);
-    keyboardBase=Math.min(keyboardBase,isPhone?96:84);
+    keyboardBase=Math.min(keyboardBase,120-keyboardSpan());
     render();
   }
   function renderTouchControls(){
@@ -817,7 +844,7 @@ var Composer = (() => {
     $('note-span').textContent = '';
   }
   function renderKeyboard(data) {
-    const span=isPhone?24:36, range=`${keyboardBase}:${span}`;
+    const span=keyboardSpan(), range=`${keyboardBase}:${span}`;
     if (keyboardBuiltAt !== range) {
       const pitches = Array.from({length:span+1}, (_,i)=>keyboardBase+i);
       const white = pitches.filter(pitch=>![1,3,6,8,10].includes(pitch%12));
@@ -833,7 +860,7 @@ var Composer = (() => {
     $('keyboard-range').textContent = `${pitchName(keyboardBase)}–${pitchName(keyboardBase+span)}`;
     $('keyboard').classList.toggle('names-hidden',!$('note-names').checked);
     $('keyboard').classList.toggle('symbols-hidden',!$('piano-symbols').checked);
-    $('octave-down').disabled = keyboardBase <= 0; $('octave-up').disabled = keyboardBase >= (isPhone?96:84);
+    $('octave-down').disabled = keyboardBase <= 0; $('octave-up').disabled = keyboardBase >= 120-span;
   }
   function updateLive(at) {
     const data = song.inspect(at), harmony = data.harmony;
@@ -1017,7 +1044,10 @@ var Composer = (() => {
     duration=+$(id).value;entryDurations[part]=duration;
     $('duration').value=duration;$('piano-duration').value=duration;
   };
-  $('next').onclick=()=>seek(position+duration);
+  $('next').onclick=()=>{
+    try{seek(song.dispatch({type:'advance',at:Math.min(256,Math.round((position+duration)*24)/24)}));}
+    catch(error){status(error.message,true);}
+  };
   $('zoom').oninput=()=>{beatWidth=+$('zoom').value;renderTimeline(song.inspect(position));updateLive(transport?playPosition():position);centerCursor();};
   $('show-parts').onclick=()=>{
     const show=$('show-parts').getAttribute('aria-expanded')!=='true';
@@ -1106,7 +1136,7 @@ var Composer = (() => {
     if(isPhone){
       if(event.button!==0||event.target.closest('.lane-controls'))return;
       const target=event.target, note=target.closest('[data-note]');
-      const editing=touchEdit&&note&&selectedNotes.has(note.dataset.note)&&!portraitQuery.matches;
+      const editing=touchEdit&&note&&selectedNotes.has(note.dataset.note);
       if(!target.closest('#edit-cursor')&&!editing){
         event.preventDefault();
         const scroll=$('timeline-scroll');scroll.scrollTo({left:scroll.scrollLeft,behavior:'auto'});
@@ -1286,7 +1316,7 @@ var Composer = (() => {
     try{await activateAudio();sound(pitch,audio.currentTime,.3,'note',false,auditionPart);}catch(error){status(error.message,true);}
   };
   $('octave-down').onclick=()=>{keyboardBase=Math.max(0,keyboardBase-12);renderKeyboard(song.inspect(position));updateLive(transport?playPosition():position);};
-  $('octave-up').onclick=()=>{keyboardBase=Math.min(isPhone?96:84,keyboardBase+12);renderKeyboard(song.inspect(position));updateLive(transport?playPosition():position);};
+  $('octave-up').onclick=()=>{keyboardBase=Math.min(120-keyboardSpan(),keyboardBase+12);renderKeyboard(song.inspect(position));updateLive(transport?playPosition():position);};
   function reset() {stopTransport();song=Composer.createComposer();position=0;selectedNotes.clear();part='chord';selectedBoxes.clear();boxAnchor=null;render();}
   $('blank').onclick=()=>{
     if(song.inspect().notes.length&&!confirm('Replace this scratch composition? This prototype does not save work.'))return;

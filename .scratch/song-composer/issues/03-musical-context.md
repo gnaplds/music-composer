@@ -94,3 +94,12 @@ The following are future application checks:
 8. Moving between editing and playback changes the keyboard's context source as specified, with the active collection visibly named and family membership readable without color alone.
 
 An arithmetic check confirmed that all 24 supported collection transpositions contain disjoint four-note families and verified the E examples above. That check validates pitch-set definitions only; no application, audio playback, meter editor, or accessible color palette has been tested. The [context ADR](../../../docs/adr/0002-independent-musical-context.md) records why these settings are independent of the written notes.
+
+
+## Empty-box key defaults — October 30, 2026
+
+The owner requested that new chord boxes at the next step use the collection's key, then confirmed “empty and new boxes only,” including automatic advance. An empty box has no sounding note in any part, including sustains from earlier boxes. For example, an F minor collection supplies an F minor key to an empty destination box, while an occupied C-major box stays C major.
+
+Next step and automatic advance set this default for an existing empty destination box. Piano entry sets it for every previously empty or newly created box reached by the new note. The collection active at the entry position within each box supplies the tonic and mode. Key settings outside those boxes are preserved. Merely seeking or changing a collection does not change the key. Advancing past the song end still only moves the cursor; the new note creates boxes and assigns their keys. An inherited key change is undoable, and inheritance during piano entry shares the note's undo step. Explicit key changes remain available.
+
+Four regression tests cover box scope and following-key restoration, automatic advance and atomic undo, occupied boxes including held notes, invalid/no-op advances, and a new sustain spanning several empty boxes without redundant key boundaries. All 49 tests pass. Browser controls reproduced C major remaining on an occupied box and F minor appearing on the empty next box; an entered F-minor chord then displays i.

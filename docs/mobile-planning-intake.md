@@ -26,7 +26,7 @@ The [mobile planning map](../.scratch/song-composer-mobile/map.md) indexes the d
 
 The owner has resumed the mobile effort and explicitly requested that the current website work when opened on a phone. The current build adapts the existing page and musical logic for touch and phone dimensions. It will not require a separate mobile site or a Godot build for this trial. Godot remains a later candidate under the existing engine decision, rather than a prerequisite for this work.
 
-The accepted landscape-first orientation, Redmi Note 9 test device, and musical rules carry forward. The owner accepted Q80–Q88 in [Define the phone writing workflow](../.scratch/song-composer-mobile/issues/01-touch-workflow.md). Opening the same site on a phone is not proof that the current desktop gestures work with touch; the owner's physical-device trial remains necessary.
+The Redmi Note 9 test device and musical rules carry forward. On October 30, 2026, the owner replaced the initial landscape preference with [portrait writing](../.scratch/song-composer-mobile/issues/01-touch-workflow.md#current-orientation--october-30-2026): one octave with taller keys, while landscape retains two octaves. The owner accepted Q80–Q88 in [Define the phone writing workflow](../.scratch/song-composer-mobile/issues/01-touch-workflow.md). Opening the same site on a phone is not proof that the current desktop gestures work with touch; the owner's physical-device trial remains necessary.
 
 ## Areas to investigate
 
