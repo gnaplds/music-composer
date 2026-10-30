@@ -110,6 +110,6 @@ The larger controls and piano-control toggle are implemented. All 49 model/playb
 
 ## Larger controls and shorter help — October 30, 2026
 
-The mobile chord boxes and labels are larger. Undo, Select, and Tools have equal widths, and Play is wider on phones and desktop. Space uses the existing Play/Pause action outside controls. Help text decreased from 1,525 to 544 words, with short steps and a visible warning that notes are not saved. Examples and the note list remain available.
+The mobile chord boxes and labels are larger. Undo, Select, and Tools have equal widths, and Play is wider on phones and desktop. Space uses the existing Play/Pause action outside controls. Help text decreased from 1,525 to 535 words, with short steps and a visible warning that notes are not saved. Examples and the note list remain available.
 
 All 49 musical tests pass. Inline scripts parse, and all existing HTML IDs remain present. Simple English checks cover sentence length, word choice, and condition placement. Browser use remains disabled in Work settings, so button layout, Space behavior, and the revised Help panel still need visible checks.
