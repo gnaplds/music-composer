@@ -9,6 +9,36 @@ vm.runInContext(script, context);
 const { createComposer, planPlayback } = context.Composer;
 const plain = value => JSON.parse(JSON.stringify(value));
 
+test('box note selection includes all sounding parts and excludes notes at its boundaries', () => {
+  const song=createComposer();
+  song.dispatch({type:'add',part:'bass',pitch:48,start:0,duration:8});
+  song.dispatch({type:'add',part:'chord',pitch:60,start:4,duration:2});
+  song.dispatch({type:'add',part:'melody',pitch:72,start:7,duration:2});
+  song.dispatch({type:'add',part:'chord',pitch:64,start:0,duration:4});
+  song.dispatch({type:'add',part:'melody',pitch:74,start:8,duration:1});
+  const before=plain(song.inspect());
+  const notes=song.inspect(5).boxNotes;
+  assert.deepEqual(plain(notes.map(note=>note.pitch)),[48,60,72]);
+  assert.equal(notes[0].start,0);
+  assert.equal(notes[0].duration,8);
+  notes[0].duration=1;
+  assert.deepEqual(plain(song.inspect()),before);
+  assert.deepEqual(plain(song.inspect(12).boxNotes),[]);
+  assert.deepEqual(plain(song.inspect(16).boxNotes),[]);
+});
+
+test('box-selected notes support group deletion and whole-note undo', () => {
+  const song=createComposer();
+  song.dispatch({type:'add',part:'bass',pitch:48,start:0,duration:8});
+  song.dispatch({type:'add',part:'melody',pitch:72,start:6,duration:4});
+  song.dispatch({type:'add',part:'chord',pitch:60,start:8,duration:2});
+  const before=plain(song.inspect().notes);
+  song.dispatch({type:'delete',ids:song.inspect(4).boxNotes.map(note=>note.id)});
+  assert.deepEqual(plain(song.inspect().notes.map(note=>note.pitch)),[60]);
+  song.dispatch({type:'undo'});
+  assert.deepEqual(plain(song.inspect().notes),before);
+});
+
 test('advancing into an empty box inherits collection key only within that box and supports undo', () => {
   const song=createComposer();
   song.dispatch({type:'context',kind:'collection',at:0,tonic:5,mode:'minor'});

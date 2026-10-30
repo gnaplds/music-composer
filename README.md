@@ -34,7 +34,7 @@ This is a working prototype. **Notes are not saved:** reloading, closing, or dis
 
 ## Listen and review
 
-- Play, pause, and resume the composition at an adjustable tempo, or loop a range of whole measures. Press Space outside a control to play or pause.
+- Play, pause, and resume the composition at an adjustable tempo, or loop a range of whole measures. Press Space to play or pause after selecting a chord box, or outside other controls.
 - Use a metronome with accented measure starts. In 6/8, it follows dotted-quarter pulses.
 - Adjust each part's volume independently, including muting it.
 - Follow the playhead and highlighted chord boxes during playback. Piano keys audition notes while the composition plays.
@@ -42,7 +42,7 @@ This is a working prototype. **Notes are not saved:** reloading, closing, or dis
 
 ## Desktop and phone
 
-The same app adapts to both screens. Desktop supports mouse editing and selection shortcuts. On a phone, portrait mode provides a one-octave piano with taller, adjustable keys and octave buttons. Part and duration controls sit above the piano; a Show/Hide piano controls button hides the whole control area while keeping the keys and resize handle available. Taller chord boxes, larger text, longer volume sliders, and wider, spaced Play/Pause, Undo, Select, and Tools buttons improve the phone layout. Play/Pause, Undo, and Tools stay at the top. Touch selection and explicit Move, Resize, and Delete actions support editing; ordinary swipes scroll the timeline.
+The same app adapts to both screens. Desktop supports mouse editing and selection shortcuts. On a phone, portrait mode provides a one-octave piano with taller, adjustable keys and octave buttons. Part and duration controls sit above the piano; a Show/Hide piano controls button hides the whole control area while keeping the keys and resize handle available. Taller chord boxes, larger text, longer volume sliders, and wider, spaced Play/Pause, Undo, Select, and Tools buttons improve the phone layout. Play/Pause, Undo, and Tools stay at the top. Tap a chord box to select all notes that sound inside it, including held notes. More box taps add notes to the selection. Clear removes the selection; Move, Resize, and Delete affect the complete selected notes. Use Select → Notes for individual note taps, or Select → Boxes for key changes. Ordinary swipes scroll the timeline.
 
 Landscape remains available with a two-octave piano. Both orientations support writing and playback, and rotation preserves notes and selections within the current session.
 

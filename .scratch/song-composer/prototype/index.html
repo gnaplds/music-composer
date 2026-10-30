@@ -12,8 +12,8 @@
 
 .ruler{height:62px;border-top:1px solid #9bb0bd;border-bottom:0}.measure-head{height:34px;bottom:0;padding:8px 10px}.beat-mark{position:absolute;top:0;height:23px;border-left:1px solid #b8c9d5;padding:3px 5px;font-size:10px;color:#587081;pointer-events:none}.cursor:not(.playhead){pointer-events:auto;cursor:ew-resize;touch-action:none}.cursor-handle{position:absolute;bottom:33px;left:-14px;width:30px;min-height:27px;height:27px;padding:0;border:1px solid #9d6813;background:#bf811a;color:#fff;cursor:ew-resize;touch-action:none;border-radius:3px}.cursor-handle:hover{background:#9d6813!important}.cursor::before{display:none}
 
-.boxes{height:96px}.box{height:96px;padding:9px 0;line-height:1.2}.box>span{padding-inline:8px}.box-chord{display:block;font-size:23px;font-weight:650;overflow:hidden;text-overflow:ellipsis}.box-roman{display:block;font-size:18px;font-weight:600;color:#5d4681;margin:3px 0 5px;overflow:hidden;text-overflow:ellipsis}.box.harmony-change{border-left-style:dashed}.box .small{font-size:11px;overflow:hidden;text-overflow:ellipsis}.harmony-heading{display:flex;align-items:baseline;gap:10px}.harmony-heading .chord-name{min-width:0;overflow-wrap:anywhere}.roman-name{margin-left:auto;font-size:22px;font-weight:650;color:#5d4681;white-space:normal;min-width:0;max-width:65%;overflow-wrap:anywhere;text-align:right}.timeline{min-height:0}
-.roman-figures{display:inline-flex;flex-direction:column;align-items:center;font-size:.7em;line-height:.85;vertical-align:super;margin-left:.08em}.roman-figures.stacked{display:inline-block;vertical-align:baseline}.roman-figures.stacked>span{display:block;text-align:center}.box-roman{line-height:1.45}.timeline.hide-box-keys .box-key{display:none}.timeline.hide-box-keys .boxes,.timeline.hide-box-keys .box{height:82px}.lane-label{pointer-events:auto;min-height:25px;height:25px;border:0;line-height:19px;padding:3px 7px;cursor:pointer}.timeline.hide-parts .lanes{display:none}.lane.collapsed{cursor:default}.lane-label[aria-expanded=false]{background:#dbe5ec}
+.boxes{height:120px}.box{height:120px;padding:12px 0;line-height:1.2}.box>span{padding-inline:8px}.box-chord{display:block;font-size:28px;font-weight:650;overflow:hidden;text-overflow:ellipsis}.box-roman{display:block;font-size:22px;font-weight:600;color:#5d4681;margin:3px 0 5px;overflow:hidden;text-overflow:ellipsis}.box.harmony-change{border-left-style:dashed}.box .small{font-size:11px;overflow:hidden;text-overflow:ellipsis}.harmony-heading{display:flex;align-items:baseline;gap:10px}.harmony-heading .chord-name{min-width:0;overflow-wrap:anywhere}.roman-name{margin-left:auto;font-size:22px;font-weight:650;color:#5d4681;white-space:normal;min-width:0;max-width:65%;overflow-wrap:anywhere;text-align:right}.timeline{min-height:0}
+.roman-figures{display:inline-flex;flex-direction:column;align-items:center;font-size:.7em;line-height:.85;vertical-align:super;margin-left:.08em}.roman-figures.stacked{display:inline-block;vertical-align:baseline}.roman-figures.stacked>span{display:block;text-align:center}.box-roman{line-height:1.45}.timeline.hide-box-keys .box-key{display:none}.timeline.hide-box-keys .boxes,.timeline.hide-box-keys .box{height:120px}.lane-label{pointer-events:auto;min-height:25px;height:25px;border:0;line-height:19px;padding:3px 7px;cursor:pointer}.timeline.hide-parts .lanes{display:none}.lane.collapsed{cursor:default}.lane-label[aria-expanded=false]{background:#dbe5ec}
 .box.box-selected{box-shadow:inset 0 0 0 2px #7555a1;background:#f0ebf8}.box.box-playing,.box.box-playing:hover{background:#d1e9df!important;border-top:4px solid #16736a}.lane-controls{position:sticky;left:0;display:inline-flex;align-items:center;gap:8px;background:#e7eef3ed;z-index:3;height:25px;padding-right:7px}.lane-controls .lane-label{position:static}.lane.entry-part{box-shadow:inset 4px 0 #bf811a;background-color:#fff8e9}.lane.entry-part .lane-controls{background:#f6e5c4}.entry-badge{font-size:10px;font-weight:650;color:#805800}.note.drag-invalid{outline-color:#b43f21}.part-volume{display:inline-flex;align-items:center;gap:4px;font-size:11px}.part-volume input{width:80px;min-height:20px;padding:0;border:0}.part-volume output{min-width:30px}
 
 .top{padding-block:16px}.top h1{font-size:22px}.top-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}.keyboard-dock{padding-bottom:0}
@@ -65,12 +65,12 @@
 body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .phone .mobile-only{display:flex}.phone button,.phone select,.phone input{min-height:40px}.phone button,.phone select,.phone .key{touch-action:manipulation}
 .phone .top{flex:none;padding:2px 8px;gap:6px;min-height:44px}.phone .top h1{font-size:16px;white-space:nowrap;letter-spacing:-.3px}.phone .top-actions{flex-wrap:wrap;gap:8px}.phone #phone-transport{gap:12px}.phone #play,.phone #undo,.phone #touch-select,.phone #open-tools{width:80px;min-width:80px;min-height:44px;flex:none}.phone #play{width:96px;min-width:96px}.phone .top button{padding:5px 9px}.phone .top .help-button{width:40px;height:40px}
-.phone .touch-actions{flex:none;gap:6px;align-items:center;padding:2px 8px;min-height:44px;overflow-x:auto;white-space:nowrap;border-block:1px solid var(--line)}
-.phone .touch-actions button,.phone .touch-actions select{flex:none}.phone .touch-actions [hidden],.phone .touch-actions[hidden],.phone #touch-select[hidden]{display:none}.phone #touch-count{font-size:12px}.phone #touch-preview{font-size:12px;font-weight:600}.phone #touch-select-kind{max-width:100px}
+.phone .touch-actions{flex:none;gap:12px;align-items:center;padding:2px 8px;min-height:44px;overflow-x:auto;white-space:nowrap;border-block:1px solid var(--line)}
+.phone .touch-actions button,.phone .touch-actions select{flex:none;height:44px;min-height:44px}.phone .touch-actions button{min-width:80px}.phone .touch-actions [hidden],.phone .touch-actions[hidden],.phone #touch-select[hidden]{display:none}.phone #touch-count{font-size:12px}.phone #touch-preview{font-size:12px;font-weight:600}.phone #touch-select-kind{max-width:100px}
 .phone #touch-select[aria-pressed=true]{outline:2px solid #bf811a;outline-offset:-2px}
 .phone .workspace{flex:1;min-height:0;display:block;margin:0 8px}.phone .canvas-area{height:100%;display:flex;flex-direction:column;min-height:0}.phone .scroll{flex:1;min-height:0;border-radius:0;overscroll-behavior:contain;touch-action:none;scrollbar-width:none}.phone .scroll::-webkit-scrollbar{display:none}
 .phone .timeline,.phone .timeline *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.phone .note{height:32px;min-height:32px;font-size:14px;line-height:26px;cursor:pointer}.phone .resize-handle{display:none}
-.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:116px}.phone .boxes{position:sticky;top:0;z-index:5;background:inherit}.phone .box{padding:8px 0}.phone .box-chord{font-size:28px;line-height:1.2}.phone .box-roman{font-size:22px;line-height:1.35;margin:2px 0}.phone .box .small{font-size:14px;line-height:1.2}
+.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:140px}.phone .boxes{position:sticky;top:0;z-index:5;background:inherit}.phone .box{padding:8px 0}.phone .box-chord{font-size:32px;line-height:1.2}.phone .box-roman{font-size:26px;line-height:1.35;margin:2px 0}.phone .box .small{font-size:14px;line-height:1.2}
 .phone .ruler{position:sticky;bottom:0;height:48px;z-index:7}.phone .measure-head{height:24px;padding:2px 6px;font-size:14px}.phone .beat-mark{height:24px;padding:2px 5px;font-size:12px}
 .phone .lane-controls{height:40px;display:flex;width:min(100%,calc(100vw - 18px))}.phone .lane-label{flex:none;max-width:100px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;height:40px;min-height:40px;font-size:14px;line-height:28px}.phone .part-volume{flex:1;min-width:0;font-size:14px}.phone .part-volume input{flex:1;min-width:0;min-height:40px;width:140px}.phone .part-volume output{min-width:40px}.phone .entry-badge{display:none}
 .phone .cursor{z-index:6}.phone .cursor-handle{position:absolute;top:0;bottom:auto;width:44px;height:44px;min-height:44px;margin-left:0;touch-action:none}.phone .timeline.touch-edit .note.selected{cursor:ew-resize;outline-width:3px}
@@ -84,9 +84,15 @@ body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overf
 .phone.portrait .keyboard-top{flex-wrap:wrap}.phone.portrait #phone-entry{flex-basis:100%}.phone.portrait .entry{width:100%}.phone.portrait .entry .field{flex:1;min-width:0;flex-direction:column;align-items:stretch;gap:2px}.phone.portrait .entry select{width:100%;max-width:none}
 .phone.portrait .keyboard-actions{width:100%;justify-content:flex-end}.phone.portrait #keyboard-range{display:block;margin-right:auto;font-size:14px}.phone.portrait .keyboard,.phone.portrait .key{height:var(--piano-height,160px)}.phone.portrait .key.black{height:var(--piano-black-height,101px)}
 /* Let chord labels scroll away in short windows so the ruler cannot trap the notes. */
-@media(max-height:360px){.phone .boxes{position:relative}.phone .keyboard,.phone .key{height:var(--piano-height,64px)}.phone .key.black{height:var(--piano-black-height,44px)}.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:96px}.phone .box{padding-block:2px}}
+@media(max-height:650px){.phone .boxes{position:relative}}
+@media(max-height:360px){.phone .boxes{position:relative}.phone .keyboard,.phone .key{height:var(--piano-height,64px)}.phone .key.black{height:var(--piano-black-height,44px)}.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:116px}.phone .box{padding-block:2px}}
 .phone .small,.phone label.field,.phone .legend,.phone .timeline-footer,.phone .status,.phone #touch-count,.phone #touch-preview{font-size:14px}
 .phone label.field input,.phone label.field select,.phone .keyboard-actions,.phone .tools-body .keyboard-actions{font-size:16px}.phone .help-body,.phone .help-body summary,.phone #help-panel .walkthrough,.phone #help-panel details.state{font-size:16px}.phone h2{font-size:18px}.phone h3{font-size:16px}.phone .key,.phone .key.black{font-size:14px}
+.phone #touch-select,.phone #open-tools,.phone .touch-actions button{justify-content:center;align-items:center;text-align:center}
+.phone #tools-entry{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.phone #tools-entry .field{display:flex;flex-direction:column;align-items:stretch;gap:6px;min-width:0}.phone #tools-entry input[type=number],.phone #tools-entry select{width:100%;max-width:none;min-width:0}
+.phone #tools-entry>.name-toggle,.phone #tools-entry>button{grid-column:1/-1}.phone #tools-entry>button{min-height:44px}
+.phone #tools-view .timeline-footer{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:14px}.phone #tools-view label{display:grid;gap:8px}.phone #tools-view input{width:100%;min-width:0}
 .phone .piano-bar{display:flex;align-items:center;gap:8px}.phone .piano-bar .piano-resize{flex:1;height:44px}.phone #piano-controls-toggle{font-size:14px;min-height:40px}.phone .keyboard-dock.controls-hidden .keyboard-top{display:none}
 .piano-resize{height:14px;cursor:ns-resize;touch-action:none;user-select:none;display:flex;align-items:center;justify-content:center;margin-top:-10px;margin-bottom:4px}
 .piano-resize::after{content:"";width:64px;height:4px;border-radius:2px;background:#738999}
@@ -142,6 +148,8 @@ body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overf
         <li>Drag a selected note.</li>
         <li>Release your finger to apply the change.</li>
       </ol>
+      <p>A chord box tap selects all notes that sound inside it. More box taps add notes to the selection.</p>
+      <p>Held notes count too. Move, Resize, and Delete affect each whole note. Clear removes only the selection.</p>
       <p>Move changes the note position. Resize changes the note duration. Outside Move or Resize, a swipe scrolls the timeline.</p>
       <ul><li>To remove selected notes, tap Delete.</li><li>To reverse the last edit, tap Undo.</li><li>To stop an unfinished edit, tap Cancel.</li></ul>
     </details>
@@ -153,7 +161,7 @@ body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overf
         <li>To select several notes, hold Ctrl or Cmd as you click them.</li>
         <li>Right-click a note to remove it.</li>
         <li>Click Undo to reverse the last edit.</li>
-        <li>Press Space outside a control to play or pause.</li>
+        <li>After you select a chord box, press Space to play or pause.</li>
       </ul>
     </details>
     <details><summary>Find a position or adjust the view</summary>
@@ -506,7 +514,7 @@ var Composer = (() => {
         harmony.romanDisplay = harmony.romanReadings.find(reading => reading.label === harmony.roman)?.display ?? null;
         const layout = measures();
         const activeBox = layout.flatMap(measure => measure.boxes).find(box => box.start <= position && box.end > position) ?? null;
-        return structuredClone({ ...state, activeBox, lengthLabels: Object.fromEntries(state.notes.map(note => [note.id, lengthLabel(note.duration)])), measures: layout, context, families, harmony, active: state.notes.filter(note => note.start <= position && note.start + note.duration > position), canUndo: past.length > 0, canRedo: future.length > 0 });
+        return structuredClone({ ...state, activeBox, boxNotes: state.notes.filter(note => activeBox && note.start < activeBox.end && note.start + note.duration > activeBox.start), lengthLabels: Object.fromEntries(state.notes.map(note => [note.id, lengthLabel(note.duration)])), measures: layout, context, families, harmony, active: state.notes.filter(note => note.start <= position && note.start + note.duration > position), canUndo: past.length > 0, canRedo: future.length > 0 });
       }
     };
   }
@@ -759,7 +767,7 @@ var Composer = (() => {
     if(!isPhone)return;
     const note=document.querySelector(`[data-note="${id}"]`);if(!note||note.closest('[hidden]'))return;
     const scroll=$('timeline-scroll'), rect=note.getBoundingClientRect();
-    const top=document.querySelector('.boxes').getBoundingClientRect().bottom+2;
+    const top=Math.max(scroll.getBoundingClientRect().top,document.querySelector('.boxes').getBoundingClientRect().bottom)+2;
     const bottom=document.querySelector('.ruler').getBoundingClientRect().top-2;
     if(rect.bottom>bottom)scroll.scrollTop+=rect.bottom-bottom;
     else if(rect.top<top)scroll.scrollTop-=top-rect.top;
@@ -840,7 +848,7 @@ var Composer = (() => {
       const boxId=`${box.start}:${box.end}`;
       return segments.map(segment=>{
         const context=`${flat[segment.key.tonic]} ${segment.key.mode}`;
-        const title=`${segment.name}${segment.romanDisplay?' · '+segment.romanDisplay.text:''} · ${context} · ${locationName(segment.start,data)}. ${segment.detail||''} ${isPhone?'Tap to select this box; use Select → Boxes for a group.':'Click to select this box; Ctrl/Cmd-click toggles, Shift-click selects a range.'} Use Zoom for narrow passages.`;
+        const title=`${segment.name}${segment.romanDisplay?' · '+segment.romanDisplay.text:''} · ${context} · ${locationName(segment.start,data)}. ${segment.detail||''} ${isPhone?'Tap to select all notes sounding in this box. More box taps add notes. Use Select → Boxes for key changes.':'Click to select this box; Ctrl/Cmd-click toggles, Shift-click selects a range.'} Use Zoom for narrow passages.`;
         return `<button class="box${segment.start===box.start?'':' harmony-change'}${selectedBoxes.has(boxId)?' box-selected':''}" data-box="${boxId}" aria-pressed="${selectedBoxes.has(boxId)}" data-at="${segment.start}" style="left:${segment.start*beatWidth}px;width:${(segment.end-segment.start)*beatWidth}px" title="${esc(title)}" aria-label="${esc(title)}"><span class="box-chord">${esc(segment.name)}</span><span class="box-roman">${romanMarkup(segment.romanDisplay)}</span><span class="small box-key">${esc(context)}</span></button>`;
       }).join('');
     }).join('');
@@ -1137,12 +1145,24 @@ var Composer = (() => {
       selected=note.id;part=note.part;render({center:false});return;
     }
     const phoneBox=isPhone&&event.target.closest('[data-box]');
-    if(phoneBox&&selectionMode){
-      if(selectionMode!=='boxes'||touchEdit)return;
+    if(phoneBox&&selectionMode==='boxes'){
+      if(touchEdit)return;
       stopTransport();selectedNotes.clear();
       const id=phoneBox.dataset.box;
       if(selectedBoxes.has(id))selectedBoxes.delete(id);else selectedBoxes.add(id);
       boxAnchor=id;render({center:false});return;
+    }
+    if(phoneBox){
+      if(touchEdit)return;
+      stopTransport();
+      const data=song.inspect(+phoneBox.dataset.at);
+      if(selectionMode!=='notes')selectedNotes.clear();
+      for(const note of data.boxNotes)selectedNotes.add(note.id);
+      selectedBoxes.clear();boxAnchor=null;selected=null;
+      selectionMode='notes';$('touch-select-kind').value='notes';
+      position=+phoneBox.dataset.at;render({center:false});
+      document.querySelector(`[data-box="${phoneBox.dataset.box}"]`)?.focus({preventScroll:true});
+      status(`${selectedNotes.size} notes selected. Clear removes the selection. Delete removes whole notes, including held notes.`);return;
     }
     if(noteButton){
       stopTransport();const note=song.inspect().notes.find(note=>note.id===noteButton.dataset.note);
@@ -1413,12 +1433,15 @@ var Composer = (() => {
     }
     if(event.target.matches('input,select,textarea'))return;
     if(event.code==='Space'&&!event.altKey&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.isComposing&&!event.defaultPrevented){
-      if(event.target.closest('button,a,summary,[contenteditable]:not([contenteditable="false"]),[role="textbox"]'))return;
+      if(event.target.closest('button:not([data-box]),a,summary,[contenteditable]:not([contenteditable="false"]),[role="textbox"]'))return;
       event.preventDefault();
       if(!event.repeat)$('play').click();
       return;
     }
     if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z'){event.preventDefault();mutate({type:event.shiftKey?'redo':'undo'},event.shiftKey?'Edit restored.':'Edit undone.');}
+  });
+  window.addEventListener('keyup',event=>{
+    if(event.code==='Space'&&event.target.closest('[data-box]'))event.preventDefault();
   });
   new ResizeObserver(()=>{
     if($('timeline').style.getPropertyValue('--cursor-room')!==`${$('timeline-scroll').clientWidth/2+16}px`){

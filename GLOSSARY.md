@@ -42,7 +42,7 @@ The musical material assigned to the chord role in a chord box, distinct from it
 A pitched musical event with a start position and a duration, assigned to one part.
 
 **Note selection**:
-One or more notes chosen for editing, possibly across parts. A group move applies the same time offset to every note; a group resize applies the same duration change. Selection does not combine the notes or change their assigned parts.
+One or more notes chosen for editing, possibly across parts. A group move applies the same time offset to every note; a group resize applies the same duration change. Selection does not combine the notes or change their assigned parts. A selection from a chord box includes all notes sounding anywhere within its span, including notes held from earlier boxes. The selection includes the complete duration of each note, even outside that span.
 
 **Same-pitch overlap**:
 Two notes at the same pitch and octave whose time spans overlap within one part. Notes that only meet at an end/start boundary do not overlap. Equal pitches in different parts remain distinct.
