@@ -76,3 +76,11 @@ The owner confirmed that Hide piano controls should hide the entire area above t
 Implemented taller chord boxes (96 pixels, or 80 in short landscape), 24-pixel chord names, 20-pixel Roman numerals, 16-pixel main text, and 14-pixel supporting labels. Play and Undo have an 80-pixel minimum width and a 12-pixel gap. Volume sliders use the available row width. The phone cursor handle now sits on the measure ruler to leave chord names clear.
 
 All 49 existing model/playback tests pass; both inline scripts parse. Browser testing was blocked because local browser use is disabled in Work settings. No new screenshot or visual usability result is claimed. Check portrait at 390 × 844 and 320 × 568, landscape at 844 × 390 and 844 × 320, and desktop restoration. Verify hiding/showing controls preserves notes, settings, and undo; piano resizing; cursor dragging and keyboard seeking; slider reach; Play/Undo spacing; and text clipping. The physical Redmi trial remains pending.
+
+## Larger controls and beginner help — October 30, 2026
+
+The owner requested another size increase and shorter help for ESL and first-time users. Mobile chord boxes now use 116 pixels (96 in short landscape), chord names use 28 pixels, and Roman numerals use 22 pixels. Undo, Select, and Tools use equal 80-pixel widths. Play uses 96 pixels on phones and a 112-pixel minimum on desktop. In portrait, Help sits beside the title; the other controls use one row, or two rows below 388 pixels.
+
+The Help panel starts with six short steps. Other topics are collapsed. Examples, the note list, and the warning about unsaved notes remain. Space uses the existing Play/Pause action outside controls; held or modified Space does not repeat the shortcut. Input fields, editable text, focused buttons, and Help/Tools keep their normal keyboard behavior.
+
+All 49 musical tests pass. Inline scripts parse, all existing HTML IDs remain, and the text passed Simple English sentence checks. Browser use is still disabled in Work settings. Pending checks include narrow portrait wrapping, desktop Play width, Space start/pause/resume, held Space, input/button focus, and all tutorial steps. Physical-phone testing remains pending.

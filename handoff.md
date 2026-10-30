@@ -12,6 +12,8 @@ Desktop supports piano step entry, independent Melody/Chord/Bass parts, a timeli
 
 ## Latest work and evidence
 
+- The latest update increases mobile chord boxes to 116 pixels and chord names to 28 pixels. Undo, Select, and Tools share an 80-pixel width; Play is 96 pixels on phones and at least 112 pixels on desktop. Space plays/pauses outside controls. Help now starts with a short beginner guide. All 49 tests pass; visual and shortcut checks remain pending because browser use is disabled in Work settings. See the [latest trial notes](.scratch/song-composer-mobile/issues/03-phone-touch-prototype.md#larger-controls-and-beginner-help--october-30-2026).
+
 - Mobile readability changes add taller chord boxes, larger text, wider/spaced transport buttons, longer volume sliders, and the approved Show/Hide piano controls button. The phone cursor handle is on the ruler. All 49 tests pass and inline scripts parse. **This update has not been visually tested:** local browser use was disabled in Work settings. The [trial ticket](.scratch/song-composer-mobile/issues/03-phone-touch-prototype.md#mobile-readability-update--october-30-2026) lists the remaining checks; earlier screenshots show the previous layout.
 
 - The owner approved portrait writing and confirmed that collection-key defaults apply only to empty/new boxes. See the [portrait trial](.scratch/song-composer-mobile/issues/03-phone-touch-prototype.md#portrait-writing-trial--october-30-2026) and [key-default rule](.scratch/song-composer/issues/03-musical-context.md#empty-box-key-defaults--october-30-2026). The earlier resizable piano, global Show/Hide parts, key labels off, and wider cursor handles remain.

@@ -17,6 +17,7 @@
 .box.box-selected{box-shadow:inset 0 0 0 2px #7555a1;background:#f0ebf8}.box.box-playing,.box.box-playing:hover{background:#d1e9df!important;border-top:4px solid #16736a}.lane-controls{position:sticky;left:0;display:inline-flex;align-items:center;gap:8px;background:#e7eef3ed;z-index:3;height:25px;padding-right:7px}.lane-controls .lane-label{position:static}.lane.entry-part{box-shadow:inset 4px 0 #bf811a;background-color:#fff8e9}.lane.entry-part .lane-controls{background:#f6e5c4}.entry-badge{font-size:10px;font-weight:650;color:#805800}.note.drag-invalid{outline-color:#b43f21}.part-volume{display:inline-flex;align-items:center;gap:4px;font-size:11px}.part-volume input{width:80px;min-height:20px;padding:0;border:0}.part-volume output{min-width:30px}
 
 .top{padding-block:16px}.top h1{font-size:22px}.top-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}.keyboard-dock{padding-bottom:0}
+#play{min-width:112px}
 .help-button{width:34px;height:34px;min-height:34px;padding:0;border-radius:50%;background:#294c66;color:white;border-color:#294c66;font-size:21px}
 .help-button:hover:not(:disabled){background:#365f7c;color:white}
 #help-panel{position:fixed;inset:66px 16px auto auto;margin:0;width:min(480px,calc(100vw - 32px));max-height:calc(100dvh - 82px);padding:0;border:1px solid #aabcc9;border-radius:12px;background:#f8fbfd;color:#243747;box-shadow:0 12px 40px #24374733;overflow:auto;overscroll-behavior:contain}
@@ -63,13 +64,13 @@
 :root:has(#dark-mode:checked) #mobile-tools{background:#22313f;color:#e4edf3}
 body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .phone .mobile-only{display:flex}.phone button,.phone select,.phone input{min-height:40px}.phone button,.phone select,.phone .key{touch-action:manipulation}
-.phone .top{flex:none;padding:2px 8px;gap:6px;min-height:44px}.phone .top h1{font-size:16px;white-space:nowrap;letter-spacing:-.3px}.phone .top-actions{flex-wrap:wrap;gap:8px}.phone #phone-transport{gap:12px}.phone #play,.phone #undo{min-width:80px;min-height:44px}.phone .top button{padding:5px 9px}.phone .top .help-button{width:40px;height:40px}
+.phone .top{flex:none;padding:2px 8px;gap:6px;min-height:44px}.phone .top h1{font-size:16px;white-space:nowrap;letter-spacing:-.3px}.phone .top-actions{flex-wrap:wrap;gap:8px}.phone #phone-transport{gap:12px}.phone #play,.phone #undo,.phone #touch-select,.phone #open-tools{width:80px;min-width:80px;min-height:44px;flex:none}.phone #play{width:96px;min-width:96px}.phone .top button{padding:5px 9px}.phone .top .help-button{width:40px;height:40px}
 .phone .touch-actions{flex:none;gap:6px;align-items:center;padding:2px 8px;min-height:44px;overflow-x:auto;white-space:nowrap;border-block:1px solid var(--line)}
 .phone .touch-actions button,.phone .touch-actions select{flex:none}.phone .touch-actions [hidden],.phone .touch-actions[hidden],.phone #touch-select[hidden]{display:none}.phone #touch-count{font-size:12px}.phone #touch-preview{font-size:12px;font-weight:600}.phone #touch-select-kind{max-width:100px}
 .phone #touch-select[aria-pressed=true]{outline:2px solid #bf811a;outline-offset:-2px}
 .phone .workspace{flex:1;min-height:0;display:block;margin:0 8px}.phone .canvas-area{height:100%;display:flex;flex-direction:column;min-height:0}.phone .scroll{flex:1;min-height:0;border-radius:0;overscroll-behavior:contain;touch-action:none;scrollbar-width:none}.phone .scroll::-webkit-scrollbar{display:none}
 .phone .timeline,.phone .timeline *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.phone .note{height:32px;min-height:32px;font-size:14px;line-height:26px;cursor:pointer}.phone .resize-handle{display:none}
-.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:96px}.phone .boxes{position:sticky;top:0;z-index:5;background:inherit}.phone .box{padding:8px 0}.phone .box-chord{font-size:24px;line-height:1.2}.phone .box-roman{font-size:20px;line-height:1.35;margin:2px 0}.phone .box .small{font-size:14px;line-height:1.2}
+.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:116px}.phone .boxes{position:sticky;top:0;z-index:5;background:inherit}.phone .box{padding:8px 0}.phone .box-chord{font-size:28px;line-height:1.2}.phone .box-roman{font-size:22px;line-height:1.35;margin:2px 0}.phone .box .small{font-size:14px;line-height:1.2}
 .phone .ruler{position:sticky;bottom:0;height:48px;z-index:7}.phone .measure-head{height:24px;padding:2px 6px;font-size:14px}.phone .beat-mark{height:24px;padding:2px 5px;font-size:12px}
 .phone .lane-controls{height:40px;display:flex;width:min(100%,calc(100vw - 18px))}.phone .lane-label{flex:none;max-width:100px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;height:40px;min-height:40px;font-size:14px;line-height:28px}.phone .part-volume{flex:1;min-width:0;font-size:14px}.phone .part-volume input{flex:1;min-width:0;min-height:40px;width:140px}.phone .part-volume output{min-width:40px}.phone .entry-badge{display:none}
 .phone .cursor{z-index:6}.phone .cursor-handle{position:absolute;top:0;bottom:auto;width:44px;height:44px;min-height:44px;margin-left:0;touch-action:none}.phone .timeline.touch-edit .note.selected{cursor:ew-resize;outline-width:3px}
@@ -78,11 +79,12 @@ body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overf
 .phone .status{flex:none;margin:2px 8px;padding:5px 8px;min-height:0}.phone #help-panel{inset:48px 12px auto auto;max-height:calc(100dvh - 60px)}
 /* Keep the hosting badge from covering piano keys. */
 #nl-badge-frame{display:none!important}
-.phone.portrait .top{flex-wrap:wrap;align-items:center}.phone.portrait .top h1{width:100%;font-size:16px}.phone.portrait .top-actions{width:100%;justify-content:space-between}
+.phone.portrait .top{position:relative;flex-wrap:wrap;align-items:center}.phone.portrait .top h1{width:100%;min-height:40px;display:flex;align-items:center;font-size:16px}.phone.portrait .top-actions{width:100%;display:grid;grid-template-columns:96px repeat(3,80px);gap:12px;justify-content:start}.phone.portrait #phone-transport{display:contents}.phone.portrait #help-button{position:absolute;top:2px;right:8px}
+@media(max-width:387px){.phone.portrait .top-actions{grid-template-columns:96px 80px}}
 .phone.portrait .keyboard-top{flex-wrap:wrap}.phone.portrait #phone-entry{flex-basis:100%}.phone.portrait .entry{width:100%}.phone.portrait .entry .field{flex:1;min-width:0;flex-direction:column;align-items:stretch;gap:2px}.phone.portrait .entry select{width:100%;max-width:none}
 .phone.portrait .keyboard-actions{width:100%;justify-content:flex-end}.phone.portrait #keyboard-range{display:block;margin-right:auto;font-size:14px}.phone.portrait .keyboard,.phone.portrait .key{height:var(--piano-height,160px)}.phone.portrait .key.black{height:var(--piano-black-height,101px)}
 /* Let chord labels scroll away in short windows so the ruler cannot trap the notes. */
-@media(max-height:360px){.phone .boxes{position:relative}.phone .keyboard,.phone .key{height:var(--piano-height,64px)}.phone .key.black{height:var(--piano-black-height,44px)}.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:80px}.phone .box{padding-block:2px}}
+@media(max-height:360px){.phone .boxes{position:relative}.phone .keyboard,.phone .key{height:var(--piano-height,64px)}.phone .key.black{height:var(--piano-black-height,44px)}.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:96px}.phone .box{padding-block:2px}}
 .phone .small,.phone label.field,.phone .legend,.phone .timeline-footer,.phone .status,.phone #touch-count,.phone #touch-preview{font-size:14px}
 .phone label.field input,.phone label.field select,.phone .keyboard-actions,.phone .tools-body .keyboard-actions{font-size:16px}.phone .help-body,.phone .help-body summary,.phone #help-panel .walkthrough,.phone #help-panel details.state{font-size:16px}.phone h2{font-size:18px}.phone h3{font-size:16px}.phone .key,.phone .key.black{font-size:14px}
 .phone .piano-bar{display:flex;align-items:center;gap:8px}.phone .piano-bar .piano-resize{flex:1;height:44px}.phone #piano-controls-toggle{font-size:14px;min-height:40px}.phone .keyboard-dock.controls-hidden .keyboard-top{display:none}
@@ -97,7 +99,7 @@ body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overf
 <output id="touch-count" aria-live="polite"></output><button id="touch-clear" hidden>Clear</button>
 <button id="touch-move" hidden>Move</button><button id="touch-resize" hidden>Resize</button><button id="touch-delete" class="danger" hidden>Delete</button>
 <button id="touch-cancel" hidden>Cancel</button><output id="touch-preview" aria-live="polite"></output></div>
-<div class="toolbar"><button class="primary" id="play" aria-pressed="false">▶ Play</button><span class="separator"></span><label>♩ BPM <input id="bpm" type="number" min="1" max="300" value="96" aria-label="Quarter-note BPM"></label><label><input id="metronome" type="checkbox">Metronome</label><label><input id="loop" type="checkbox">Loop measures</label><label>From <select id="loop-from" aria-label="First loop measure"></select></label><label>to <select id="loop-to" aria-label="Last loop measure"></select></label><span class="separator"></span><button id="undo" disabled>Undo</button><button id="redo" disabled>Redo</button></div>
+<div class="toolbar"><button class="primary" id="play" aria-pressed="false" aria-keyshortcuts="Space" title="Play or pause · Space">▶ Play</button><span class="separator"></span><label>♩ BPM <input id="bpm" type="number" min="1" max="300" value="96" aria-label="Quarter-note BPM"></label><label><input id="metronome" type="checkbox">Metronome</label><label><input id="loop" type="checkbox">Loop measures</label><label>From <select id="loop-from" aria-label="First loop measure"></select></label><label>to <select id="loop-to" aria-label="Last loop measure"></select></label><span class="separator"></span><button id="undo" disabled>Undo</button><button id="redo" disabled>Redo</button></div>
 <main class="workspace"><div class="canvas-area"><div class="scroll" id="timeline-scroll"><div class="timeline hide-box-keys" id="timeline" aria-label="Composition timeline"></div></div><div class="timeline-footer"><span id="position-readout"></span><label>Zoom <input type="range" id="zoom" min="28" max="160" value="48" aria-label="Timeline zoom"></label></div><div class="entry"><label class="field">Part<select id="part"><option value="melody">Melody</option><option value="chord" selected>Chord</option><option value="bass">Bass</option></select></label><label class="field">Position in quarter notes<input id="position" type="number" value="0" min="0" max="256" step="0.25"></label><label class="field">Note duration<select id="duration"></select></label><label class="field">Snap<select id="snap"><option value="1" selected>Quarter</option><option value="0.5">Eighth</option><option value="0.6666666666666666">Quarter triplet</option><option value="0.3333333333333333">Eighth triplet</option></select></label><label class="name-toggle"><input id="advance-entry" type="checkbox">Advance after entry</label><button id="next">Next step</button></div><div class="box-tools"><button id="split">Split box here</button><button id="merge">Merge boundary here</button><button id="show-parts" aria-expanded="true" aria-controls="timeline-lanes">Hide parts</button><button id="show-box-keys" aria-pressed="false" title="Show or hide the local song key beneath chord labels">Key labels: Off</button><button id="clear-box-selection" disabled>Clear box selection</button><span id="box-selection-count" class="muted small" style="align-self:center">No boxes selected</span></div></div>
 <aside class="inspector"><section><h2>Sounding harmony</h2><div class="harmony-heading"><div class="chord-name" id="chord-name">No harmony yet</div><span class="roman-name" id="roman-name" aria-label="Roman numeral">—</span></div><p class="small muted" id="roman-context"></p><p class="small muted" id="harmony-notes">Bass + chord notes determine the name.</p><select id="alternatives" class="recognition-select" aria-label="Choose a chord interpretation"></select><label class="field">Roman interpretation<select id="roman-choice" aria-label="Choose a Roman interpretation"></select></label><div class="custom-row"><input id="custom-label" placeholder="Custom label" maxlength="80" aria-label="Custom chord label"><button id="set-label">Set</button></div><p class="small warning" id="label-review"></p></section>
 <section><h2 id="selection-title">No note selected</h2><p id="selection-help" class="small muted" hidden></p><div class="note-form" id="note-form" hidden><label class="field">Pitch<select id="note-pitch"></select></label><div class="two"><label class="field">Start (quarters)<input id="note-start" type="number" min="0" max="256" step="0.25"></label><label class="field">Duration<select id="note-length" aria-label="Selected note duration"></select></label></div><p class="small muted" id="note-span" hidden></p><button id="apply-note">Apply edit</button><button id="delete-note" class="danger">Delete</button></div></section>
@@ -117,44 +119,74 @@ body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overf
 <aside id="help-panel" popover="auto" role="dialog" aria-labelledby="help-title">
   <div class="help-header"><h2 id="help-title">Help &amp; tutorials</h2><button type="button" popovertarget="help-panel" popovertargetaction="hide" aria-label="Close help" autofocus>×</button></div>
   <div class="help-body">
-    <p class="help-notice"><strong>Notes are not saved.</strong> Reloading or closing this page clears your composition. This prototype uses a temporary synth sound.</p>
-    <details open><summary>Write a phrase</summary>
-      <ol><li>Choose Melody, Chord, or Bass. The amber row is the part used by the piano.</li><li>Set the position and note duration, then click piano keys to add notes. Position 0 starts the first measure.</li><li>Melody advances the orange cursor to each note’s end. Chord and Bass keep it fixed so you can add notes together. Change this with Advance after entry, or use Next step.</li></ol>
-      <p>Chord starts with Half notes; Melody and Bass start with Quarter notes. Default duration beside the piano and Note duration below the timeline control the same setting, remembered separately for each part.</p>
-      <p>Use dotted values, Quarter triplet, or Eighth triplet from the duration menu. Three quarter triplets fill two quarter-note beats. The piano auditions only during playback; pause to write.</p>
+    <p class="help-notice"><strong>The app does not save your notes.</strong> A page reload or a closed tab erases your composition.</p>
+    <details open><summary>Start here: write your first notes</summary>
+      <ol>
+        <li>Close this panel with the × button.</li>
+        <li>Choose Melody, Chord, or Bass in Part.</li>
+        <li>Choose a Note duration, such as Quarter or Half.</li>
+        <li>Tap a piano key to add a note.</li>
+        <li>Tap Play to hear your music.</li>
+        <li>Tap Pause before you add more notes.</li>
+      </ol>
+      <p>On a computer, click instead of tap. The orange cursor marks the position for new notes.</p>
+      <p>Melody moves the cursor after each note. Chord and Bass keep it still for notes that play together.</p>
+      <p>On a phone, Tools contains Next step and Advance after entry. These settings control the next note position.</p>
     </details>
-    <details><summary>Select, move, resize, and delete notes</summary>
-      <ul><li>Click a note to edit its pitch, start, or duration in the side panel.</li><li>Left-drag the body to move in time; drag the right edge to resize. Snap uses Quarter, Eighth, Quarter triplet, or Eighth triplet.</li><li>Ctrl/Cmd-click or Shift-click toggles notes in a group, including across parts. Moving a group keeps its spacing; resizing changes every duration by the same amount.</li><li>Right-click a timeline note to delete it. Right-click a piano key to delete that pitch’s note active at the cursor in the selected part.</li><li>Escape cancels a drag. Undo and Redo restore musical edits; a completed group drag is one edit.</li></ul>
-      <p>Pitch, part, and duration stay fixed when moving. Resize snaps from the note’s start. Same-pitch notes cannot overlap within one part, but may meet at an end/start boundary. Invalid group edits are rejected together.</p>
-      <p>Notes can sustain across boxes and measures. Editing a held note changes its complete span. Moving or extending notes past the end adds measures.</p>
+    <details><summary>Change notes on a phone</summary>
+      <ol>
+        <li>Tap Select.</li>
+        <li>Choose Notes.</li>
+        <li>Tap each note that you want to change.</li>
+        <li>Tap Move or Resize.</li>
+        <li>Drag a selected note.</li>
+        <li>Release your finger to apply the change.</li>
+      </ol>
+      <p>Move changes the note position. Resize changes the note duration. Outside Move or Resize, a swipe scrolls the timeline.</p>
+      <ul><li>To remove selected notes, tap Delete.</li><li>To reverse the last edit, tap Undo.</li><li>To stop an unfinished edit, tap Cancel.</li></ul>
     </details>
-    <details><summary>Adjust the workspace</summary><p>Drag the handle above the piano up or down to change the key height. When the handle has keyboard focus, use Up/Down for small changes or Home/End for the limits. Escape cancels an unfinished drag. Height is limited to keep the timeline usable and lasts for this page session. Portrait phone keys start taller than landscape keys.</p><p>Hide parts hides all Melody, Chord, and Bass rows while keeping chord labels and the measure ruler visible. The notes still play. Show parts restores the rows and their collapse settings. On phones, this button is in Tools. Key labels start off; turn them on with Key labels: Off.</p></details>
-    <details><summary>Keys for new passages</summary><p>Next step and automatic advance give an empty destination box the tonic and major/minor mode of the collection active there. Piano entry also applies this default to empty or new boxes reached by the new note. A box with any sounding note, including one held from an earlier box, keeps its key. Merely seeking or changing the collection does not change keys. You can still set a different key explicitly.</p><p>Advancing beyond the song does not add measures; the key is assigned when a note creates the new boxes. Key changes stay within those boxes. Undo reverses a Next step key change; key defaults during piano entry are undone together with that note.</p></details>
-    <details><summary>Compose on a phone</summary><p>Write in portrait with one piano octave and taller keys. Landscape offers two octaves. Choose a part and duration above the piano. Use the octave buttons for other pitches. Tap a row’s arrow to expand or collapse it.</p><p>Swipe the timeline to scroll, including from notes. Tap a note to select it without moving the orange cursor. Select → Notes or Boxes lets taps add or remove items; Clear empties the selection. Note selections survive part changes.</p><p>Choose Move or Resize, then drag a selected note to preview the group edit. Release applies one edit and returns to scrolling. Cancel or an interrupted touch discards the preview. Delete shows the note count; one Undo restores the whole group. A long press never deletes music.</p><p>Tap a beat or empty row, or drag the orange handle, to set the cursor. Seeking pauses playback. Tools contains harmony, context, loop, view, and display settings. Both orientations support writing and playback. Rotating preserves the current scratch composition, but reloading still clears it.</p></details>
-    <details><summary>Navigate the timeline</summary>
-      <p>Click a row to choose a part and position. Drag the orange cursor to seek silently: it snaps to nearby note starts and ends, then the selected rhythm grid. The piano highlights all notes active at that position.</p>
-      <p>Hold the right mouse button and drag to pan, including from a note. A drag does not delete notes; Escape restores the previous view. Use Zoom for short passages. Note entry and navigation smoothly center the cursor; manual panning remains free until the next edit.</p>
-      <p>Focus the cursor handle and use Left/Right arrows to move by Snap, or Home/End to reach the song boundaries. Ctrl/Cmd+Z undoes; Ctrl/Cmd+Shift+Z redoes. Collapse a part with its row button; its notes still play.</p>
+    <details><summary>Change notes on a computer</summary>
+      <ul>
+        <li>Drag a note to change its position.</li>
+        <li>Drag the right edge to change its duration.</li>
+        <li>Click a note to open its pitch and duration settings.</li>
+        <li>To select several notes, hold Ctrl or Cmd as you click them.</li>
+        <li>Right-click a note to remove it.</li>
+        <li>Click Undo to reverse the last edit.</li>
+        <li>Press Space outside a control to play or pause.</li>
+      </ul>
     </details>
-    <details><summary>Chord boxes, keys, and time signatures</summary>
-      <p>Boxes organize time; their notes remain independent. Split or merge a box at the cursor without moving notes.</p>
-      <p>Click a chord label to select one box, Ctrl/Cmd-click to toggle boxes, or Shift-click to select a range. Set key changes only selected boxes and restores the surrounding keys. With no boxes selected, it applies from the cursor until the next key marker.</p>
-      <p>Key, harmonic collection, and meter are separate settings. Changing key never transposes notes. A meter change starts a new measure at the cursor and reorganizes later measures without moving written notes. Key labels toggles the local key beneath each chord name.</p>
+    <details><summary>Find a position or adjust the view</summary>
+      <ul>
+        <li>Drag the orange handle to choose a note position.</li>
+        <li>On a phone, swipe the timeline to see other notes.</li>
+        <li>On a computer, hold the right mouse button as you drag the timeline.</li>
+        <li>Drag the handle above the piano to change its height.</li>
+        <li>Tap an Octave button to see higher or lower piano notes.</li>
+        <li>On a phone, tap Hide piano controls to make more space.</li>
+      </ul>
+      <p>Show piano controls restores the controls. Hide parts hides all three note rows. Their notes still play.</p>
     </details>
-    <details><summary>Playback, loops, and volume</summary>
-      <p>Play starts from the cursor; Pause stops sound, and Play resumes. Choosing a new position sets the next start. Loop measures repeats the selected range and restarts held notes at its beginning. The playing box is highlighted, and the timeline follows ahead to show the next chord.</p>
-      <p>Tempo is quarter-note BPM. Metronome clicks quarters in 2/4, 3/4, and 4/4; it clicks two dotted quarters in 6/8. The first pulse of each measure is accented. There is no count-in or swing yet.</p>
-      <p>Each part has its own volume slider in 5% steps. Part volume does not change the metronome. Notes held at a playback start sound for their remaining duration.</p>
+    <details><summary>Change the sound</summary>
+      <ul><li>Move a Vol slider to change the volume of that part.</li><li>On a phone, open Tools for the playback settings.</li></ul>
+      <p>BPM controls the speed. Metronome adds a beat sound. Loop measures repeats the chosen measures.</p>
     </details>
-    <details><summary>Piano colors and symbols</summary>
-      <p>● identifies the sixth-chord tones, ◆ the diminished-chord tones, and ○ notes outside the selected collection. The piano starts with plain white and black keys. Switch on Note names or Symbols to show labels; Symbols uses the family colors. There are no color strips under the keys. C major sixth-diminished combines C–E–G–A with D–F–A♭–B. Minor sixth-diminished lowers the sixth chord’s third.</p>
-      <p>The active collection follows the editing cursor while stopped and the playhead while playing. Sounding-note highlights are separate from these family colors. The octave buttons change the visible register. Dark mode, beside New composition, changes the editor and help panel while keeping the piano white and black. These display choices last for the page session and do not change your notes.</p>
+    <details><summary>Understand the chord boxes</summary>
+      <p>Each box shows a chord name and a Roman numeral. The Roman numeral describes the chord in the current key.</p>
+      <p>Bass and Chord notes determine the name. Melody notes do not change it.</p>
+      <p>The collection defines the piano note groups. Empty and new boxes use its key during Next step or piano entry.</p>
+      <p>Boxes with notes keep their key. A key change does not move notes.</p>
+      <details><summary>Details for the current chord</summary><p id="roman-detail" class="muted"></p></details>
     </details>
-    <details><summary>Chord names and Roman numerals</summary><p>Degrees use the tonic’s major scale in both modes. Inversion figures are stacked: triads use 6 or 6 over 4; sevenths use 6 over 5, 4 over 3, or 4 over 2. A slash before a Roman numeral still means “of,” as in V/IV. (add6) means an added sixth; sixth and suspended chords name their bass explicitly. V/x, subV/x, and vii°/x offer dominant, tritone-substitute, and leading-tone readings. A mode name records a possible borrowing source. Choose the reading you intend; notes, key, and colors stay unchanged. Recognition covers triads, sus2/sus4, sixths, and sevenths in any register. Ninths and other extended sets remain playable with custom labels.</p></details>
-    <details><summary>Current harmony explanation</summary><p id="roman-detail" class="muted"></p><p>Names use the sounding Bass and Chord notes, including held notes; Melody is excluded. Choose an alternative or a custom label without changing the notes. The actual lowest note determines the inversion. Review warnings remain visible if a chosen interpretation no longer fits.</p></details>
-    <details><summary>Guided examples</summary><section class="walkthrough"><div class="walk-header"><h2 style="margin:0">Try a musical situation</h2><div class="tabs" role="group" aria-label="Guided examples"><button aria-pressed="false" data-scene="bass">Held bass</button><button aria-pressed="false" data-scene="inner">Moving inner voices</button><button aria-pressed="false" data-scene="context">Context changes</button></div></div><div class="walk-content"><p id="walk-description" class="small muted">Choose an example to start from a blank composition, then add its phrase one step at a time. These examples replace the current scratch work.</p><div class="walk-step"><span id="walk-progress" class="small muted"></span><button id="walk-next" hidden></button></div></div></section></details>
-    <details class="state"><summary>Inspect the composition</summary><div class="state-content"><div><h3>Written notes</h3><table><thead><tr><th>Part</th><th>Pitch</th><th>Start ♩</th><th>Duration</th></tr></thead><tbody id="notes-table"></tbody></table></div><div><h3>Context markers</h3><div id="markers-list"></div><p class="muted">This prototype recognizes exact matches from the initial vocabulary. Incomplete matches show their notes; missing-note suggestions are deferred. Pitch labels use practical flat names here. The final spelling rules remain in the specification.</p><p class="muted">Prototype limit: 256 quarter notes. Saving, file exchange, measure insertion/deletion, box resizing, and the full voicing toolbox belong to the later implementation.</p></div></div></details>
-    <details><summary>Prototype limits</summary><p>This version keeps a scratch composition in memory only. Saving, MIDI export/import, live recording, final piano sound, and the full voicing toolbox are not available. The maximum song length is 256 quarter notes. Undo history lasts for this page session.</p><p>Recognition covers major, minor, diminished, and augmented triads, sus2/sus4, sixths, and sevenths. Extended or incomplete sets remain playable without a guaranteed name. Pitch spelling uses practical piano-key names. Opening help does not change your music; guided examples ask before replacing an existing phrase.</p></details>
+    <details><summary>Try an example</summary>
+      <p class="help-notice">Each example replaces your current notes.</p>
+      <section class="walkthrough"><div class="walk-header"><h2 style="margin:0">Try an example</h2><div class="tabs" role="group" aria-label="Guided examples"><button aria-pressed="false" data-scene="bass">Held bass</button><button aria-pressed="false" data-scene="inner">Chord changes</button><button aria-pressed="false" data-scene="context">Key and meter</button></div></div><div class="walk-content"><p id="walk-description" class="small muted">Choose an example. Then tap its next step button.</p><div class="walk-step"><span id="walk-progress" class="small muted"></span><button id="walk-next" hidden></button></div></div></section>
+    </details>
+    <details><summary>Limits and note list</summary>
+      <p>This prototype has no save, MIDI import, or MIDI export. It uses a temporary synth sound. The limit is 256 quarter notes.</p>
+      <p>Some chords have no automatic name. You can still play them.</p>
+      <details class="state"><summary>Show notes and key changes</summary><div class="state-content"><div><h3>Notes</h3><table><thead><tr><th>Part</th><th>Pitch</th><th>Start ♩</th><th>Duration</th></tr></thead><tbody id="notes-table"></tbody></table></div><div><h3>Key, collection, and meter</h3><div id="markers-list"></div></div></div></details>
+    </details>
   </div>
 </aside>
 <script id="composer-core">
@@ -1335,30 +1367,30 @@ var Composer = (() => {
   };
   const add=(role,pitches,start,length)=>{for(const pitch of pitches)song.dispatch({type:'add',part:role,pitch,start,duration:length});};
   const scenarios={
-    bass:{description:'Hold C3 through two measures while chord tones and a melody move above it. A box split should leave the phrase unchanged.',steps:[
+    bass:{description:'The bass note lasts for two measures. The chord and melody change above it. A box split leaves the notes unchanged.',steps:[
       ['Add the held bass',()=>{add('bass',[48],0,8);position=0;part='bass';}],
       ['Add E–G–A above C',()=>{add('chord',[64,67,69],0,4);part='chord';}],
       ['Add a moving melody',()=>{add('melody',[72],0,1);add('melody',[74],1,1);add('melody',[76],2,2);part='melody';}],
       ['Split the first box',()=>{song.dispatch({type:'split',at:2});position=2;}],
       ['Listen to the loop',()=>{$('loop').checked=true;$('loop-from').value=0;$('loop-to').value=1;play();}]
     ]},
-    inner:{description:'Hold the high melody while the inner voices change halfway through the first measure. Select a held note to see its full editable span.',steps:[
+    inner:{description:'The melody and bass stay the same. The chord notes change halfway through the first measure.',steps:[
       ['Hold the melody and bass',()=>{add('melody',[79],0,4);add('bass',[48],0,4);position=0;}],
-      ['Write the first voicing',()=>{add('chord',[60,64,69],0,2);part='chord';}],
-      ['Move the inner voices',()=>{add('chord',[60,65,68],2,2);position=2;}],
+      ['Add the first chord',()=>{add('chord',[60,64,69],0,2);part='chord';}],
+      ['Change the chord notes',()=>{add('chord',[60,65,68],2,2);position=2;}],
       ['Listen to the phrase',()=>{$('loop').checked=true;$('loop-from').value=0;$('loop-to').value=0;play();}]
     ]},
-    context:{description:'Keep C–E–G–A sounding. Change the collection so E changes family, then place 3/4 halfway through the first measure. The written phrase should stay in place.',steps:[
+    context:{description:'This example changes the collection, time signature, and key. The notes stay in place.',steps:[
       ['Hold C6 for two measures',()=>{add('bass',[48],0,8);add('chord',[64,67,69],0,8);position=0;}],
       ['Use F collection at position 2',()=>{song.dispatch({type:'context',kind:'collection',at:2,tonic:5,mode:'major'});position=2;}],
       ['Start 3/4 at position 2',()=>{song.dispatch({type:'context',kind:'meter',at:2,n:3,d:4});position=2;}],
       ['Change the key separately',()=>{song.dispatch({type:'context',kind:'key',at:5,tonic:7,mode:'major'});position=5;}],
-      ['Listen across the markers',()=>{position=0;$('loop').checked=false;play();}]
+      ['Listen to the changes',()=>{position=0;$('loop').checked=false;play();}]
     ]}
   };
   function renderWalkthrough(){
     document.querySelectorAll('[data-scene]').forEach(button=>button.setAttribute('aria-pressed',button.dataset.scene===scene?'true':'false'));
-    if(!scene){$('walk-next').hidden=true;$('walk-progress').textContent='';$('walk-description').textContent='Choose an example to start from a blank composition, then add its phrase one step at a time. These examples replace the current scratch work.';return;}
+    if(!scene){$('walk-next').hidden=true;$('walk-progress').textContent='';$('walk-description').textContent='Choose an example. Then tap its next step button.';return;}
     const current=scenarios[scene];$('walk-description').textContent=current.description;
     $('walk-progress').textContent=`${step} of ${current.steps.length} steps`;
     $('walk-next').hidden=false;$('walk-next').disabled=step>=current.steps.length;
@@ -1366,9 +1398,9 @@ var Composer = (() => {
   }
   document.querySelectorAll('[data-scene]').forEach(button=>button.onclick=()=>{
     if(song.inspect().notes.length&&!confirm('Start this example from blank? Current scratch work will be replaced.'))return;
-    reset();scene=button.dataset.scene;step=0;renderWalkthrough();status('Example ready. Use the next step button, then try your own edits.');
+    reset();scene=button.dataset.scene;step=0;renderWalkthrough();status('Example ready. Tap the next step button.');
   });
-  $('walk-next').onclick=()=>{try{const [title,action]=scenarios[scene].steps[step];action();step++;render();renderWalkthrough();status(title+'. Inspect the notes and listen for the result.');}catch(error){status(error.message,true);}};
+  $('walk-next').onclick=()=>{try{const [title,action]=scenarios[scene].steps[step];action();step++;render();renderWalkthrough();status(title+'. The step is complete.');}catch(error){status(error.message,true);}};
   window.addEventListener('keydown',event=>{
     if(event.target.closest('#help-panel,#mobile-tools,#piano-resize'))return;
     if((drag||touchEdit)&&event.key==='Escape'){event.preventDefault();if(drag)finishDrag(false);touchEdit='';render({center:false});return;}
@@ -1380,6 +1412,12 @@ var Composer = (() => {
       document.querySelector('.cursor-handle').focus({preventScroll:true});return;
     }
     if(event.target.matches('input,select,textarea'))return;
+    if(event.code==='Space'&&!event.altKey&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.isComposing&&!event.defaultPrevented){
+      if(event.target.closest('button,a,summary,[contenteditable]:not([contenteditable="false"]),[role="textbox"]'))return;
+      event.preventDefault();
+      if(!event.repeat)$('play').click();
+      return;
+    }
     if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z'){event.preventDefault();mutate({type:event.shiftKey?'redo':'undo'},event.shiftKey?'Edit restored.':'Edit undone.');}
   });
   new ResizeObserver(()=>{
