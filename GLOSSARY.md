@@ -5,10 +5,16 @@ Terms established by the project brief and scope interview. Musical study terms 
 ## Language
 
 **Project**:
-A composition workspace containing a song's measures and musical material.
+A composition workspace containing a song's measures, musical material, and composition settings. The app calls a project a composition.
 
 **Project file**:
 A portable snapshot of a project's complete composition state, used for backup or transfer and restored as a new project copy. It is distinct from a MIDI file or an audio recording.
+
+**Composition settings**:
+Playback and note-entry choices associated with a composition, such as tempo, part volumes, loop settings, and note durations.
+
+**Display preferences**:
+Choices that control the appearance of the workspace without changing the composition's notes or playback settings.
 
 **Local autosave**:
 Automatic saving of completed edits in the current browser's storage. It preserves the latest saved project state, not a separate backup or an edit history across sessions.

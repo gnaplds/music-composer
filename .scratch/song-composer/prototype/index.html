@@ -1,82 +1,83 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Simple Composer</title>
 <style>
+/* Palette roles: UI state stays distinct from musical collection membership. */
+:root{
+  --page:#f3f1ea;--surface:#fcfbf7;--surface-soft:#e8e4db;--button:var(--surface-soft);--hover:#e2ded4;
+  --ink:#302d26;--muted:#605b51;--line:#c6c0b3;--border:#837e73;--focus:var(--ink);
+  --primary:#315b49;--primary-hover:#284c3d;--selection:#315b49;--selection-bg:#e0ebe3;
+  --entry:#9a5b0a;--entry-ink:#fff;--entry-bg:#f5ead7;
+  --sixth:#164c6a;--sixth-bg:#dcebf4;--dim:#5e3869;--dim-bg:#efe2f2;--outside:#4c483e;--outside-bg:#e8e4db;
+  --error:#9c3434;--error-bg:#f8e6e2;
+  --key-white:#fcfbf7;--key-ink:#302d26;--key-black:#1c1c1c;--key-white-hover:#e8e4db;--key-black-hover:#38352f;
+  --sixth-on-white:#164c6a;--dim-on-white:#5e3869;--outside-on-white:#4c483e;
+  --sixth-on-black:#c1def2;--dim-on-black:#eacff3;--outside-on-black:#dbd7cd;
+  --backdrop:#1b1a17a8;--shadow-soft:#1b1a170f;--shadow:#1b1a1729;
+}
+:root:has(#dark-mode:checked){
+  --page:#1b1a17;--surface:#282722;--surface-soft:#38352f;--hover:#413d35;
+  --ink:#eeece5;--muted:#c6c2b8;--line:#514d44;--border:#938d81;
+  --primary:#3f6654;--primary-hover:#49735f;--selection:#8ab29d;--selection-bg:#293e32;
+  --entry:#ecb45f;--entry-ink:#302d26;--entry-bg:#3e3323;
+  --sixth:#c1def2;--sixth-bg:#243d4d;--dim:#eacff3;--dim-bg:#44304c;--outside:#dbd7cd;--outside-bg:#38352f;
+  --error:#f3b7ab;--error-bg:#452b27;
+}
+
 .keyboard.names-hidden .pitch-name{visibility:hidden}.keyboard.symbols-hidden .family-symbol{visibility:hidden}.name-toggle{display:flex;align-items:center;gap:5px}
 .timeline::after{content:"";position:absolute;left:100%;top:0;width:var(--cursor-room,0px);height:1px;pointer-events:none}
 .scroll:has(.panning),.timeline.panning,.timeline.panning *{cursor:grabbing!important;user-select:none}
-.note:has(.resize-handle){padding:2px 0 2px 2px;touch-action:none;cursor:grab}.note.resizing{cursor:grabbing}.resize-handle{position:absolute;right:0;top:0;bottom:0;width:min(10px,35%);cursor:ew-resize;touch-action:none;background:currentColor;opacity:.25;border-left:2px solid currentColor}.note:hover .resize-handle,.note.selected .resize-handle{opacity:.55}.note.resizing{outline:3px solid #d38b19;z-index:6}.length-preview{font-weight:650;color:#805800}
-:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#243747;background:#edf2f6;font-size:14px;--sixth:#16736a;--dim:#7555a1;--outside:#667581;--line:#d5dee5;--row:96px}
-*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button,select,input{border:1px solid #bccbd5;border-radius:5px;background:white;color:inherit;min-height:34px;padding:6px 10px}button{cursor:pointer;font-weight:550}button:hover:not(:disabled){background:#e7f1f7;border-color:#5e839b}button:disabled{opacity:.42;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #d38b19;outline-offset:2px}.primary{background:#294c66;color:white;border-color:#294c66}.primary:hover:not(:disabled){background:#365f7c}h1{font-size:23px;line-height:1.2;margin:0;font-weight:650;letter-spacing:-.6px}h2{font-size:15px;margin:0 0 10px}h3{font-size:14px;margin:0 0 8px}p{line-height:1.5;margin:6px 0}.muted{color:#566b7a}.small{font-size:12px}.top{padding:20px 24px 12px;display:flex;justify-content:space-between;gap:20px;align-items:center}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:13px 24px;background:#f8fbfd;border-bottom:1px solid var(--line)}.toolbar label{display:flex;align-items:center;gap:6px}.toolbar input[type=number]{width:65px}.separator{width:1px;height:24px;background:var(--line);margin:0 4px}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:18px;margin:20px 24px 14px}.canvas-area{min-width:0}.entry{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:4px 0 0;padding:12px 0;border-top:1px solid var(--line)}label.field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:550}label.field input,label.field select{font-size:14px;font-weight:400}.entry input[type=number]{width:110px}.scroll{overflow:auto;position:relative;background:#fff;border:1px solid #bccbd5;border-radius:7px}.timeline{position:relative;min-height:420px}.ruler{position:relative;height:38px;border-bottom:1px solid var(--line);background:#f5f8fa}.measure-head{position:absolute;height:38px;padding:9px 10px;border-left:1px solid #9bb0bd;white-space:nowrap;overflow:hidden;font-size:12px;font-weight:650}.measure-head span{font-weight:400;color:#587081;margin-left:8px}.boxes{height:44px;position:relative;border-bottom:1px solid var(--line)}.box{position:absolute;height:44px;border-left:1px solid #c4d2dc;background:#fff;padding:7px 8px;font-size:13px;overflow:hidden;white-space:nowrap;border-radius:0;border-block:0;border-right:0;text-align:left}.box:hover{background:#eff5f8!important}.box .small{display:block;font-size:10px;color:#637887}.lanes{position:relative}.lane{position:relative;height:var(--row);border-bottom:1px solid #dce4ea;background:repeating-linear-gradient(to right,transparent 0,transparent calc(var(--beat-width) - 1px),#e5ecf0 calc(var(--beat-width) - 1px),#e5ecf0 var(--beat-width));cursor:crosshair}.lane:nth-child(even){background-color:#f8fafc}.lane-label{position:sticky;left:0;top:0;display:inline-block;background:#e7eef3e8;z-index:3;font-size:11px;padding:3px 7px;border-radius:0 0 4px 0;pointer-events:none}.bar-line{position:absolute;top:0;bottom:0;width:1px;background:#9bb0bd;pointer-events:none}.box-line{position:absolute;top:0;bottom:0;width:1px;border-left:1px dashed #d0dce4;pointer-events:none}.note{position:absolute;min-height:22px;height:22px;padding:2px 5px;border:1px solid currentColor;border-left:3px solid currentColor;border-radius:4px;text-align:left;overflow:hidden;white-space:nowrap;font-size:11px;font-weight:600;z-index:2;line-height:16px}.note.sixth{color:#125b54;background:#cfe9e3}.note.diminished{color:#624184;background:#e5dcf1}.note.outside{color:#4c5e6d;background:#e1e7ec}.note.selected{outline:3px solid #d38b19;outline-offset:1px;z-index:4}.note.sounding{filter:brightness(.91);box-shadow:0 0 0 2px #243747}.cursor{position:absolute;top:0;bottom:0;width:2px;background:#bf811a;pointer-events:none;z-index:5}.cursor::before{content:"";position:absolute;top:0;left:-4px;border-top:7px solid #bf811a;border-inline:5px solid transparent}.playhead{background:#294c66;display:none}.playhead::before{border-top-color:#294c66}.timeline-footer{padding:9px 0;display:flex;justify-content:space-between;gap:10px;font-size:12px;color:#566b7a}.box-tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:0;padding-bottom:8px}.inspector{border-left:1px solid #c9d5dd;padding-left:18px}.inspector section{padding-bottom:15px;margin-bottom:15px;border-bottom:1px solid var(--line)}.inspector section:last-child{border:0}.inspector .field{margin-bottom:9px}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.two input,.two select{min-width:0;width:100%}.note-form[hidden]{display:none}.context-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}.context-row select{min-width:0}.context-row button{grid-column:1/-1}.chord-name{font-size:28px;font-weight:600;letter-spacing:-.7px;line-height:1.2;margin:4px 0}.recognition-select{width:100%;margin:7px 0}.custom-row{display:flex;gap:6px}.custom-row input{min-width:0;flex:1}.warning{color:#815b18}.walkthrough{margin:0 24px 18px;border-top:1px solid #c6d3dd;padding-top:12px}.walk-header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button[aria-pressed=true]{background:#294c66;color:#fff}.walk-content{margin-top:10px;display:flex;gap:15px;align-items:center;justify-content:space-between;flex-wrap:wrap}.walk-content p{max-width:680px}.walk-step{display:flex;gap:7px;align-items:center}.status{margin:0 24px 12px;padding:9px 12px;background:#e1eaf0;border-radius:5px;min-height:36px;font-size:12px}.status.error{background:#fae7df;color:#913e22}details.state{margin:0 24px 18px;font-size:12px}summary{cursor:pointer;padding:6px 0;font-weight:600}.state-content{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-height:260px;overflow:auto}table{border-collapse:collapse;width:100%;background:#fff}td,th{padding:6px 9px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.keyboard-dock{position:sticky;bottom:0;background:#e6edf3;border-top:1px solid #aabcc9;padding:12px 24px 16px;z-index:10}.keyboard-top{display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}.collection-name{font-size:14px;font-weight:650}.legend{display:flex;gap:12px;font-size:11px;flex-wrap:wrap}.legend .sixth{color:var(--sixth)}.legend .diminished{color:var(--dim)}.legend .outside{color:var(--outside)}.keyboard-actions{display:flex;flex-wrap:wrap;align-items:center;gap:7px;font-size:12px}.keyboard-scroll{overflow-x:auto}.keyboard{height:var(--piano-height,116px);position:relative;display:flex;min-width:680px;margin:auto}.key{position:relative;border-radius:0 0 5px 5px;border:1px solid #a1b1be;border-top:2px solid #738999;background:#fff;color:#243747;height:var(--piano-height,116px);flex:1;min-width:22px;padding:0;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:3px;padding-bottom:10px;font-size:11px}.key.black{position:absolute;z-index:2;top:0;height:var(--piano-black-height,73px);background:#1c1c1c;color:#fff;border:1px solid #080808;min-width:0;padding-bottom:7px;font-size:10px}.key.sounding{background:#cbdce7;box-shadow:inset 0 0 0 3px #d38b19}.key.black.sounding{background:#55778f}.key:hover{background:#e0ebf3!important}.key.black:hover{background:#446578!important}.note-form button{margin-right:5px}.danger{color:#974327}
+.note:has(.resize-handle){padding:2px 0 2px 2px;touch-action:none;cursor:grab}.note.resizing{cursor:grabbing}.resize-handle{position:absolute;right:0;top:0;bottom:0;width:min(10px,35%);cursor:ew-resize;touch-action:none;background:currentColor;opacity:.25;border-left:2px solid currentColor}.note:hover .resize-handle,.note.selected .resize-handle{opacity:.55}.note.resizing{outline:3px solid var(--selection);z-index:6}.length-preview{font-weight:650;color:var(--ink)}
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--page);font-size:14px;--row:96px}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button,select,input{border:1px solid var(--border);border-radius:5px;background:var(--surface);color:inherit;min-height:34px;padding:6px 10px}button{cursor:pointer;font-weight:550}button:hover:not(:disabled,.key,.note,.box){background:var(--hover);border-color:var(--focus)}button:disabled{opacity:.42;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--selection);outline-offset:2px}.primary{background:var(--primary);color:white;border-color:var(--primary)}.primary:hover:not(:disabled){background:var(--primary-hover)}h1{font-size:23px;line-height:1.2;margin:0;font-weight:650;letter-spacing:-.6px}h2{font-size:15px;margin:0 0 10px}h3{font-size:14px;margin:0 0 8px}p{line-height:1.5;margin:6px 0}.muted{color:var(--muted)}.small{font-size:12px}.top{padding:20px 24px 12px;display:flex;justify-content:space-between;gap:20px;align-items:center}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:13px 24px;background:var(--surface-soft);border-bottom:1px solid var(--line)}.toolbar label{display:flex;align-items:center;gap:6px}.toolbar input[type=number]{width:65px}.separator{width:1px;height:24px;background:var(--line);margin:0 4px}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:18px;margin:20px 24px 14px}.canvas-area{min-width:0}.entry{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:4px 0 0;padding:12px 0;border-top:1px solid var(--line)}label.field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:550}label.field input,label.field select{font-size:14px;font-weight:400}.entry input[type=number]{width:110px}.scroll{overflow:auto;position:relative;background:var(--surface);border:1px solid var(--border);border-radius:7px}.timeline{position:relative;min-height:420px}.ruler{position:relative;height:38px;border-bottom:1px solid var(--line);background:var(--surface-soft)}.measure-head{position:absolute;height:38px;padding:9px 10px;border-left:1px solid var(--border);white-space:nowrap;overflow:hidden;font-size:12px;font-weight:650}.measure-head span{font-weight:400;color:var(--muted);margin-left:8px}.boxes{height:44px;position:relative;border-bottom:1px solid var(--line)}.box{position:absolute;height:44px;border-left:1px solid var(--line);background:var(--surface);padding:7px 8px;font-size:13px;overflow:hidden;white-space:nowrap;border-radius:0;border-block:0;border-right:0;text-align:left}.box:hover{background:var(--hover)!important}.box .small{display:block;font-size:10px;color:var(--muted)}.lanes{position:relative}.lane{position:relative;height:var(--row);border-bottom:1px solid var(--line);background:repeating-linear-gradient(to right,transparent 0,transparent calc(var(--beat-width) - 1px),var(--line) calc(var(--beat-width) - 1px),var(--line) var(--beat-width));cursor:crosshair}.lane:nth-child(even){background-color:var(--surface-soft)}.lane-label{position:sticky;left:0;top:0;display:inline-block;background:var(--button);z-index:3;font-size:11px;padding:3px 7px;border-radius:0 0 4px 0;pointer-events:none}.bar-line{position:absolute;top:0;bottom:0;width:1px;background:var(--border);pointer-events:none}.box-line{position:absolute;top:0;bottom:0;width:1px;border-left:1px dashed var(--line);pointer-events:none}.note{position:absolute;min-height:22px;height:22px;padding:2px 5px;border:1px solid currentColor;border-left:3px solid currentColor;border-radius:4px;text-align:left;overflow:hidden;white-space:nowrap;font-size:11px;font-weight:600;z-index:2;line-height:16px}.note.sixth{color:var(--sixth);background:var(--sixth-bg)}.note.diminished{color:var(--dim);background:var(--dim-bg)}.note.outside{color:var(--outside);background:var(--outside-bg)}.note.selected{outline:3px solid var(--selection);outline-offset:1px;z-index:4}.note.sounding{filter:none;box-shadow:0 0 0 2px var(--ink)}.cursor{position:absolute;top:0;bottom:0;width:2px;background:var(--entry);pointer-events:none;z-index:5}.cursor::before{content:"";position:absolute;top:0;left:-4px;border-top:7px solid var(--entry);border-inline:5px solid transparent}.playhead{background:var(--ink);display:none}.playhead::before{border-top-color:var(--ink)}.timeline-footer{padding:9px 0;display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted)}.box-tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:0;padding-bottom:8px}.inspector{border-left:1px solid var(--line);padding-left:18px}.inspector section{padding-bottom:15px;margin-bottom:15px;border-bottom:1px solid var(--line)}.inspector section:last-child{border:0}.inspector .field{margin-bottom:9px}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.two input,.two select{min-width:0;width:100%}.note-form[hidden]{display:none}.context-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}.context-row select{min-width:0}.context-row button{grid-column:1/-1}.chord-name{font-size:28px;font-weight:600;letter-spacing:-.7px;line-height:1.2;margin:4px 0}.recognition-select{width:100%;margin:7px 0}.custom-row{display:flex;gap:6px}.custom-row input{min-width:0;flex:1}.warning{color:var(--error)}.walkthrough{margin:0 24px 18px;border-top:1px solid var(--line);padding-top:12px}.walk-header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button[aria-pressed=true]{background:var(--primary);color:white}.walk-content{margin-top:10px;display:flex;gap:15px;align-items:center;justify-content:space-between;flex-wrap:wrap}.walk-content p{max-width:680px}.walk-step{display:flex;gap:7px;align-items:center}.status{margin:0 24px 12px;padding:9px 12px;background:var(--surface-soft);border-radius:5px;min-height:36px;font-size:12px}.status.error{background:var(--error-bg);color:var(--error)}details.state{margin:0 24px 18px;font-size:12px}summary{cursor:pointer;padding:6px 0;font-weight:600}.state-content{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-height:260px;overflow:auto}table{border-collapse:collapse;width:100%;background:var(--surface)}td,th{padding:6px 9px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.keyboard-dock{position:sticky;bottom:0;background:var(--surface-soft);border-top:1px solid var(--border);padding:12px 24px 16px;z-index:10}.keyboard-top{display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}.collection-name{font-size:14px;font-weight:650}.legend{display:flex;gap:12px;font-size:11px;flex-wrap:wrap}.legend .sixth{color:var(--sixth)}.legend .diminished{color:var(--dim)}.legend .outside{color:var(--outside)}.keyboard-actions{display:flex;flex-wrap:wrap;align-items:center;gap:7px;font-size:12px}.keyboard-scroll{overflow-x:auto}.keyboard{height:var(--piano-height,116px);position:relative;display:flex;min-width:680px;margin:auto}.key{position:relative;border-radius:0 0 5px 5px;border:1px solid var(--border);border-top:2px solid var(--border);background:var(--key-white);color:var(--key-ink);height:var(--piano-height,116px);flex:1;min-width:22px;padding:0;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:3px;padding-bottom:10px;font-size:11px}.key.black{position:absolute;z-index:2;top:0;height:var(--piano-black-height,73px);background:var(--key-black);color:white;border:1px solid var(--key-black);min-width:0;padding-bottom:7px;font-size:10px}.key.sounding{background:var(--key-white-hover);box-shadow:inset 0 0 0 3px var(--key-ink)}.key.black.sounding{background:var(--key-black-hover);box-shadow:inset 0 0 0 3px var(--key-white)}.key:hover{background:var(--key-white-hover)!important}.key.black:hover{background:var(--key-black-hover)!important}.note-form button{margin-right:5px}.danger{color:var(--error)}
 @media(max-width:1000px){.workspace{grid-template-columns:minmax(0,1fr) 245px;gap:12px;margin-inline:14px}.inspector{padding-left:12px}.top,.toolbar{padding-inline:14px}.keyboard-dock{padding-inline:14px}.walkthrough,.status,details.state{margin-inline:14px}.keyboard-top{gap:7px}.legend{gap:7px}}
 @media(max-width:720px){.workspace{grid-template-columns:1fr}.inspector{border-left:0;padding-left:0;display:grid;grid-template-columns:1fr 1fr;gap:16px}.top{align-items:start}.keyboard-dock{position:relative}.keyboard{min-width:680px}.state-content{grid-template-columns:1fr}.inspector section{min-width:0}.walk-content{align-items:start}.entry{gap:6px}}
 
-.ruler{height:62px;border-top:1px solid #9bb0bd;border-bottom:0}.measure-head{height:34px;bottom:0;padding:8px 10px}.beat-mark{position:absolute;top:0;height:23px;border-left:1px solid #b8c9d5;padding:3px 5px;font-size:10px;color:#587081;pointer-events:none}.cursor:not(.playhead){pointer-events:auto;cursor:ew-resize;touch-action:none}.cursor-handle{position:absolute;bottom:33px;left:-14px;width:30px;min-height:27px;height:27px;padding:0;border:1px solid #9d6813;background:#bf811a;color:#fff;cursor:ew-resize;touch-action:none;border-radius:3px}.cursor-handle:hover{background:#9d6813!important}.cursor::before{display:none}
+.ruler{height:62px;border-top:1px solid var(--border);border-bottom:0}.measure-head{height:34px;bottom:0;padding:8px 10px}.beat-mark{position:absolute;top:0;height:23px;border-left:1px solid var(--line);padding:3px 5px;font-size:10px;color:var(--muted);pointer-events:none}.cursor:not(.playhead){pointer-events:auto;cursor:ew-resize;touch-action:none}.cursor-handle{position:absolute;bottom:33px;left:-14px;width:30px;min-height:27px;height:27px;padding:0;border:1px solid var(--entry);background:var(--entry);color:var(--entry-ink);cursor:ew-resize;touch-action:none;border-radius:3px}.cursor-handle:hover{background:var(--entry)!important}.cursor::before{display:none}
 
-.boxes{height:120px}.box{height:120px;padding:12px 0;line-height:1.2}.box>span{padding-inline:8px}.box-chord{display:block;font-size:28px;font-weight:650;overflow:hidden;text-overflow:ellipsis}.box-roman{display:block;font-size:22px;font-weight:600;color:#5d4681;margin:3px 0 5px;overflow:hidden;text-overflow:ellipsis}.box.harmony-change{border-left-style:dashed}.box .small{font-size:11px;overflow:hidden;text-overflow:ellipsis}.harmony-heading{display:flex;align-items:baseline;gap:10px}.harmony-heading .chord-name{min-width:0;overflow-wrap:anywhere}.roman-name{margin-left:auto;font-size:22px;font-weight:650;color:#5d4681;white-space:normal;min-width:0;max-width:65%;overflow-wrap:anywhere;text-align:right}.timeline{min-height:0}
-.roman-figures{display:inline-flex;flex-direction:column;align-items:center;font-size:.7em;line-height:.85;vertical-align:super;margin-left:.08em}.roman-figures.stacked{display:inline-block;vertical-align:baseline}.roman-figures.stacked>span{display:block;text-align:center}.box-roman{line-height:1.45}.timeline.hide-box-keys .box-key{display:none}.timeline.hide-box-keys .boxes,.timeline.hide-box-keys .box{height:120px}.lane-label{pointer-events:auto;min-height:25px;height:25px;border:0;line-height:19px;padding:3px 7px;cursor:pointer}.timeline.hide-parts .lanes{display:none}.lane.collapsed{cursor:default}.lane-label[aria-expanded=false]{background:#dbe5ec}
-.box.box-selected{box-shadow:inset 0 0 0 2px #7555a1;background:#f0ebf8}.box.box-playing,.box.box-playing:hover{background:#d1e9df!important;border-top:4px solid #16736a}.lane-controls{position:sticky;left:0;display:inline-flex;align-items:center;gap:8px;background:#e7eef3ed;z-index:3;height:25px;padding-right:7px}.lane-controls .lane-label{position:static}.lane.entry-part{box-shadow:inset 4px 0 #bf811a;background-color:#fff8e9}.lane.entry-part .lane-controls{background:#f6e5c4}.entry-badge{font-size:10px;font-weight:650;color:#805800}.note.drag-invalid{outline-color:#b43f21}.part-volume{display:inline-flex;align-items:center;gap:4px;font-size:11px}.part-volume input{width:80px;min-height:20px;padding:0;border:0}.part-volume output{min-width:30px}
+.boxes{height:120px}.box{height:120px;padding:12px 0;line-height:1.2}.box>span{padding-inline:8px}.box-chord{display:block;font-size:28px;font-weight:650;overflow:hidden;text-overflow:ellipsis}.box-roman{display:block;font-size:22px;font-weight:600;color:var(--ink);margin:4px 0;overflow:hidden;text-overflow:ellipsis}.box.harmony-change{border-left-style:dashed}.box .small{font-size:11px;overflow:hidden;text-overflow:ellipsis}.harmony-heading{display:flex;align-items:baseline;gap:10px}.harmony-heading .chord-name{min-width:0;overflow-wrap:anywhere}.roman-name{margin-left:auto;font-size:22px;font-weight:650;color:var(--ink);white-space:normal;min-width:0;max-width:65%;overflow-wrap:anywhere;text-align:right}.timeline{min-height:0}
+.roman-figures{display:inline-flex;flex-direction:column;align-items:center;font-size:.7em;line-height:.85;vertical-align:super;margin-left:.08em}.roman-figures.stacked{display:inline-block;vertical-align:baseline}.roman-figures.stacked>span{display:block;text-align:center}.box-roman{line-height:1.45}.timeline.hide-box-keys .box-key{display:none}.timeline.hide-box-keys .boxes,.timeline.hide-box-keys .box{height:120px}.lane-label{pointer-events:auto;min-height:25px;height:25px;border:0;line-height:19px;padding:3px 7px;cursor:pointer}.timeline.hide-parts .lanes{display:none}.lane.collapsed{cursor:default}.lane-label[aria-expanded=false]{background:var(--surface-soft)}
+.box.box-selected{outline:2px solid var(--selection);outline-offset:-2px;background:var(--selection-bg)}.box.box-playing,.box.box-playing:hover{background:var(--surface-soft)!important;box-shadow:inset 0 4px var(--ink)}.lane-controls{position:sticky;left:0;display:inline-flex;align-items:center;gap:8px;background:var(--button);z-index:3;height:25px;padding-right:7px}.lane-controls .lane-label{position:static}.lane.entry-part{box-shadow:inset 4px 0 var(--entry);background-color:var(--entry-bg)}.lane.entry-part .lane-controls{background:var(--entry-bg)}.entry-badge{font-size:10px;font-weight:650;color:var(--entry)}.note.drag-invalid{outline-color:var(--error)}.part-volume{display:inline-flex;align-items:center;gap:4px;font-size:11px}.part-volume input{width:80px;min-height:20px;padding:0;border:0}.part-volume output{min-width:30px}
 
 .top{padding-block:16px}.top h1{font-size:22px}.top-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}.keyboard-dock{padding-bottom:0}
 #play{min-width:112px}
-.help-button{width:34px;height:34px;min-height:34px;padding:0;border-radius:50%;background:#294c66;color:white;border-color:#294c66;font-size:21px}
-.help-button:hover:not(:disabled){background:#365f7c;color:white}
-#help-panel{position:fixed;inset:66px 16px auto auto;margin:0;width:min(480px,calc(100vw - 32px));max-height:calc(100dvh - 82px);padding:0;border:1px solid #aabcc9;border-radius:12px;background:#f8fbfd;color:#243747;box-shadow:0 12px 40px #24374733;overflow:auto;overscroll-behavior:contain}
-.help-header{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 18px;background:#f8fbfd;border-bottom:1px solid #d5dee5;z-index:1}.help-header h2{margin:0;font-size:18px}.help-header button{font-size:24px;line-height:1;min-width:36px}
-.help-body{padding:4px 18px 18px;font-size:13px;line-height:1.55}.help-body details{border-bottom:1px solid #d5dee5;padding:8px 0}.help-body details:last-child{border-bottom:0}.help-body summary{font-size:14px}.help-body ul,.help-body ol{padding-left:21px}.help-body li+li{margin-top:7px}.help-notice{padding:10px 12px;margin:10px 0;background:#f7f0df;color:#655129;border-radius:6px}
+.help-button{width:34px;height:34px;min-height:34px;padding:0;border-radius:50%;background:var(--primary);color:white;border-color:var(--primary);font-size:21px}
+.help-button:hover:not(:disabled){background:var(--primary-hover);color:white}
+#help-panel{position:fixed;inset:66px 16px auto auto;margin:0;width:min(480px,calc(100vw - 32px));max-height:calc(100dvh - 82px);padding:0;border:1px solid var(--border);border-radius:12px;background:var(--surface-soft);color:var(--ink);overflow:auto;overscroll-behavior:contain}
+.help-header{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 18px;background:var(--surface-soft);border-bottom:1px solid var(--line);z-index:1}.help-header h2{margin:0;font-size:18px}.help-header button{font-size:24px;line-height:1;min-width:36px}
+.help-body{padding:4px 18px 18px;font-size:13px;line-height:1.55}.help-body details{border-bottom:1px solid var(--line);padding:8px 0}.help-body details:last-child{border-bottom:0}.help-body summary{font-size:14px}.help-body ul,.help-body ol{padding-left:21px}.help-body li+li{margin-top:7px}.help-notice{padding:10px 12px;margin:10px 0;background:var(--surface-soft);color:var(--ink);border-radius:6px}
 #help-panel .walkthrough,#help-panel details.state{margin:0;border:0;padding:0;font-size:13px}#help-panel .state-content{grid-template-columns:1fr;max-height:none;overflow:auto}#help-panel .walk-header h2{display:none}#help-panel .walk-content{display:block}#help-panel .walk-step{margin:12px 0}
 :root{color-scheme:light}
-:root:has(#dark-mode:checked){
-  color-scheme:dark;color:#e4edf3;background:#151d26;--line:#435768;--sixth:#78ceba;--dim:#c7a4ee;--outside:#acb8c2;
-  button:where(:not(.key,.cursor-handle)),input,select,.scroll,.box,table{background:#1d2935;border-color:#506577;color:#e4edf3}
-  button:hover:where(:not(:disabled,.key,.cursor-handle)){background:#304757;border-color:#83a9c2}
-  .primary,.help-button,.tabs button[aria-pressed=true]{background:#365f7c;color:white;border-color:#638da8}
-  .primary:hover:where(:not(:disabled)),.help-button:hover:where(:not(:disabled)){background:#466f8b}
-  .toolbar,#help-panel,.help-header{background:#22313f;color:#e4edf3;border-color:var(--line)}
-  .muted,.timeline-footer,.measure-head span,.beat-mark,.box .small{color:#aab9c5}
-  .ruler,.keyboard-dock{background:#263645;border-color:#506577}
-  .measure-head,.beat-mark{border-color:#506577}.bar-line{background:#506577}
-  .box:hover{background:#304252!important}.box-line,.inspector,.walkthrough,.help-body details{border-color:var(--line)}
-  .lane{border-color:var(--line);background-image:repeating-linear-gradient(to right,transparent 0,transparent calc(var(--beat-width) - 1px),#2e4050 calc(var(--beat-width) - 1px),#2e4050 var(--beat-width))}
-  .lane:nth-child(even){background-color:#202e3b}
-  .lane-controls,.lane-label{background:#2e4050}.lane-label[aria-expanded=false]{background:#354858}
-  .lane.entry-part{background-color:#332e23}.lane.entry-part .lane-controls,.lane.entry-part .lane-label{background:#4b3c26}
-  .entry-badge,.length-preview{color:#f0cb85}
-  .note{border-color:currentColor}.note.sixth{color:#a6e4d5;background:#234d46}.note.diminished{color:#e2cdf9;background:#493857}.note.outside{color:#d3dde5;background:#344654}
-  .playhead{background:#94bde0}
-  .note.sounding{filter:none;box-shadow:0 0 0 2px #e4edf3}.note.drag-invalid{outline-color:#ffb49a}
-  .box-roman,.roman-name{color:#d2b0f2}
-  .box.box-selected{background:#3c304c;box-shadow:inset 0 0 0 2px var(--dim)}
-  .box.box-playing,.box.box-playing:hover{background:#234e43!important;border-top-color:var(--sixth)}
-  .status{background:#293b4b}.status.error{background:#502c26;color:#ffb49a}.danger{color:#ffb49a}.warning{color:#efd08e}
-  .help-notice{background:#403727;color:#f0d8ab}
-}
-.key.sixth .family-symbol{color:#16736a}.key.diminished .family-symbol{color:#7555a1}.key.outside .family-symbol{color:#667581}
-.key.black.sixth .family-symbol{color:#78ceba}.key.black.diminished .family-symbol{color:#c7a4ee}.key.black.outside .family-symbol{color:#acb8c2}
+:root:has(#dark-mode:checked){color-scheme:dark}
+
+.key.sixth .family-symbol{color:var(--sixth-on-white)}.key.diminished .family-symbol{color:var(--dim-on-white)}.key.outside .family-symbol{color:var(--outside-on-white)}
+.key.black.sixth .family-symbol{color:var(--sixth-on-black)}.key.black.diminished .family-symbol{color:var(--dim-on-black)}.key.black.outside .family-symbol{color:var(--outside-on-black)}
 .keyboard .key:is(.sounding,:hover) .family-symbol{color:inherit}
 
 .mobile-only{display:none}
-#mobile-tools{padding:0;width:min(720px,calc(100vw - 24px));max-height:calc(100dvh - 24px);border:1px solid var(--line);border-radius:10px;background:#f8fbfd;color:inherit;overscroll-behavior:contain}
-#mobile-tools::backdrop{background:#101c2ba8}
+#mobile-tools{padding:0;width:min(720px,calc(100vw - 24px));max-height:calc(100dvh - 24px);border:1px solid var(--line);border-radius:10px;background:var(--surface-soft);color:inherit;overscroll-behavior:contain}
+#mobile-tools::backdrop{background:var(--backdrop)}
 .tools-header{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;background:inherit;border-bottom:1px solid var(--line);padding:8px 14px}.tools-header h2{margin:0}
 .tools-body{padding:12px 14px}.tools-body>section{padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--line)}
 .tools-body .toolbar,.tools-body .entry,.tools-body .timeline-footer,.tools-body .box-tools{margin:0;padding:0;border:0;background:transparent;flex-wrap:wrap;justify-content:start}
 .tools-body .inspector{border:0;padding:0;display:block}.tools-body .keyboard-actions{font-size:14px}.tools-body #tools-project{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-:root:has(#dark-mode:checked) #mobile-tools{background:#22313f;color:#e4edf3}
+.project-bar{display:flex;align-items:center;gap:10px;min-height:38px;padding:4px 16px;border-bottom:1px solid var(--line);font-size:13px}.project-name{font-weight:650;max-width:34ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.save-status,.offline-status{color:var(--muted)}.save-status[data-state=error],.save-status[data-state=conflict],.offline-status[data-state=error]{color:var(--error)}.project-spacer{flex:1}.project-conflict{display:flex;align-items:center;gap:6px}.project-bar button{min-height:32px;padding:4px 9px}.project-actions{display:flex;align-items:center;gap:6px}.project-actions button[hidden],.project-conflict[hidden],.project-actions [hidden]{display:none}
+#projects-dialog{padding:0;width:min(760px,calc(100vw - 24px));max-height:calc(100dvh - 24px);border:1px solid var(--line);border-radius:10px;background:var(--surface-soft);color:inherit;overscroll-behavior:contain}#projects-dialog::backdrop{background:var(--backdrop)}.project-dialog-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;background:inherit;border-bottom:1px solid var(--line);padding:10px 16px}.project-dialog-head h2{margin:0}.project-dialog-body{padding:14px 16px}.project-actions{flex-wrap:wrap;margin-bottom:14px}.project-list{display:grid;gap:8px}.project-row{display:flex;align-items:center;gap:8px;padding:8px;border:1px solid var(--line);border-radius:7px}.project-row-name{flex:1;min-width:0;overflow-wrap:anywhere}.project-row small{display:block;color:var(--muted)}.project-row button{min-height:36px}.project-empty{padding:12px;color:var(--muted)}.project-dialog-body details{margin-top:16px;border-top:1px solid var(--line);padding-top:10px}.project-note{color:var(--muted);font-size:13px;line-height:1.45}
 body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .phone .mobile-only{display:flex}.phone button,.phone select,.phone input{min-height:40px}.phone button,.phone select,.phone .key{touch-action:manipulation}
 .phone .top{flex:none;padding:2px 8px;gap:6px;min-height:44px}.phone .top h1{font-size:16px;white-space:nowrap;letter-spacing:-.3px}.phone .top-actions{flex-wrap:wrap;gap:8px}.phone #phone-transport{gap:12px}.phone #play,.phone #undo,.phone #touch-select,.phone #open-tools{width:80px;min-width:80px;min-height:44px;flex:none}.phone #play{width:96px;min-width:96px}.phone .top button{padding:5px 9px}.phone .top .help-button{width:40px;height:40px}
 .phone .touch-actions{flex:none;gap:12px;align-items:center;padding:2px 8px;min-height:44px;overflow-x:auto;white-space:nowrap;border-block:1px solid var(--line)}
 .phone .touch-actions button,.phone .touch-actions select{flex:none;height:44px;min-height:44px}.phone .touch-actions button{min-width:80px}.phone .touch-actions [hidden],.phone .touch-actions[hidden],.phone #touch-select[hidden]{display:none}.phone #touch-count{font-size:12px}.phone #touch-preview{font-size:12px;font-weight:600}.phone #touch-select-kind{max-width:100px}
-.phone #touch-select[aria-pressed=true]{outline:2px solid #bf811a;outline-offset:-2px}
+.phone #touch-select[aria-pressed=true]{outline:2px solid var(--selection);outline-offset:-2px}
 .phone .workspace{flex:1;min-height:0;display:block;margin:0 8px}.phone .canvas-area{height:100%;display:flex;flex-direction:column;min-height:0}.phone .scroll{flex:1;min-height:0;border-radius:0;overscroll-behavior:contain;touch-action:none;scrollbar-width:none}.phone .scroll::-webkit-scrollbar{display:none}
 .phone .timeline,.phone .timeline *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.phone .note{height:32px;min-height:32px;font-size:14px;line-height:26px;cursor:pointer}.phone .resize-handle{display:none}
-.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:140px}.phone .boxes{position:sticky;top:0;z-index:5;background:inherit}.phone .box{padding:8px 0}.phone .box-chord{font-size:32px;line-height:1.2}.phone .box-roman{font-size:26px;line-height:1.35;margin:2px 0}.phone .box .small{font-size:14px;line-height:1.2}
+.phone .boxes,.phone .box,.phone .timeline.hide-box-keys .boxes,.phone .timeline.hide-box-keys .box{height:140px}.phone .boxes{position:sticky;top:0;z-index:5;background:inherit}.phone .box{padding:8px 0}.phone .box-chord{font-size:32px;line-height:1.2}.phone .box-roman{font-size:26px;line-height:1.35;margin:4px 0}.phone .box .small{font-size:14px;line-height:1.2}
 .phone .ruler{position:sticky;bottom:0;height:48px;z-index:7}.phone .measure-head{height:24px;padding:2px 6px;font-size:14px}.phone .beat-mark{height:24px;padding:2px 5px;font-size:12px}
 .phone .lane-controls{height:40px;display:flex;width:min(100%,calc(100vw - 18px))}.phone .lane-label{flex:none;max-width:100px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;height:40px;min-height:40px;font-size:14px;line-height:28px}.phone .part-volume{flex:1;min-width:0;font-size:14px}.phone .part-volume input{flex:1;min-width:0;min-height:40px;width:140px}.phone .part-volume output{min-width:40px}.phone .entry-badge{display:none}
 .phone .cursor{z-index:6}.phone .cursor-handle{position:absolute;top:0;bottom:auto;width:44px;height:44px;min-height:44px;margin-left:0;touch-action:none}.phone .timeline.touch-edit .note.selected{cursor:ew-resize;outline-width:3px}
 .phone .keyboard-dock{position:relative;flex:none;padding:2px 8px 0}.phone .keyboard-top{flex-wrap:nowrap;gap:6px;margin:0 0 2px}.phone .keyboard-top>.keyboard-context{display:none}.phone .keyboard-actions{flex-wrap:nowrap;gap:4px}.phone .keyboard-actions button{padding:4px 8px}.phone #keyboard-range,.phone .piano-duration-field{display:none}
 .phone #phone-entry{flex:1;min-width:0}.phone .entry{margin:0;padding:0;border:0;gap:8px;align-items:center;flex-wrap:nowrap}.phone .entry .field{flex-direction:row;align-items:center;gap:4px}.phone .entry select{max-width:160px;font-size:16px}.phone .keyboard-scroll{overflow:hidden}.phone .keyboard{height:var(--piano-height,86px);min-width:0}.phone .key{height:var(--piano-height,86px);min-width:0;font-size:11px;padding-bottom:6px}.phone .key.black{height:var(--piano-black-height,54px);font-size:10px;padding-bottom:4px}
 .phone .status{flex:none;margin:2px 8px;padding:5px 8px;min-height:0}.phone #help-panel{inset:48px 12px auto auto;max-height:calc(100dvh - 60px)}
+.phone .project-bar{flex:none;min-height:32px;padding:2px 8px;gap:8px;font-size:12px;flex-wrap:wrap}.phone .project-name{max-width:24ch}.phone .project-spacer{display:none}.phone .project-actions{margin-left:auto}.phone .project-actions button{min-height:30px;padding:2px 7px}.phone .project-conflict{font-size:11px}.phone .project-row{align-items:flex-start;flex-wrap:wrap}.phone .project-row-name{flex-basis:100%}.phone .project-row button{flex:1}
 /* Keep the hosting badge from covering piano keys. */
 #nl-badge-frame{display:none!important}
 .phone.portrait .top{position:relative;flex-wrap:wrap;align-items:center}.phone.portrait .top h1{width:100%;min-height:40px;display:flex;align-items:center;font-size:16px}.phone.portrait .top-actions{width:100%;display:grid;grid-template-columns:96px repeat(3,80px);gap:12px;justify-content:start}.phone.portrait #phone-transport{display:contents}.phone.portrait #help-button{position:absolute;top:2px;right:8px}
@@ -95,49 +96,119 @@ body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overf
 .phone #tools-view .timeline-footer{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:14px}.phone #tools-view label{display:grid;gap:8px}.phone #tools-view input{width:100%;min-width:0}
 .phone .piano-bar{display:flex;align-items:center;gap:8px}.phone .piano-bar .piano-resize{flex:1;height:44px}.phone #piano-controls-toggle{font-size:14px;min-height:40px}.phone .keyboard-dock.controls-hidden .keyboard-top{display:none}
 .piano-resize{height:14px;cursor:ns-resize;touch-action:none;user-select:none;display:flex;align-items:center;justify-content:center;margin-top:-10px;margin-bottom:4px}
-.piano-resize::after{content:"";width:64px;height:4px;border-radius:2px;background:#738999}
-.piano-resize:hover::after,.piano-resize:focus-visible::after{background:#bf811a}.piano-resize:focus-visible{outline:2px solid #bf811a;outline-offset:-2px}
+.piano-resize::after{content:"";width:64px;height:4px;border-radius:2px;background:var(--border)}
+.piano-resize:hover::after,.piano-resize:focus-visible::after{background:var(--selection)}.piano-resize:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
 .phone .piano-resize{margin-top:0;margin-bottom:0}
+/* Shared workspace styles: keep musical colors on the music. */
+:root{--radius:6px;--space:8px;--space-section:24px;--motion-hover:120ms;--motion-panel-in:220ms;--motion-panel-out:160ms;--motion-help-in:160ms;--motion-help-out:120ms;--ease-enter:cubic-bezier(.32,.72,0,1);--ease-exit:cubic-bezier(.55,0,1,.45);--body-leading:1.45;--control-leading:1.4;-webkit-font-smoothing:antialiased;line-height:var(--body-leading)}
+h1,h2,h3{line-height:1.2;text-wrap:balance;letter-spacing:normal}p{text-wrap:pretty;line-height:var(--body-leading)}
+button,input,select{line-height:var(--control-leading);border-radius:var(--radius)}
+button:not(.key,.note,.box,.lane-label,.cursor-handle){min-height:40px;padding:8px 16px}
+input:not([type=checkbox],[type=range]),select{min-height:40px;padding:8px 16px;font-size:16px}
+input[type=range]{accent-color:var(--selection)}
+input[type=checkbox]{min-height:18px;width:18px;height:18px;padding:0;accent-color:var(--selection)}
+.name-toggle{min-height:40px}.field{line-height:1.4}.small,.note,.measure-head,.legend,.lane-label,.box .small,.entry-badge,.beat-mark,.key,.key.black{font-size:12px}
+:root button:not(.key,.note,.box,.lane-label,.cursor-handle),:root:has(#dark-mode:checked) button:not(.key,.note,.box,.lane-label,.cursor-handle){background:var(--button);color:var(--ink)}
+:root input,:root select,:root:has(#dark-mode:checked) input,:root:has(#dark-mode:checked) select{background:var(--surface);color:var(--ink)}
+:root .primary,:root:has(#dark-mode:checked) .primary{background:var(--primary)!important;border-color:var(--primary);color:white!important}
+:root .tabs button[aria-pressed=true],:root:has(#dark-mode:checked) .tabs button[aria-pressed=true]{background:var(--primary);color:white}
+#projects-dialog:has(#project-name-form:not([hidden])) #create-project{background:var(--button)!important;color:var(--ink)!important;border-color:var(--line)}
+:root .danger,:root:has(#dark-mode:checked) .danger{color:var(--error)!important}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,.piano-resize:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+:root .save-status[data-state=error],:root .save-status[data-state=conflict],:root .offline-status[data-state=error]{color:var(--error)}
+:root .help-button,:root:has(#dark-mode:checked) .help-button{width:40px;height:40px;min-height:40px;padding:0;border-radius:50%;background:var(--button);border-color:var(--line);color:var(--ink)}
+.project-bar{gap:var(--space);padding:8px 24px;align-items:center}.project-bar .project-actions{margin-bottom:0}
+:root #current-name,:root:has(#dark-mode:checked) #current-name{background:transparent;border-color:transparent;text-align:left;padding:4px 8px;font-weight:650;max-width:min(34ch,65vw)}
+#current-name::after{content:' ▾';font-size:12px}.save-status{min-width:12ch}.offline-status{font-size:12px}
+.project-conflict{flex-wrap:wrap}.project-row{padding:16px;gap:8px}.project-row button:last-child{margin-inline-start:16px}
+#project-name-form{padding:16px;margin-bottom:16px;background:var(--surface-soft);border:1px solid var(--line);border-radius:var(--radius)}#composition-name{width:100%;margin-top:4px}.name-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.dialog-status{padding:12px 16px;margin:0 0 16px;border-radius:var(--radius);background:var(--error-bg);color:var(--error)}
+[hidden],.loop-range[hidden],.project-actions[hidden]{display:none!important}
+.loop-range{display:flex;align-items:center;gap:8px}.toolbar{gap:16px}.toolbar>label:has(input[type=number]){align-items:start;flex-direction:column;gap:4px}.toolbar input[type=number]{width:80px}.loop-range label{display:flex;flex-direction:column;align-items:start;gap:4px}
+.inspector section{padding-bottom:0;margin-bottom:var(--space-section);border:0}.inspector-details{border:0;margin-top:var(--space-section)}.inspector-details summary,.entry-options summary{padding:12px 0;font-size:14px}.disclosure-body{padding:4px 0 16px}.disclosure-body h3{margin:24px 0 8px}.disclosure-body h3:first-child{margin-top:8px}.disclosure-body .field{margin-bottom:8px}.recognition-select{margin:0}.context-row{gap:8px}.context-row label{min-width:0}.custom-row input{width:100%}.custom-row button{white-space:nowrap}.two{align-items:end}
+.note-actions{display:flex;justify-content:space-between;gap:24px;margin-top:16px}.note-form .note-actions button{margin:0}
+.entry-options{border:0;margin-top:var(--space)}.entry-options .entry{border:0;padding-top:0}.box-tools{gap:8px;padding-block:8px}
+.piano-entry{display:flex;align-items:end;gap:8px;flex-wrap:wrap}.piano-entry .field{min-width:120px}.piano-entry select{width:100%}.keyboard-top{gap:16px;align-items:end}.keyboard-actions{gap:8px}.empty-hint{font-size:14px;color:var(--muted);margin:0 0 8px;max-width:65ch}
+#position-readout,.part-volume output,#touch-count,#touch-preview{font-variant-numeric:tabular-nums}.state-content th:nth-child(n+3),.state-content td:nth-child(n+3){text-align:right;font-variant-numeric:tabular-nums}
+#help-panel{box-shadow:0 0 0 1px var(--shadow-soft),0 2px 4px var(--shadow-soft),0 12px 28px -6px var(--shadow)}.help-body{font-size:14px;line-height:1.45}.help-header h2{line-height:1.2}
+.phone.portrait .top-actions{grid-template-columns:1.2fr repeat(3,minmax(0,1fr));gap:8px}.phone.portrait #play,.phone.portrait #undo,.phone.portrait #touch-select,.phone.portrait #open-tools{width:100%;min-width:0;padding-inline:8px;height:44px}
+.phone button:not(.key,.note,.box,.lane-label,.cursor-handle),.phone input:not([type=checkbox],[type=range]),.phone select{min-height:44px}.phone #help-button{height:44px;width:44px;padding:0}.phone .top h1{min-height:44px}
+.phone .project-bar{padding:4px 8px;gap:4px 8px}.phone .project-name{max-width:23ch}.phone .offline-status{font-size:12px}.phone .project-bar button{padding:4px 8px}.phone .project-actions{margin-left:0}.phone .project-row button:last-child{margin-left:16px}
+.phone .entry-options{display:none}.phone #phone-entry{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px;width:100%;flex-basis:100%;align-items:end}.phone .piano-entry .field{min-width:0;font-size:14px;gap:4px}.phone .piano-entry select{width:100%;max-width:none;padding:8px;font-size:16px}.phone #next{padding:8px;font-size:14px;white-space:nowrap}
+.phone .keyboard-top{gap:8px}.phone .keyboard-actions{gap:8px}.phone .keyboard-actions button{padding:8px 16px}.phone .box .small,.phone .lane-label,.phone .note{font-size:14px}.phone .box-chord{font-size:32px}.phone .box-roman{font-size:26px}.phone .empty-hint{margin:4px 0 8px;font-size:14px}.phone .touch-actions{gap:12px}.phone .touch-actions .danger{margin-inline-start:16px}.phone .tools-body>section{padding-bottom:0;margin-bottom:var(--space-section);border:0}.phone .tools-body h3{margin-bottom:8px}
+@media(hover:hover) and (pointer:fine){button:not(.key,.note,.box,.lane-label,.cursor-handle):hover{transition:box-shadow var(--motion-hover) ease}button:not(:disabled,.key,.note,.box,.lane-label,.cursor-handle):hover{box-shadow:inset 0 0 0 1px var(--muted)}:root .primary:hover:not(:disabled){background:var(--primary-hover)!important}}
+@media(prefers-reduced-motion:reduce){button{transition:none!important}}
+
+
+/* A musical chart supplies the detail; its surrounding controls stay quiet. */
+.top{padding:16px 24px}.workspace{gap:24px;margin:16px 24px}.keyboard-dock{padding-inline:24px}.inspector{padding-left:24px;border:0}.top h1{font-size:20px;font-weight:600;letter-spacing:0}
+.toolbar,.project-bar,.keyboard-dock{border-color:var(--line)}.separator{display:none}.toolbar{column-gap:24px;row-gap:12px}.keyboard-top{margin-bottom:12px}
+.box-chord,.chord-name{font-weight:600;letter-spacing:-.01em}.box-roman,.roman-name{font-weight:500;font-variant-numeric:tabular-nums}.harmony-heading{display:block}.roman-name{display:block;text-align:left;max-width:none;margin:4px 0 0}.chord-name{margin:0}
+.inspector .small{max-width:40ch}.inspector-details summary{font-weight:500}.project-row{border:0;border-radius:0;padding:16px 0}.project-row+.project-row{border-top:1px solid var(--line)}
+.tools-header,.project-dialog-head,.help-header{border:0;padding:16px}.tools-body,.project-dialog-body,.help-body{padding:8px 16px 16px}.help-body details{border:0;padding-block:12px}.project-dialog-body details{border:0;margin-top:24px}:root .help-notice,:root:has(#dark-mode:checked) .help-notice{background:var(--surface-soft);color:var(--ink);margin:8px 0 16px}
+#play{display:inline-flex;align-items:center;justify-content:center;gap:8px}#play::before{content:'';width:12px;height:14px;background:currentColor;clip-path:polygon(15% 0,100% 50%,15% 100%);flex:none}#play[aria-pressed=true]::before{clip-path:polygon(0 0,35% 0,35% 100%,0 100%,0 0,65% 0,100% 0,100% 100%,65% 100%,65% 0)}
+.save-status{min-inline-size:13ch;font-variant-numeric:tabular-nums}.save-status[data-state=error],.save-status[data-state=conflict]{min-inline-size:0}
+button:active:not(:disabled,.key,.note,.box,.lane-label,.cursor-handle){box-shadow:inset 0 0 0 2px var(--muted)}
+.phone .workspace{margin:0 8px}.phone .top{padding:4px 8px}.phone .top h1{font-size:16px}.phone .keyboard-dock{padding:4px 8px 0}.phone .inspector{padding:0}.phone .keyboard-top{margin-bottom:4px}.phone .tools-body .toolbar{gap:16px}
+/* Native top-layer transitions retain focus/Escape behavior; older browsers open instantly. */
+@supports (transition-behavior:allow-discrete){
+  #projects-dialog,#mobile-tools,#help-panel{opacity:0;transform:scale(.97);pointer-events:none;transition:opacity var(--motion-panel-out) var(--ease-exit),transform var(--motion-panel-out) var(--ease-exit),display var(--motion-panel-out) allow-discrete,overlay var(--motion-panel-out) allow-discrete}
+  #projects-dialog[open],#mobile-tools[open],#help-panel:popover-open{opacity:1;transform:scale(1);pointer-events:auto;transition-duration:var(--motion-panel-in);transition-timing-function:var(--ease-enter)}
+  #help-panel{transform-origin:top right;transform:translateY(-4px) scale(.97);transition-duration:var(--motion-help-out)}
+  #help-panel:popover-open{transform:translateY(0) scale(1);transition-duration:var(--motion-help-in)}
+  #projects-dialog::backdrop,#mobile-tools::backdrop{opacity:0;pointer-events:none;transition:opacity var(--motion-panel-out) var(--ease-exit),display var(--motion-panel-out) allow-discrete,overlay var(--motion-panel-out) allow-discrete}
+  #projects-dialog[open]::backdrop,#mobile-tools[open]::backdrop{opacity:1;pointer-events:auto;transition-duration:var(--motion-panel-in);transition-timing-function:var(--ease-enter)}
+  @starting-style{
+    #projects-dialog[open],#mobile-tools[open]{opacity:0;transform:scale(.97)}
+    #help-panel:popover-open{opacity:0;transform:translateY(-4px) scale(.97)}
+    #projects-dialog[open]::backdrop,#mobile-tools[open]::backdrop{opacity:0}
+  }
+}
+body.keyboard-input #projects-dialog,body.keyboard-input #mobile-tools,body.keyboard-input #help-panel,body.keyboard-input dialog::backdrop{transition:none!important}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
 </style></head><body>
-<header class="top"><h1>Simple Composer</h1><div class="top-actions"><div class="mobile-only" id="phone-transport"></div><button class="mobile-only" id="touch-select" aria-pressed="false">Select</button><button class="mobile-only" id="open-tools" aria-haspopup="dialog">Tools</button><label class="name-toggle"><input id="dark-mode" type="checkbox">Dark mode</label><button id="blank">New composition</button><button id="help-button" class="help-button" type="button" popovertarget="help-panel" aria-label="Help and tutorials" title="Help and tutorials">?</button></div></header>
+<header class="top"><h1>Simple Composer</h1><div class="top-actions"><div class="mobile-only" id="phone-transport"></div><button class="mobile-only" id="touch-select" aria-pressed="false">Select</button><button class="mobile-only" id="open-tools" aria-haspopup="dialog">Tools</button><label class="name-toggle"><input id="dark-mode" type="checkbox">Dark mode</label><button id="help-button" class="help-button" type="button" popovertarget="help-panel" aria-label="Help and tutorials" title="Help and tutorials">?</button></div></header>
+<div class="project-bar"><button id="current-name" class="project-name" aria-haspopup="dialog" title="Open compositions">Untitled composition</button><span id="save-status" class="save-status" data-state="new" aria-live="polite">Not saved yet</span><span id="offline-status" class="offline-status" data-state="checking">Checking offline readiness…</span><span class="project-spacer"></span><div id="conflict-actions" class="project-conflict" hidden><span id="conflict-message">Newer copy found.</span><button id="save-conflict-copy">Save as new</button><button id="open-latest">Open latest</button></div><div class="project-actions"><button id="retry-save" hidden>Retry</button><button id="download-recovery" hidden>Download project</button><button id="offline-update" hidden>Update app</button></div></div>
 <div class="touch-actions mobile-only" aria-label="Touch selection and editing">
 <select id="touch-select-kind" aria-label="Selection type" hidden><option value="notes">Notes</option><option value="boxes">Boxes</option></select>
 <output id="touch-count" aria-live="polite"></output><button id="touch-clear" hidden>Clear</button>
 <button id="touch-move" hidden>Move</button><button id="touch-resize" hidden>Resize</button><button id="touch-delete" class="danger" hidden>Delete</button>
 <button id="touch-cancel" hidden>Cancel</button><output id="touch-preview" aria-live="polite"></output></div>
-<div class="toolbar"><button class="primary" id="play" aria-pressed="false" aria-keyshortcuts="Space" title="Play or pause · Space">▶ Play</button><span class="separator"></span><label>♩ BPM <input id="bpm" type="number" min="1" max="300" value="96" aria-label="Quarter-note BPM"></label><label><input id="metronome" type="checkbox">Metronome</label><label><input id="loop" type="checkbox">Loop measures</label><label>From <select id="loop-from" aria-label="First loop measure"></select></label><label>to <select id="loop-to" aria-label="Last loop measure"></select></label><span class="separator"></span><button id="undo" disabled>Undo</button><button id="redo" disabled>Redo</button></div>
-<main class="workspace"><div class="canvas-area"><div class="scroll" id="timeline-scroll"><div class="timeline hide-box-keys" id="timeline" aria-label="Composition timeline"></div></div><div class="timeline-footer"><span id="position-readout"></span><label>Zoom <input type="range" id="zoom" min="28" max="160" value="48" aria-label="Timeline zoom"></label></div><div class="entry"><label class="field">Part<select id="part"><option value="melody">Melody</option><option value="chord" selected>Chord</option><option value="bass">Bass</option></select></label><label class="field">Position in quarter notes<input id="position" type="number" value="0" min="0" max="256" step="0.25"></label><label class="field">Note duration<select id="duration"></select></label><label class="field">Snap<select id="snap"><option value="1" selected>Quarter</option><option value="0.5">Eighth</option><option value="0.6666666666666666">Quarter triplet</option><option value="0.3333333333333333">Eighth triplet</option></select></label><label class="name-toggle"><input id="advance-entry" type="checkbox">Advance after entry</label><button id="next">Next step</button></div><div class="box-tools"><button id="split">Split box here</button><button id="merge">Merge boundary here</button><button id="show-parts" aria-expanded="true" aria-controls="timeline-lanes">Hide parts</button><button id="show-box-keys" aria-pressed="false" title="Show or hide the local song key beneath chord labels">Key labels: Off</button><button id="clear-box-selection" disabled>Clear box selection</button><span id="box-selection-count" class="muted small" style="align-self:center">No boxes selected</span></div></div>
-<aside class="inspector"><section><h2>Sounding harmony</h2><div class="harmony-heading"><div class="chord-name" id="chord-name">No harmony yet</div><span class="roman-name" id="roman-name" aria-label="Roman numeral">—</span></div><p class="small muted" id="roman-context"></p><p class="small muted" id="harmony-notes">Bass + chord notes determine the name.</p><select id="alternatives" class="recognition-select" aria-label="Choose a chord interpretation"></select><label class="field">Roman interpretation<select id="roman-choice" aria-label="Choose a Roman interpretation"></select></label><div class="custom-row"><input id="custom-label" placeholder="Custom label" maxlength="80" aria-label="Custom chord label"><button id="set-label">Set</button></div><p class="small warning" id="label-review"></p></section>
-<section><h2 id="selection-title">No note selected</h2><p id="selection-help" class="small muted" hidden></p><div class="note-form" id="note-form" hidden><label class="field">Pitch<select id="note-pitch"></select></label><div class="two"><label class="field">Start (quarters)<input id="note-start" type="number" min="0" max="256" step="0.25"></label><label class="field">Duration<select id="note-length" aria-label="Selected note duration"></select></label></div><p class="small muted" id="note-span" hidden></p><button id="apply-note">Apply edit</button><button id="delete-note" class="danger">Delete</button></div></section>
-<section><h2>Musical context</h2><label class="field">Song key</label><div class="context-row"><select id="key-tonic" aria-label="Key tonic"></select><select id="key-mode" aria-label="Key mode"><option>major</option><option>minor</option></select><button id="apply-key">Set key from cursor</button></div><label class="field" style="margin-top:10px">Collection at entry position</label><div class="context-row"><select id="collection-tonic" aria-label="Collection tonic"></select><select id="collection-mode" aria-label="Collection mode"><option>major</option><option>minor</option></select><button id="apply-collection">Set collection here</button></div><div class="two" style="margin-top:10px"><select id="meter" aria-label="Time signature"><option>2/4</option><option>3/4</option><option selected>4/4</option><option>6/8</option></select><button id="apply-meter">Set meter here</button></div></section></aside></main>
+<div class="toolbar"><button class="primary" id="play" aria-pressed="false" aria-keyshortcuts="Space" title="Play or pause · Space">Play</button><span class="separator"></span><label>♩ BPM <input id="bpm" type="number" min="1" max="300" value="96" aria-label="Quarter-note BPM"></label><label><input id="metronome" type="checkbox">Metronome</label><label><input id="loop" type="checkbox">Loop measures</label><span id="loop-range" class="loop-range" hidden><label>From <select id="loop-from" aria-label="First loop measure"></select></label><label>to <select id="loop-to" aria-label="Last loop measure"></select></label></span><span class="separator"></span><button id="undo" disabled>Undo</button><button id="redo" disabled>Redo</button></div>
+<main class="workspace"><div class="canvas-area"><div class="scroll" id="timeline-scroll"><div class="timeline hide-box-keys" id="timeline" aria-label="Composition timeline"></div></div><div class="timeline-footer"><span id="position-readout"></span><label>Zoom <input type="range" id="zoom" min="28" max="160" value="48" aria-label="Timeline zoom"></label></div><details class="entry-options"><summary>Entry settings</summary><div class="entry"><label class="field">Position in quarter notes<input id="position" type="number" value="0" min="0" max="256" step="0.25"></label><label class="field">Snap<select id="snap"><option value="1" selected>Quarter</option><option value="0.5">Eighth</option><option value="0.6666666666666666">Quarter triplet</option><option value="0.3333333333333333">Eighth triplet</option></select></label><label class="name-toggle"><input id="advance-entry" type="checkbox">Advance after entry</label></div></details><div class="box-tools"><button id="split">Split box here</button><button id="merge">Merge boundary here</button><button id="show-parts" aria-expanded="true" aria-controls="timeline-lanes">Hide parts</button><button id="show-box-keys" aria-pressed="false" title="Show or hide the local song key beneath chord labels">Key labels: Off</button><button id="clear-box-selection" disabled>Clear box selection</button><span id="box-selection-count" class="muted small" style="align-self:center">No boxes selected</span></div></div>
+<aside class="inspector"><section><h2>Sounding harmony</h2><div class="harmony-heading"><div class="chord-name" id="chord-name">No harmony yet</div><span class="roman-name" id="roman-name" aria-label="Roman numeral">—</span></div><p class="small muted" id="roman-context"></p><p class="small muted" id="harmony-notes">Bass + chord notes determine the name.</p><details class="inspector-details"><summary>Harmony details</summary><div class="disclosure-body"><label class="field">Chord interpretation<select id="alternatives" class="recognition-select"></select></label><label class="field">Roman interpretation<select id="roman-choice" aria-label="Choose a Roman interpretation"></select></label><label class="field" for="custom-label">Custom chord label</label><div class="custom-row"><input id="custom-label" maxlength="80" autocomplete="off"><button id="set-label">Set label</button></div></div></details><p class="small warning" id="label-review"></p></section>
+<section><h2 id="selection-title">No note selected</h2><p id="selection-help" class="small muted" hidden></p><div class="note-form" id="note-form" hidden><label class="field">Pitch<select id="note-pitch"></select></label><div class="two"><label class="field">Start (quarters)<input id="note-start" type="number" min="0" max="256" step="0.25"></label><label class="field">Duration<select id="note-length" aria-label="Selected note duration"></select></label></div><p class="small muted" id="note-span" hidden></p><div class="note-actions"><button id="delete-note" class="danger">Delete note</button><button id="apply-note" class="primary">Apply edit</button></div></div></section>
+<details class="inspector-details"><summary>Musical context</summary><div class="disclosure-body"><h3>Song key</h3><div class="context-row"><label class="field">Tonic<select id="key-tonic"></select></label><label class="field">Mode<select id="key-mode"><option>major</option><option>minor</option></select></label><button id="apply-key">Set key from cursor</button></div><h3>Collection at entry position</h3><div class="context-row"><label class="field">Tonic<select id="collection-tonic"></select></label><label class="field">Mode<select id="collection-mode"><option>major</option><option>minor</option></select></label><button id="apply-collection">Set collection here</button></div><div class="two" style="margin-top:10px"><label class="field">Time signature<select id="meter"><option>2/4</option><option>3/4</option><option selected>4/4</option><option>6/8</option></select></label><button id="apply-meter">Set meter here</button></div></div></details></aside></main>
 
 <div class="status" id="status" role="status" aria-live="polite" hidden></div>
 
-<footer class="keyboard-dock"><div class="piano-bar"><div id="piano-resize" class="piano-resize" role="separator" tabindex="0" aria-label="Piano height" aria-orientation="horizontal" aria-controls="keyboard" aria-valuemin="64" aria-valuemax="320" aria-valuenow="116" title="Drag up or down to resize the piano; arrow keys also adjust height"></div><button id="piano-controls-toggle" class="mobile-only" aria-expanded="true" aria-controls="keyboard-top">Hide piano controls</button></div><div class="keyboard-top" id="keyboard-top"><div class="mobile-only" id="phone-entry"></div><div class="keyboard-context"><div class="collection-name" id="collection-name">C major sixth-diminished</div><div class="legend"><span class="sixth">● Sixth-chord tone</span><span class="diminished">◆ Diminished-chord tone</span><span class="outside">○ Outside collection</span></div></div><div class="keyboard-actions"><label class="name-toggle piano-duration-field">Default duration<select id="piano-duration" aria-label="Default duration for new piano notes"></select></label><label class="name-toggle"><input id="note-names" type="checkbox">Note names</label><label class="name-toggle"><input id="piano-symbols" type="checkbox">Symbols</label><span id="keyboard-range"></span><button id="octave-down" aria-label="Keyboard down one octave">− Octave</button><button id="octave-up" aria-label="Keyboard up one octave">+ Octave</button></div></div><div class="keyboard-scroll"><div class="keyboard names-hidden symbols-hidden" id="keyboard" aria-label="Piano note entry"></div></div></footer>
-<dialog id="mobile-tools" aria-labelledby="tools-title"><div class="tools-header"><h2 id="tools-title">Tools</h2><button id="close-tools" autofocus>Close</button></div><div class="tools-body">
+<footer class="keyboard-dock"><div class="piano-bar"><div id="piano-resize" class="piano-resize" role="separator" tabindex="0" aria-label="Piano height" aria-orientation="horizontal" aria-controls="keyboard" aria-valuemin="64" aria-valuemax="320" aria-valuenow="116" title="Drag up or down to resize the piano; arrow keys also adjust height"></div><button id="piano-controls-toggle" class="mobile-only" aria-expanded="true" aria-controls="keyboard-top">Hide piano controls</button></div><div class="keyboard-top" id="keyboard-top"><div class="piano-entry" id="phone-entry"><label class="field">Part<select id="part"><option value="melody">Melody</option><option value="chord" selected>Chord</option><option value="bass">Bass</option></select></label><label class="field">Note duration<select id="duration"></select></label><button id="next">Next step</button></div><div class="keyboard-context"><div class="collection-name" id="collection-name">C major sixth-diminished</div><div class="legend"><span class="sixth">● Sixth-chord tone</span><span class="diminished">◆ Diminished-chord tone</span><span class="outside">○ Outside collection</span></div></div><div class="keyboard-actions"><label class="name-toggle"><input id="note-names" type="checkbox">Note names</label><label class="name-toggle"><input id="piano-symbols" type="checkbox">Symbols</label><span id="keyboard-range"></span><button id="octave-down" aria-label="Keyboard down one octave">− Octave</button><button id="octave-up" aria-label="Keyboard up one octave">+ Octave</button></div></div><p id="empty-hint" class="empty-hint">Choose a part and note duration, then tap a piano key to add your first note.</p><div class="keyboard-scroll"><div class="keyboard names-hidden symbols-hidden" id="keyboard" aria-label="Piano note entry"></div></div></footer>
+<dialog id="mobile-tools" aria-labelledby="tools-title"><div class="tools-header"><h2 id="tools-title">Tools</h2><button id="close-tools" autofocus>Close</button></div><div class="tools-body"><p id="tools-status" class="dialog-status" role="alert" hidden></p>
 <section><h3>Playback</h3><div id="tools-playback"></div></section>
 <section><h3>Entry and view</h3><div id="tools-entry" class="entry"></div><div id="tools-view"></div></section>
 <section><h3>Chord boxes</h3><div id="tools-boxes"></div></section>
 <div id="tools-inspector"></div>
 <section><h3>Piano display</h3><div id="tools-piano" class="keyboard-actions"></div></section>
-<section><h3>Composition and appearance</h3><div id="tools-project"></div></section>
+<section><h3>Appearance</h3><div id="tools-project"></div></section>
 </div></dialog>
+<dialog id="projects-dialog" aria-labelledby="projects-title"><div class="project-dialog-head"><h2 id="projects-title">Compositions</h2><button id="close-projects">Close</button></div><div class="project-dialog-body"><p id="projects-status" class="dialog-status" role="alert" hidden></p><div id="project-recovery-actions" class="project-actions" hidden><button id="project-retry">Retry save</button><button id="project-recovery">Download project</button></div><p class="project-note">Compositions save in this browser. Download a project file to keep a separate copy or move it to another device.</p><div class="project-actions"><button id="create-project" class="primary">New composition</button><button id="export-project">Download project</button><button id="import-project">Import project</button><button id="export-midi">Export MIDI</button><input id="project-file" type="file" accept=".json,application/json" hidden></div><form id="project-name-form" hidden><label class="field" for="composition-name">Composition name</label><input id="composition-name" name="composition-name" maxlength="80" required autocomplete="off"><div class="name-actions"><button type="button" id="cancel-project-name">Cancel</button><button class="primary" id="save-project-name" type="submit">Create composition</button></div></form><div id="project-list" class="project-list"></div><details><summary>Trash</summary><div id="trash-list" class="project-list"></div></details></div></dialog>
 <aside id="help-panel" popover="auto" role="dialog" aria-labelledby="help-title">
   <div class="help-header"><h2 id="help-title">Help &amp; tutorials</h2><button type="button" popovertarget="help-panel" popovertargetaction="hide" aria-label="Close help" autofocus>×</button></div>
   <div class="help-body">
-    <p class="help-notice"><strong>The app does not save your notes.</strong> A page reload or a closed tab erases your composition.</p>
+    <p class="help-notice"><strong>Your compositions save in this browser.</strong> Download a project file to keep a separate copy or move it to another device.</p>
     <details open><summary>Start here: write your first notes</summary>
       <ol>
         <li>Close this panel with the × button.</li>
         <li>Choose Melody, Chord, or Bass in Part.</li>
         <li>Choose a Note duration, such as Quarter or Half.</li>
         <li>Tap a piano key to add a note.</li>
-        <li>Tap Play to hear your music.</li>
-        <li>Tap Pause before you add more notes.</li>
+        <li>Tap Play to hear your music. Tap it again to pause.</li>
       </ol>
-      <p>On a computer, click instead of tap. The orange cursor marks the position for new notes.</p>
+      <p>Your edits save in this browser. Look at the save status beside the composition name.</p>
+      <p>On a computer, click instead of tap. The amber entry cursor marks the position for new notes.</p>
       <p>Melody moves the cursor after each note. Chord and Bass keep it still for notes that play together.</p>
-      <p>On a phone, Tools contains Next step and Advance after entry. These settings control the next note position.</p>
+      <p>Next step is beside the piano. Tools contains Advance after entry, which moves the cursor after each note.</p>
     </details>
     <details><summary>Change notes on a phone</summary>
       <ol>
@@ -166,7 +237,7 @@ body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overf
     </details>
     <details><summary>Find a position or adjust the view</summary>
       <ul>
-        <li>Drag the orange handle to choose a note position.</li>
+        <li>Drag the amber entry handle to choose a note position.</li>
         <li>On a phone, swipe the timeline to see other notes.</li>
         <li>On a computer, hold the right mouse button as you drag the timeline.</li>
         <li>Drag the handle above the piano to change its height.</li>
@@ -179,6 +250,11 @@ body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overf
       <ul><li>Move a Vol slider to change the volume of that part.</li><li>On a phone, open Tools for the playback settings.</li></ul>
       <p>BPM controls the speed. Metronome adds a beat sound. Loop measures repeats the chosen measures.</p>
     </details>
+    <details><summary>Save or move your work</summary>
+      <p>Tap the composition name to create, open, rename, copy, or move work to Trash. Restore a project from Trash, or delete it forever after confirmation.</p>
+      <p>Download project saves a separate file. Import project opens a new copy. Export MIDI shares the notes with music software.</p>
+      <p>Projects save only in this browser. Download a project file before you move to another device. When the app says Ready offline, you can reopen it without internet.</p>
+    </details>
     <details><summary>Understand the chord boxes</summary>
       <p>Each box shows a chord name and a Roman numeral. The Roman numeral describes the chord in the current key.</p>
       <p>Bass and Chord notes determine the name. Melody notes do not change it.</p>
@@ -187,11 +263,11 @@ body.phone{font-size:16px;height:100dvh;display:flex;flex-direction:column;overf
       <details><summary>Details for the current chord</summary><p id="roman-detail" class="muted"></p></details>
     </details>
     <details><summary>Try an example</summary>
-      <p class="help-notice">Each example replaces your current notes.</p>
+      <p class="help-notice">Each example opens as a separate composition. Your current work stays unchanged.</p>
       <section class="walkthrough"><div class="walk-header"><h2 style="margin:0">Try an example</h2><div class="tabs" role="group" aria-label="Guided examples"><button aria-pressed="false" data-scene="bass">Held bass</button><button aria-pressed="false" data-scene="inner">Chord changes</button><button aria-pressed="false" data-scene="context">Key and meter</button></div></div><div class="walk-content"><p id="walk-description" class="small muted">Choose an example. Then tap its next step button.</p><div class="walk-step"><span id="walk-progress" class="small muted"></span><button id="walk-next" hidden></button></div></div></section>
     </details>
     <details><summary>Limits and note list</summary>
-      <p>This prototype has no save, MIDI import, or MIDI export. It uses a temporary synth sound. The limit is 256 quarter notes.</p>
+      <p>Compositions save in this browser. Project files include the full editable composition. MIDI export shares the notes with music software; it does not include chord boxes or custom labels. MIDI import and audio export are not available. The app uses a temporary synth sound and supports up to 256 quarter notes.</p>
       <p>Some chords have no automatic name. You can still play them.</p>
       <details class="state"><summary>Show notes and key changes</summary><div class="state-content"><div><h3>Notes</h3><table><thead><tr><th>Part</th><th>Pitch</th><th>Start ♩</th><th>Duration</th></tr></thead><tbody id="notes-table"></tbody></table></div><div><h3>Key, collection, and meter</h3><div id="markers-list"></div></div></div></details>
     </details>
@@ -291,10 +367,29 @@ var Composer = (() => {
     }
     return options;
   }
-  function createComposer() {
-    let state = { notes: [], labels: [], cuts: [4, 8, 12], end: 16, meter: [{ at: 0, n: 4, d: 4 }], key: [{ at: 0, tonic: 0, mode: 'major' }], collection: [{ at: 0, tonic: 0, mode: 'major' }] };
+  function validateSnapshot(snapshot) {
+    const fail = () => { throw new Error('This project file has invalid composition data.'); };
+    if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) fail();
+    const data = structuredClone(snapshot), validTime = value => Number.isFinite(value) && value >= 0 && value <= 256 && Math.abs(value * 24 - Math.round(value * 24)) < 1e-7;
+    if (!validTime(data.end) || data.end < 16 || !Array.isArray(data.notes) || data.notes.length > 20000 || !Array.isArray(data.labels) || data.labels.length > 10000 || !Array.isArray(data.cuts) || !Array.isArray(data.meter) || !Array.isArray(data.key) || !Array.isArray(data.collection)) fail();
+    const ids = new Set();
+    for (const note of data.notes) {
+      if (!note || typeof note.id !== 'string' || !/^n\d{1,15}$/.test(note.id) || !Number.isSafeInteger(+note.id.slice(1)) || ids.has(note.id) || !['bass','chord','melody'].includes(note.part) || !Number.isInteger(note.pitch) || note.pitch < 0 || note.pitch > 127 || !validTime(note.start) || !validTime(note.duration) || note.duration <= 0 || note.start + note.duration > data.end) fail();
+      ids.add(note.id);
+    }
+    if (data.cuts.some(at => !validTime(at) || at > data.end) || new Set(data.cuts).size !== data.cuts.length) fail();
+    for (const kind of ['key','collection']) {
+      const markers = data[kind];
+      if (!markers.length || markers[0].at !== 0 || markers.some((marker,index) => !marker || !validTime(marker.at) || marker.at > data.end || !Number.isInteger(marker.tonic) || marker.tonic < 0 || marker.tonic > 11 || !['major','minor'].includes(marker.mode) || (index > 0 && marker.at <= markers[index-1].at))) fail();
+    }
+    if (!data.meter.length || data.meter[0].at !== 0 || data.meter.some((marker,index) => !marker || !validTime(marker.at) || marker.at > data.end || ![[2,4],[3,4],[4,4],[6,8]].some(([n,d]) => marker.n === n && marker.d === d) || (index > 0 && marker.at <= data.meter[index-1].at))) fail();
+    for (const label of data.labels) if (!label || !validTime(label.start) || !validTime(label.end) || label.start >= label.end || label.end > data.end || typeof label.name !== 'string' || !label.name.trim() || label.name.length > 80 || typeof label.custom !== 'boolean' || (label.roman != null && typeof label.roman !== 'string') || typeof label.signature !== 'string') fail();
+    return data;
+  }
+  function createComposer(initialState) {
+    let state = initialState === undefined ? { notes: [], labels: [], cuts: [4, 8, 12], end: 16, meter: [{ at: 0, n: 4, d: 4 }], key: [{ at: 0, tonic: 0, mode: 'major' }], collection: [{ at: 0, tonic: 0, mode: 'major' }] } : validateSnapshot(initialState);
     const past = [], future = [];
-    let serial = 0;
+    let serial = state.notes.reduce((highest,note)=>Math.max(highest,+note.id.slice(1)),0);
     function rejectOverlap(note, exceptId, notes = state.notes) {
       const start = Math.round(note.start*24), end = Math.round((note.start+note.duration)*24);
       if (notes.some(other => other.id !== exceptId && other.part === note.part && other.pitch === note.pitch && Math.round(other.start*24) < end && start < Math.round((other.start+other.duration)*24))) throw new Error('This pitch would overlap another note in the same part. Move or shorten it first.');
@@ -515,7 +610,8 @@ var Composer = (() => {
         const layout = measures();
         const activeBox = layout.flatMap(measure => measure.boxes).find(box => box.start <= position && box.end > position) ?? null;
         return structuredClone({ ...state, activeBox, boxNotes: state.notes.filter(note => activeBox && note.start < activeBox.end && note.start + note.duration > activeBox.start), lengthLabels: Object.fromEntries(state.notes.map(note => [note.id, lengthLabel(note.duration)])), measures: layout, context, families, harmony, active: state.notes.filter(note => note.start <= position && note.start + note.duration > position), canUndo: past.length > 0, canRedo: future.length > 0 });
-      }
+      },
+      snapshot() { return structuredClone(state); }
     };
   }
   function planPlayback(song, { from, to, bpm, metronome = false }) {
@@ -537,12 +633,92 @@ var Composer = (() => {
     }
     return { from, to, bpm, duration: (to - from) * seconds, notes, clicks };
   }
-  return { createComposer, planPlayback, durationChoices };
+  return { createComposer, planPlayback, durationChoices, validateSnapshot };
+})();
+</script>
+<script id="exchange-core">
+var Exchange = (() => {
+  const format = 'simple-composer-project', version = 1, roles = ['bass','chord','melody'];
+  const snaps = [1,.5,2/3,1/3];
+  const validSettings = settings => {
+    if (!settings || typeof settings !== 'object' || Array.isArray(settings)) throw new Error('This project file has invalid settings.');
+    const {bpm,partVolumes,loop,metronome,entryDurations,advanceAfterEntry,snap,position,activePart}=settings;
+    if (!Number.isFinite(bpm)||bpm<1||bpm>300||!partVolumes||!loop||!entryDurations||!advanceAfterEntry||typeof metronome!=='boolean'||!snaps.includes(snap)||!Number.isFinite(position)||position<0||position>256||Math.abs(position*24-Math.round(position*24))>1e-7||!roles.includes(activePart)||typeof loop.enabled!=='boolean'||!Number.isInteger(loop.from)||loop.from<0||!Number.isInteger(loop.to)||loop.to<0) throw new Error('This project file has invalid settings.');
+    for(const role of roles)if(!Number.isFinite(partVolumes[role])||partVolumes[role]<0||partVolumes[role]>1||!Number.isFinite(entryDurations[role])||!Composer.durationChoices.some(([,value])=>Math.abs(value-entryDurations[role])<1e-8)||typeof advanceAfterEntry[role]!=='boolean')throw new Error('This project file has invalid part settings.');
+    return structuredClone(settings);
+  };
+  function makeProject(name,state,settings){
+    if(typeof name!=='string'||!name.trim()||name.length>80)throw new Error('Use a composition name from 1 to 80 characters.');
+    const music=Composer.validateSnapshot(state),preferences=validSettings(settings),measureCount=Composer.createComposer(music).inspect().measures.length;
+    if(preferences.loop.from>=measureCount||preferences.loop.to>=measureCount)throw new Error('This project file has a loop range outside the composition.');
+    return {format,version,composition:{name:name.trim(),state:music,settings:preferences}};
+  }
+  function parseProject(text){
+    if(typeof text!=='string'||text.length>5*1024*1024)throw new Error('This project file is too large or could not be read.');
+    let file;try{file=JSON.parse(text);}catch{throw new Error('This is not a valid project file.');}
+    if(!file||file.format!==format||file.version!==version)throw new Error('This project file format is not supported.');
+    return makeProject(file.composition?.name,file.composition?.state,file.composition?.settings);
+  }
+  function overlaps(state){
+    const groups=new Map(),result=[];
+    for(const note of state.notes){const key=`${note.part}:${note.pitch}`;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(note);}
+    for(const notes of groups.values()){
+      notes.sort((a,b)=>a.start-b.start);let previousEnd=-Infinity;
+      for(let i=0;i<notes.length;i++){
+        const note=notes[i],end=note.start+note.duration,overlapsBefore=previousEnd>note.start,overlapsAfter=notes[i+1]?.start<end;
+        if(overlapsBefore||overlapsAfter)result.push({part:note.part,pitch:note.pitch,start:note.start,end});
+        previousEnd=Math.max(previousEnd,end);
+      }
+    }
+    return result.sort((a,b)=>a.start-b.start||a.pitch-b.pitch);
+  }
+  function vlq(value){
+    const bytes=[value&127];
+    for(value=Math.floor(value/128);value;value=Math.floor(value/128))bytes.unshift((value&127)|128);
+    return bytes;
+  }
+  function chunk(id,bytes){return [...id].map(char=>char.charCodeAt(0)).concat([(bytes.length>>>24)&255,(bytes.length>>>16)&255,(bytes.length>>>8)&255,bytes.length&255],bytes);}
+  function track(events,endTick){
+    events.sort((a,b)=>a.tick-b.tick||a.order-b.order);
+    let previous=0,bytes=[];
+    for(const event of events){bytes.push(...vlq(event.tick-previous),...event.data);previous=event.tick;}
+    bytes.push(...vlq(Math.max(0,endTick-previous)),0xff,0x2f,0);
+    return chunk('MTrk',bytes);
+  }
+  function writeMidi(state,settings){
+    state=Composer.validateSnapshot(state);settings=validSettings(settings);
+    if(!Number.isFinite(settings.bpm)||settings.bpm<1||settings.bpm>300)throw new Error('Choose a tempo from 1 to 300 BPM before exporting MIDI.');
+    const micros=Math.round(60000000/settings.bpm);
+    if(micros>0xffffff)throw new Error('MIDI cannot encode this tempo. Choose a higher tempo to export; your composition will stay unchanged.');
+    const endTick=Math.round(state.end*480), nameBytes=Array.from('Song context',char=>char.charCodeAt(0)), context=[{tick:0,order:0,data:[0xff,0x03,nameBytes.length,...nameBytes]}];
+    context.push({tick:0,order:1,data:[0xff,0x51,3,(micros>>>16)&255,(micros>>>8)&255,micros&255]});
+    const majorSf=[0,7,2,-3,4,-1,6,1,-4,3,-2,5];
+    for(const marker of state.key){const pitch=(marker.tonic+(marker.mode==='minor'?3:0))%12,sf=majorSf[pitch];context.push({tick:Math.round(marker.at*480),order:2,data:[0xff,0x59,2,sf&255,marker.mode==='minor'?1:0]});}
+    for(const marker of state.meter)context.push({tick:Math.round(marker.at*480),order:3,data:[0xff,0x58,4,marker.n,Math.log2(marker.d),24,8]});
+    const tracks=[track(context,endTick)];
+    roles.forEach((part,index)=>{
+      const channel=index,trackName=part[0].toUpperCase()+part.slice(1),events=[{tick:0,order:0,data:[0xff,0x03,trackName.length,...Array.from(trackName,char=>char.charCodeAt(0))]},{tick:0,order:1,data:[0xb0|channel,7,Math.round(settings.partVolumes[part]*127)]}];
+      for(const note of state.notes.filter(note=>note.part===part)){
+        const start=Math.round(note.start*480),end=Math.round((note.start+note.duration)*480);
+        events.push({tick:start,order:3,data:[0x90|channel,note.pitch,96]},{tick:end,order:2,data:[0x80|channel,note.pitch,0]});
+      }
+      tracks.push(track(events,endTick));
+    });
+    return new Uint8Array(chunk('MThd',[0,1,0,4,1,0xe0]).concat(...tracks));
+  }
+  return {format,version,makeProject,parseProject,validSettings,overlaps,writeMidi};
 })();
 </script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
+  window.addEventListener('keydown',()=>document.body.classList.add('keyboard-input'),true);
+  window.addEventListener('pointerdown',()=>document.body.classList.remove('keyboard-input'),true);
+  for(const panel of document.querySelectorAll('dialog,[popover]')){
+    panel.addEventListener('beforetoggle',event=>{panel.inert=event.newState==='closed';});
+    panel.addEventListener('close',()=>{panel.inert=!panel.open;});
+  }
+  document.body.inert=true;$('save-status').textContent='Loading saved compositions…';$('save-status').dataset.state='saving';
   const flat = ['C','D♭','D','E♭','E','F','G♭','G','A♭','A','B♭','B'];
   const sharp = ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
   const symbol = { sixth: '●', diminished: '◆', outside: '–' };
@@ -570,12 +746,211 @@ var Composer = (() => {
   const portraitQuery = matchMedia('(orientation: portrait)');
   let isPhone = false, selectionMode = '', touchEdit = '', visiblePart = null, desktopCollapsed = [];
   const pianoResizer=$('piano-resize'), pianoDock=document.querySelector('.keyboard-dock');
-  let pianoHeight=null, pianoDrag=null;
+  let pianoHeight=null, pianoDrag=null, database=null, activeId=null, activeRevision=0, createdAt=Date.now(), currentName='Untitled composition', lastValidBpm=96, dirty=false, saving=false, conflicted=false, latestConflict=null, saveTimer=null, preferenceTimer=null, offlineReady=false, updateWorker=null, reloadForUpdate=false;
+  const tabId=globalThis.crypto?.randomUUID?.()??`${Date.now()}-${Math.random()}`, roles=['bass','chord','melody'];
+  let channel=null, storageError=null;
+  const SAVE_FEEDBACK={busyDelay:300,busyMinimum:500};
+  let saveFeedbackTimer=null,saveFeedbackState='new',saveBusySince=null;
+  function paintSaveStatus(message,state){
+    $('save-status').textContent=message;$('save-status').dataset.state=state;
+    $('retry-save').hidden=state!=='error';$('download-recovery').hidden=!['error','conflict'].includes(state);
+  }
+  function saveStatus(message,state='saved'){
+    if(state==='saving'){
+      if(saveFeedbackState==='saving')return;
+      clearTimeout(saveFeedbackTimer);saveFeedbackState=state;
+      if(saveBusySince!==null){paintSaveStatus('Saving…','saving');return;}
+      paintSaveStatus('Edits pending','pending');
+      saveFeedbackTimer=setTimeout(()=>{saveBusySince=performance.now();paintSaveStatus('Saving…','saving');},SAVE_FEEDBACK.busyDelay);
+      return;
+    }
+    clearTimeout(saveFeedbackTimer);saveFeedbackState=state;
+    const remaining=state==='saved'&&saveBusySince!==null?Math.max(0,SAVE_FEEDBACK.busyMinimum-(performance.now()-saveBusySince)):0;
+    if(remaining){saveFeedbackTimer=setTimeout(()=>{saveBusySince=null;paintSaveStatus(message,state);},remaining);}
+    else{saveBusySince=null;paintSaveStatus(message,state);}
+  }
+  function requestValue(request){return new Promise((resolve,reject)=>{request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
+  function transactionDone(tx){return new Promise((resolve,reject)=>{tx.oncomplete=()=>resolve();tx.onabort=tx.onerror=()=>reject(tx.error||new Error('The browser could not save this composition.'));});}
+  function openDatabase(){return new Promise((resolve,reject)=>{
+    if(!('indexedDB'in window)){reject(new Error('This browser does not support local project saving.'));return;}
+    const request=indexedDB.open('simple-composer',1);
+    request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains('compositions'))db.createObjectStore('compositions',{keyPath:'id'});if(!db.objectStoreNames.contains('app'))db.createObjectStore('app',{keyPath:'key'});};
+    request.onsuccess=()=>{database=request.result;database.onversionchange=()=>database.close();resolve(database);};request.onerror=()=>reject(request.error||new Error('The browser could not open local project storage.'));
+  });}
+  function getStored(store,key){return requestValue(database.transaction(store,'readonly').objectStore(store).get(key));}
+  function getAllProjects(){return requestValue(database.transaction('compositions','readonly').objectStore('compositions').getAll());}
+  function putStored(store,value){const tx=database.transaction(store,'readwrite');tx.objectStore(store).put(value);return transactionDone(tx);}
+  function insertProject(record){return new Promise((resolve,reject)=>{
+    const tx=database.transaction('compositions','readwrite'),store=tx.objectStore('compositions');let created;
+    const request=store.get(record.id);request.onsuccess=()=>{if(request.result){tx.abort();reject(new Error('A composition with this internal ID already exists.'));return;}created={...record,revision:1};store.add(created);};
+    tx.oncomplete=()=>resolve(created);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('The browser could not create this composition.'));
+  });}
+  function writeProject(record,expectedRevision){return new Promise((resolve,reject)=>{
+    const tx=database.transaction('compositions','readwrite'),store=tx.objectStore('compositions');let written,conflict=null;
+    const request=store.get(record.id);request.onsuccess=()=>{
+      const current=request.result;
+      if((expectedRevision===0&&current)||(expectedRevision>0&&(!current||current.revision!==expectedRevision||current.trashedAt))){conflict=current??null;tx.abort();return;}
+      written={...record,revision:expectedRevision+1};store.put(written);
+    };
+    tx.oncomplete=()=>resolve(written);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(conflict?Object.assign(new Error('Another tab changed or removed this composition.'),{conflict}):tx.error||new Error('The browser could not save this composition.'));
+  });}
+  function changeProject(id,expectedRevision,update){return new Promise((resolve,reject)=>{
+    const tx=database.transaction('compositions','readwrite'),store=tx.objectStore('compositions');let updated,conflict=null;
+    const request=store.get(id);request.onsuccess=()=>{const current=request.result;if(!current||current.revision!==expectedRevision){conflict=current??null;tx.abort();return;}updated={...update(current),revision:expectedRevision+1};store.put(updated);};
+    tx.oncomplete=()=>resolve(updated);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(conflict?Object.assign(new Error('Another tab changed this composition.'),{conflict}):tx.error||new Error('The browser could not update this composition.'));
+  });}
+  function projectRecord(){const project=Exchange.makeProject(currentName,song.snapshot(),collectSettings());return {id:activeId,name:project.composition.name,state:project.composition.state,settings:project.composition.settings,createdAt,updatedAt:Date.now(),trashedAt:null};}
+  function collectSettings(){return {bpm:+$('bpm').value,partVolumes:{...partVolumes},loop:{enabled:$('loop').checked,from:+$('loop-from').value||0,to:+$('loop-to').value||0},metronome:$('metronome').checked,entryDurations:{...entryDurations},advanceAfterEntry:{...advanceAfterEntry},snap:+$('snap').value,position,activePart:part};}
+  function currentProjectFile(){return Exchange.makeProject(currentName,song.snapshot(),collectSettings());}
+  function setConflict(record){conflicted=true;latestConflict=record;clearTimeout(saveTimer);$('conflict-actions').hidden=false;$('conflict-message').textContent=record?.trashedAt?'This composition moved to Trash in another tab.':record?'A newer save is open in another tab.':'This composition was removed in another tab.';$('open-latest').disabled=!record||!!record.trashedAt;saveStatus('Save paused: another tab changed this composition.','conflict');}
+  async function readConflict(){if(!activeId)return null;return getStored('compositions',activeId);}
+  function markDirty(){dirty=true;if(conflicted||storageError)return;if(!database){saveStatus('Could not save locally. Download a project file to keep your edits.','error');return;}saveStatus('Saving…','saving');clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveNow(),250);}
+  async function saveNow(){
+    clearTimeout(saveTimer);if(!dirty||saving||conflicted)return;
+    if(!database){saveStatus('Could not save locally. Download a project file to keep your edits.','error');return;}
+    saving=true;dirty=false;saveStatus('Saving…','saving');
+    try{
+      const record=projectRecord(),written=await writeProject(record,activeRevision);activeRevision=written.revision;createdAt=written.createdAt||createdAt;storageError=null;
+      putStored('app',{key:'lastOpened',id:activeId}).catch(()=>{});channel?.postMessage({type:'changed',id:activeId,revision:activeRevision,tabId});saveStatus(dirty?'Saving…':'Saved locally',dirty?'saving':'saved');offlineCheck();
+    }catch(error){dirty=true;if(error.conflict!==undefined){setConflict(error.conflict);if(!error.conflict)readConflict().then(setConflict).catch(()=>{});}else{storageError=error;saveStatus('Could not save locally. Your edits are still open.','error');}}
+    finally{saving=false;if(dirty&&!conflicted&&!storageError&&database)saveTimer=setTimeout(()=>saveNow(),0);}
+  }
+  async function saveBeforeSwitch(){
+    clearTimeout(saveTimer);
+    while(saving||dirty&&!conflicted&&!storageError&&database){
+      if(saving){await new Promise(resolve=>{const check=()=>saving?setTimeout(check,10):resolve();check();});continue;}
+      clearTimeout(saveTimer);await saveNow();
+    }
+    if(dirty||conflicted){status('Save this composition before changing to another one. Retry the save or download a project file first.',true);return false;}
+    return true;
+  }
+  function schedulePreferenceSave(){
+    clearTimeout(preferenceTimer);preferenceTimer=setTimeout(async()=>{
+      if(!database)return;
+      const prefs={key:'appearance',dark:$('dark-mode').checked,noteNames:$('note-names').checked,symbols:$('piano-symbols').checked,boxKeys:$('show-box-keys').getAttribute('aria-pressed')==='true',showParts:$('show-parts').getAttribute('aria-expanded')==='true',collapsed:[...collapsedParts],pianoHeight,controlsHidden:pianoDock.classList.contains('controls-hidden'),keyboardBase,beatWidth};
+      try{await putStored('app',prefs);}catch(error){console.warn('Could not save appearance preferences',error);}
+    },150);
+  }
+  async function restorePreferences(){
+    const prefs=await getStored('app','appearance');if(!prefs)return;
+    $('dark-mode').checked=!!prefs.dark;$('note-names').checked=!!prefs.noteNames;$('piano-symbols').checked=!!prefs.symbols;
+    $('keyboard').classList.toggle('names-hidden',!prefs.noteNames);$('keyboard').classList.toggle('symbols-hidden',!prefs.symbols);
+    $('show-box-keys').setAttribute('aria-pressed',String(!!prefs.boxKeys));$('show-box-keys').textContent=`Key labels: ${prefs.boxKeys?'On':'Off'}`;$('timeline').classList.toggle('hide-box-keys',!prefs.boxKeys);
+    $('show-parts').setAttribute('aria-expanded',String(prefs.showParts!==false));$('show-parts').textContent=prefs.showParts===false?'Show parts':'Hide parts';$('timeline').classList.toggle('hide-parts',prefs.showParts===false);
+    collapsedParts.clear();for(const role of prefs.collapsed||[])if(roles.includes(role))collapsedParts.add(role);
+    pianoHeight=Number.isFinite(prefs.pianoHeight)?prefs.pianoHeight:null;$('piano-controls-toggle').setAttribute('aria-expanded',String(!prefs.controlsHidden));$('piano-controls-toggle').textContent=prefs.controlsHidden?'Show piano controls':'Hide piano controls';pianoDock.classList.toggle('controls-hidden',!!prefs.controlsHidden);
+    keyboardBase=Number.isInteger(prefs.keyboardBase)?prefs.keyboardBase:48;beatWidth=Number.isFinite(prefs.beatWidth)?Math.max(28,Math.min(160,prefs.beatWidth)):48;$('zoom').value=beatWidth;
+  }
+  async function activateRecord(record){
+    if(!record||record.trashedAt)throw new Error('This composition is in Trash. Restore it before opening it.');
+    const project=Exchange.makeProject(record.name,record.state,record.settings),settings=project.composition.settings;stopTransport();song=Composer.createComposer(project.composition.state);currentName=project.composition.name;activeId=record.id;activeRevision=record.revision;createdAt=record.createdAt||Date.now();dirty=false;conflicted=false;latestConflict=null;$('conflict-actions').hidden=true;storageError=null;
+    $('bpm').value=settings.bpm;lastValidBpm=settings.bpm;$('metronome').checked=settings.metronome;$('loop').checked=settings.loop.enabled;$('snap').value=settings.snap;position=Math.min(settings.position,256);part=settings.activePart;Object.assign(partVolumes,settings.partVolumes);Object.assign(entryDurations,settings.entryDurations);Object.assign(advanceAfterEntry,settings.advanceAfterEntry);duration=entryDurations[part];
+    selectedNotes.clear();selected=null;selectedBoxes.clear();boxAnchor=null;selectionMode='';touchEdit='';scene=null;step=0;pausedAt=null;
+    for(const role of roles)if(partGains[role])partGains[role].gain.value=partVolumes[role];
+    await putStored('app',{key:'lastOpened',id:record.id}).catch(()=>{});
+    render();const lastMeasure=song.inspect().measures.length-1;$('loop-from').value=Math.min(settings.loop.from,lastMeasure);$('loop-to').value=Math.min(settings.loop.to,lastMeasure);render();$('current-name').textContent=currentName;saveStatus('Saved locally');renderWalkthrough();
+  }
+  async function createSavedComposition(name='Untitled composition',template=null){
+    if(!(await saveBeforeSwitch()))return false;
+    const state=template?.state??Composer.createComposer().snapshot(),settings=template?.settings??{bpm:96,partVolumes:{bass:1,chord:1,melody:1},loop:{enabled:false,from:0,to:1},metronome:false,entryDurations:{bass:1,chord:2,melody:1},advanceAfterEntry:{bass:false,chord:false,melody:true},snap:1,position:0,activePart:'chord'};
+    const safeName=name.trim()||'Untitled composition';if(safeName.length>80)throw new Error('Use a composition name of 80 characters or less.');
+    const record={id:crypto.randomUUID(),revision:0,name:safeName,state:Composer.validateSnapshot(state),settings:Exchange.validSettings(settings),createdAt:Date.now(),updatedAt:Date.now(),trashedAt:null};
+    const saved=await insertProject(record);channel?.postMessage({type:'changed',id:saved.id,revision:saved.revision,tabId});await activateRecord(saved);renderProjectLists();return true;
+  }
+  function downloadBlob(blob,name){const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  function safeFilename(name){return name.trim().replace(/[\\/:*?"<>|\u0000-\u001f]/g,'-').replace(/\s+/g,' ').slice(0,80)||'composition';}
+  function downloadProject(){try{const file=currentProjectFile();downloadBlob(new Blob([JSON.stringify(file,null,2)],{type:'application/json'}),`${safeFilename(currentName)}.simple-composer.json`);}catch(error){status(error.message,true);}}
+  function downloadMidi(){
+    try{const snapshot=Composer.validateSnapshot(song.snapshot()),settings=Exchange.validSettings(collectSettings()),midi=Exchange.writeMidi(snapshot,settings),warnings=Exchange.overlaps(snapshot);if(warnings.length){const details=warnings.slice(0,20).map(item=>`${item.part}: MIDI ${item.pitch} from ${item.start} to ${item.end} quarter notes`).join('\n')+(warnings.length>20?`\n…and ${warnings.length-20} more overlapping notes.`:'');if(!confirm(`Some same-pitch notes overlap in one part. Other music apps may release them differently. Export the written notes unchanged?\n\n${details}`))return;}
+      downloadBlob(new Blob([midi],{type:'audio/midi'}),`${safeFilename(currentName)}.mid`);
+    }catch(error){status(error.message,true);}
+  }
+  async function importProject(file){
+    if(!file)return;if(file.size>5*1024*1024){status('This project file is too large. The limit is 5 MB.',true);return;}
+    try{const project=Exchange.parseProject(await file.text());if(!(await saveBeforeSwitch()))return;const sameName=(await getAllProjects()).some(item=>!item.trashedAt&&item.name===project.composition.name),name=sameName?`${project.composition.name.slice(0,69)} (Imported)`:project.composition.name;
+      const record={id:crypto.randomUUID(),revision:0,name,state:project.composition.state,settings:project.composition.settings,createdAt:Date.now(),updatedAt:Date.now(),trashedAt:null};
+      const saved=await insertProject(record);channel?.postMessage({type:'changed',id:saved.id,revision:saved.revision,tabId});await activateRecord(saved);renderProjectLists();$('projects-dialog').close();status('Project imported as a new composition.');
+    }catch(error){status(error.message||'The project could not be imported.',true);}
+  }
+  async function offlineCheck(){
+    if(!('serviceWorker'in navigator)){offlineReady=false;$('offline-status').textContent='Offline reopening is not available in this browser.';$('offline-status').dataset.state='error';return;}
+    try{
+      const registration=await navigator.serviceWorker.ready;
+      if(registration.waiting){updateWorker=registration.waiting;$('offline-update').hidden=false;}
+      if(!navigator.serviceWorker.controller){$('offline-status').textContent='Getting app ready for offline use…';$('offline-status').dataset.state='checking';return;}
+      if(!database)throw new Error('Local storage is unavailable.');
+      const tx=database.transaction('app','readwrite'),store=tx.objectStore('app');store.put({key:'offline-check',at:Date.now()});store.delete('offline-check');await transactionDone(tx);
+      offlineReady=true;$('offline-status').textContent='Ready offline';$('offline-status').dataset.state='ready';
+    }catch{$('offline-status').textContent='Offline readiness could not be checked.';$('offline-status').dataset.state='error';}
+  }
+  async function bootStorage(){
+    try{
+      await openDatabase();storageError=null;
+      try{if(navigator.storage?.persist)await navigator.storage.persist();}catch{}
+      const all=(await getAllProjects()).filter(record=>!record.trashedAt).sort((a,b)=>b.updatedAt-a.updatedAt),last=await getStored('app','lastOpened'),record=all.find(item=>item.id===last?.id)||all[0];
+      await restorePreferences();if(record)await activateRecord(record);else{activeId=crypto.randomUUID();activeRevision=0;createdAt=Date.now();currentName='Untitled composition';$('current-name').textContent=currentName;render();saveStatus('Not saved yet','new');}
+      document.body.inert=false;return true;
+    }catch(error){database=null;storageError=error;restorePreferences().catch(()=>{});$('current-name').textContent=currentName;saveStatus('Could not open local projects. Your current edits can be downloaded.','error');render();document.body.inert=false;return false;}
+  }
+  async function renderProjectLists(){
+    if(!database)return;const all=(await getAllProjects()).sort((a,b)=>b.updatedAt-a.updatedAt),live=all.filter(record=>!record.trashedAt),trash=all.filter(record=>record.trashedAt);
+    const fill=(target,records,isTrash)=>{target.replaceChildren();if(!records.length){const empty=document.createElement('div');empty.className='project-empty';empty.textContent=isTrash?'Trash is empty.':'No saved compositions yet.';target.append(empty);return;}
+      for(const record of records){const row=document.createElement('div');row.className='project-row';const label=document.createElement('div');label.className='project-row-name';label.textContent=record.name;const date=document.createElement('small');date.textContent=`${record.id===activeId?'Open now · ':''}Edited ${new Date(record.updatedAt).toLocaleString()}`;label.append(date);row.append(label);
+        const button=(text,fn)=>{const element=document.createElement('button');element.textContent=text;element.onclick=fn;row.append(element);return element;};
+        if(!isTrash){button('Open',async()=>{if(record.id===activeId){if(conflicted){latestConflict=await readConflict();$('open-latest').click();}else $('projects-dialog').close();return;}if(!(await saveBeforeSwitch()))return;try{const latest=await getStored('compositions',record.id);if(!latest||latest.trashedAt)throw new Error('This composition is no longer available. Refresh the list.');await activateRecord(latest);await renderProjectLists();$('projects-dialog').close();}catch(error){status(error.message,true);}});
+          button('Rename',()=>showProjectNameForm(record));
+          button('Duplicate',async()=>{if(!(await saveBeforeSwitch()))return;try{const source=await getStored('compositions',record.id);if(!source||source.trashedAt)throw new Error('This composition is no longer available. Refresh the list.');const copy={...source,id:crypto.randomUUID(),revision:0,name:`${source.name} (Copy)`.slice(0,80),createdAt:Date.now(),updatedAt:Date.now(),trashedAt:null};const saved=await insertProject(copy);channel?.postMessage({type:'changed',id:saved.id,revision:saved.revision,tabId});await activateRecord(saved);await renderProjectLists();}catch(error){status(error.message,true);}});
+          button('Trash',async()=>{if(!confirm(`Move “${record.name}” to Trash?`))return;if(record.id===activeId&&!(await saveBeforeSwitch()))return;try{const latest=await getStored('compositions',record.id);if(!latest)throw new Error('This composition no longer exists.');const updated=await changeProject(record.id,latest.revision,current=>({...current,trashedAt:Date.now(),updatedAt:Date.now()}));channel?.postMessage({type:'changed',id:record.id,revision:updated.revision,tabId});if(record.id===activeId)setConflict(updated);await renderProjectLists();}catch(error){status(error.message,true);}});
+        }else{
+          button('Restore',async()=>{try{const updated=await changeProject(record.id,record.revision,current=>({...current,trashedAt:null,updatedAt:Date.now()}));channel?.postMessage({type:'changed',id:record.id,revision:updated.revision,tabId});await renderProjectLists();}catch(error){status(error.message,true);}});
+          button('Delete forever',async()=>{if(!confirm(`Permanently delete “${record.name}”? This cannot be undone.`))return;try{await new Promise((resolve,reject)=>{const tx=database.transaction('compositions','readwrite'),store=tx.objectStore('compositions');const request=store.get(record.id);request.onsuccess=()=>{if(!request.result||request.result.revision!==record.revision){tx.abort();return;}store.delete(record.id);};tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(new Error('Another tab changed this composition. Refresh the list and try again.'));});channel?.postMessage({type:'deleted',id:record.id,tabId});if(record.id===activeId)setConflict(null);await renderProjectLists();}catch(error){status(error.message,true);}});
+        }target.append(row);
+      }
+    };
+    fill($('project-list'),live,false);fill($('trash-list'),trash,true);
+  }
+  $('close-projects').onclick=()=>$('projects-dialog').close();
+  let renamingProject=null;
+  function showProjectNameForm(record=null){
+    status('');renamingProject=record;$('composition-name').value=record?.name||'Untitled composition';
+    $('save-project-name').textContent=record?'Save name':'Create composition';$('project-name-form').hidden=false;
+    $('composition-name').focus();$('composition-name').select();
+  }
+  $('create-project').onclick=()=>showProjectNameForm();
+  $('cancel-project-name').onclick=()=>{$('project-name-form').hidden=true;status('');$('create-project').focus();};
+  $('project-name-form').onsubmit=async event=>{
+    event.preventDefault();const name=$('composition-name').value.trim();if(!name){status('Enter a composition name.',true);$('composition-name').focus();return;}
+    const button=$('save-project-name');button.disabled=true;
+    try{
+      if(renamingProject){
+        const record=renamingProject;if(record.id===activeId&&!(await saveBeforeSwitch()))return;
+        const updated=await changeProject(record.id,record.id===activeId?activeRevision:record.revision,current=>({...current,name,updatedAt:Date.now()}));
+        channel?.postMessage({type:'changed',id:record.id,revision:updated.revision,tabId});
+        if(record.id===activeId){currentName=updated.name;activeRevision=updated.revision;$('current-name').textContent=currentName;}
+        await renderProjectLists();$('project-name-form').hidden=true;status('');$('create-project').focus();
+      }else if(await createSavedComposition(name)){$('project-name-form').hidden=true;$('projects-dialog').close();}
+    }catch(error){status(error.message,true);}finally{button.disabled=false;}
+  };
+  $('export-project').onclick=downloadProject;$('download-recovery').onclick=downloadProject;$('retry-save').onclick=retrySave;$('export-midi').onclick=downloadMidi;
+  async function retrySave(){
+    try{if(!database)await openDatabase();dirty=true;await saveNow();if(storageError||conflicted)status('Could not save. Your edits are still open. Download a project file to keep them.',true);else status('');}
+    catch(error){storageError=error;status(error.message,true);}
+  }
+  $('project-retry').onclick=retrySave;$('project-recovery').onclick=downloadProject;
+  $('import-project').onclick=()=>$('project-file').click();$('project-file').onchange=event=>{const file=event.target.files?.[0];event.target.value='';importProject(file);};
+  $('save-conflict-copy').onclick=async()=>{try{const oldName=currentName;const file=currentProjectFile();const record={id:crypto.randomUUID(),revision:0,name:`${oldName} (Copy)`.slice(0,80),state:file.composition.state,settings:file.composition.settings,createdAt:Date.now(),updatedAt:Date.now(),trashedAt:null};const saved=await insertProject(record);channel?.postMessage({type:'changed',id:saved.id,revision:saved.revision,tabId});await activateRecord(saved);await renderProjectLists();}catch(error){status(error.message,true);}};
+  $('open-latest').onclick=async()=>{if(dirty&&!confirm('Open the latest saved version and discard the unsaved edits in this tab? Download a copy first if you want to keep them.'))return;try{const record=await readConflict();if(!record||record.trashedAt){status('No latest active version is available. Save your edits as a new composition.',true);return;}await activateRecord(record);}catch(error){status(error.message,true);}};
+  $('offline-update').onclick=async()=>{if(!updateWorker)return;if(!(await saveBeforeSwitch()))return;reloadForUpdate=true;updateWorker.postMessage({type:'SKIP_WAITING'});};
+  $('projects-dialog').addEventListener('click',event=>{if(event.target===$('projects-dialog'))$('projects-dialog').close();});
+  if('BroadcastChannel'in window){channel=new BroadcastChannel('simple-composer-projects');channel.onmessage=async({data})=>{if(!data||data.tabId===tabId||data.id!==activeId)return;if(data.type==='deleted'){setConflict(null);return;}const latest=await readConflict().catch(()=>null);if(latest&&latest.revision!==activeRevision)setConflict(latest);};}
+  window.addEventListener('beforeunload',event=>{if(dirty||saving){event.preventDefault();event.returnValue='';}});
+  navigator.serviceWorker?.addEventListener('controllerchange',()=>{offlineCheck();if(reloadForUpdate)location.reload();});
+  $('current-name').onclick=async()=>{$('project-name-form').hidden=true;status('');$('projects-dialog').inert=false;$('projects-dialog').showModal();try{await renderProjectLists();if(storageError||conflicted||!database)status('Your edits need attention. Retry saving or download a project file.',true);}catch(error){status(error.message,true);}};
   $('piano-controls-toggle').onclick=()=>{
     const hidden=pianoDock.classList.toggle('controls-hidden');
     $('piano-controls-toggle').setAttribute('aria-expanded',String(!hidden));
     $('piano-controls-toggle').textContent=hidden?'Show piano controls':'Hide piano controls';
-    syncPianoHeight();
+    syncPianoHeight();schedulePreferenceSave();
   };
   function pianoMaximum(){
     if(!isPhone)return Math.max(64,Math.min(320,Math.floor(innerHeight*.4)));
@@ -602,7 +977,7 @@ var Composer = (() => {
   function finishPianoResize(commit){
     if(!pianoDrag)return;
     const gesture=pianoDrag;pianoDrag=null;
-    if(!commit)pianoHeight=gesture.previous;
+    if(!commit)pianoHeight=gesture.previous;else schedulePreferenceSave();
     if(pianoResizer.hasPointerCapture(gesture.pointer))pianoResizer.releasePointerCapture(gesture.pointer);
     syncPianoHeight();
   }
@@ -623,21 +998,20 @@ var Composer = (() => {
     if(!['ArrowUp','ArrowDown','Home','End'].includes(event.key))return;
     event.preventDefault();
     pianoHeight=event.key==='Home'?64:event.key==='End'?pianoMaximum():Math.max(64,Math.min(pianoMaximum(),$('keyboard').getBoundingClientRect().height+(event.key==='ArrowUp'?8:-8)));
-    syncPianoHeight();
+    syncPianoHeight();schedulePreferenceSave();
   };
   window.addEventListener('resize',()=>{finishPianoResize(false);syncPianoHeight();});
   const phonePlacements = [
     [document.querySelector('.toolbar'),$('tools-playback')],
     [$('play'),$('phone-transport')],[$('undo'),$('phone-transport')],
     [document.querySelector('.inspector'),$('tools-inspector')],
-    [document.querySelector('.entry'),$('phone-entry')],
     [$('position').closest('label'),$('tools-entry')],[$('snap').closest('label'),$('tools-entry')],
-    [$('advance-entry').closest('label'),$('tools-entry')],[$('next'),$('tools-entry')],
+    [$('advance-entry').closest('label'),$('tools-entry')],
     [document.querySelector('.timeline-footer'),$('tools-view')],
     [document.querySelector('.box-tools'),$('tools-boxes')],
     [document.querySelector('.keyboard-context'),$('tools-piano')],
     [$('note-names').closest('label'),$('tools-piano')],[$('piano-symbols').closest('label'),$('tools-piano')],
-    [$('dark-mode').closest('label'),$('tools-project')],[$('blank'),$('tools-project')],
+    [$('dark-mode').closest('label'),$('tools-project')],
   ].map(([element,destination])=>{
     const home=document.createComment('control home');element.before(home);
     return {element,destination,home};
@@ -685,7 +1059,7 @@ var Composer = (() => {
     if(isPhone)document.querySelectorAll('[data-key]').forEach(key=>key.disabled=editing);
     syncPianoHeight();
   }
-  $('open-tools').onclick=()=>{$('mobile-tools').showModal();};
+  $('open-tools').onclick=()=>{$('mobile-tools').inert=false;$('mobile-tools').showModal();};
   $('close-tools').onclick=()=>{$('mobile-tools').close();};
   $('touch-select').onclick=()=>{
     touchEdit='';selectionMode=selectionMode?'':$('touch-select-kind').value;
@@ -721,14 +1095,18 @@ var Composer = (() => {
   },true);
 
   const durations = Composer.durationChoices;
-  for (const id of ['duration','piano-duration']) {
+  for (const id of ['duration']) {
     $(id).innerHTML = durations.map(([name, value]) => `<option value="${value}">${name}</option>`).join('');
     $(id).value = duration;
   }
   for (const id of ['key-tonic','collection-tonic']) $(id).innerHTML = flat.map((name, i) => `<option value="${i}">${name}</option>`).join('');
   $('note-pitch').innerHTML = Array.from({length:128}, (_, pitch) => `<option value="${pitch}">${pitchName(pitch)}${flat[pitch%12] !== sharp[pitch%12] ? ' / ' + sharp[pitch%12] + (Math.floor(pitch/12)-1) : ''}</option>`).join('');
 
-  function status(message, error = false) { $('status').textContent = message; $('status').hidden = !error; $('status').classList.toggle('error', error); }
+  function status(message, error = false) {
+    const target=$('projects-dialog').open?'projects-status':$('mobile-tools').open?'tools-status':'status';
+    for(const id of ['status','projects-status','tools-status']){const element=$(id);element.textContent=id===target?message:'';element.hidden=id!==target||!message||!error;element.classList.toggle('error',error);}
+    $('project-recovery-actions').hidden=!(error&&(storageError||conflicted||!database));$('project-retry').hidden=conflicted;
+  }
   function locationName(at, data = song.inspect(at)) {
     const index = data.measures.findIndex(measure => at >= measure.start && at < measure.end);
     if (index < 0) return 'After the last measure';
@@ -744,6 +1122,7 @@ var Composer = (() => {
       stopTransport();
       song.dispatch(action);
       render();
+      markDirty();
       status(message);
       return true;
     } catch (error) { status(error.message, true); return false; }
@@ -751,7 +1130,7 @@ var Composer = (() => {
   function seek(at, role = part) {
     stopTransport();
     position = Math.max(0, Math.min(256, Math.round(at * 24) / 24));
-    part = role; selectedNotes.clear();
+    part = role; selectedNotes.clear();markDirty();
     render();
   }
 
@@ -760,7 +1139,7 @@ var Composer = (() => {
     const scroll=$('timeline-scroll');
     // Leave viewing room after the song without adding musical time.
     $('timeline').style.setProperty('--cursor-room',`${scroll.clientWidth/2+16}px`);
-    scroll.scrollTo({left:Math.max(0,position*beatWidth-scroll.clientWidth/2),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    scroll.scrollTo({left:Math.max(0,position*beatWidth-scroll.clientWidth/2),behavior:'instant'});
   }
 
   function revealPhoneNote(id){
@@ -775,7 +1154,7 @@ var Composer = (() => {
 
   function renderEntry() {
     duration = entryDurations[part];
-    $('part').value = part; $('position').value = position; $('duration').value = duration; $('piano-duration').value = duration;
+    $('part').value = part; $('position').value = position; $('duration').value = duration;
     $('advance-entry').checked = advanceAfterEntry[part];
     document.querySelectorAll('.lane').forEach(lane=>{
       const active=lane.dataset.role===part;
@@ -799,6 +1178,7 @@ var Composer = (() => {
     $('clear-box-selection').disabled=!selectedBoxes.size;
     $('apply-key').textContent=selectedBoxes.size?`Set key for ${selectedBoxes.size} selected ${selectedBoxes.size===1?'box':'boxes'}`:'Set key from cursor';
     $('undo').disabled = !data.canUndo; $('redo').disabled = !data.canRedo;
+    $('loop-range').hidden=!$('loop').checked;$('empty-hint').hidden=!!data.notes.length;
     $('position-readout').textContent = `${locationName(position, data)} · ${data.notes.length} notes · ${data.measures.length} measures`;
     for (const kind of ['key','collection']) {
       $(`${kind}-tonic`).value = data.context[kind].tonic;
@@ -957,7 +1337,7 @@ var Composer = (() => {
       button.classList.toggle('sounding',soundingPitches.has(pitch));
       button.setAttribute('aria-label',`${transport?'Audition':'Add'} ${pitchName(pitch)}${soundingPitches.has(pitch)?transport?' · playing':' · active at editing cursor':''}`);
       button.querySelector('.family-symbol').textContent = family==='outside'?'○':symbol[family];
-      button.title = `${pitchName(pitch)}${flat[pitch%12]!==sharp[pitch%12]?' / '+sharp[pitch%12]+(Math.floor(pitch/12)-1):''} · ${family==='sixth'?'sixth-chord tone':family==='diminished'?'diminished-chord tone':'outside the collection'}${isPhone?'':` · Right-click: delete in ${part} at the orange cursor`}` ;
+      button.title = `${pitchName(pitch)}${flat[pitch%12]!==sharp[pitch%12]?' / '+sharp[pitch%12]+(Math.floor(pitch/12)-1):''} · ${family==='sixth'?'sixth-chord tone':family==='diminished'?'diminished-chord tone':'outside the collection'}${isPhone?'':` · Right-click: delete in ${part} at the amber entry cursor`}` ;
     });
     return data;
   }
@@ -1011,7 +1391,7 @@ var Composer = (() => {
     if(transport){const scroll=$('timeline-scroll');scroll.scrollTo({left:scroll.scrollLeft,behavior:'auto'});}
     transport = null; cancelVoices();
     if (!keepPause) pausedAt = null;
-    $('play').textContent = '▶ Play'; $('play').setAttribute('aria-pressed','false');
+    $('play').textContent = 'Play'; $('play').setAttribute('aria-pressed','false');
     const head = $('playhead'); if (head) head.style.display = 'none';
     if ($('keyboard').children.length) updateLive(position);
   }
@@ -1033,7 +1413,7 @@ var Composer = (() => {
       selectedBoxes.clear();boxAnchor=null;render();
       const epoch = audio.currentTime+.04;
       transport = {first,repeat,bpm,loop:looping,epoch,scheduleOrigin:epoch,plan:first,index:0,clickIndex:0};
-      pausedAt = null; $('play').textContent = 'Ⅱ Pause'; $('play').setAttribute('aria-pressed','true');
+      pausedAt = null; $('play').textContent = 'Pause'; $('play').setAttribute('aria-pressed','true');
       timer = setInterval(tick,25); tick();
       status(looping ? `Looping measures ${fromIndex+1}–${toIndex+1}. Held notes restart at the loop start.` : `Playing from ${locationName(startAt,data)}.`);
     } catch(error) { stopTransport(); status(error.message,true); }
@@ -1083,34 +1463,40 @@ var Composer = (() => {
       while(transport.clickIndex<transport.plan.clicks.length&&transport.scheduleOrigin+transport.plan.clicks[transport.clickIndex].start<audio.currentTime)transport.clickIndex++;
       tick();
     }
-    status($('metronome').checked?'Metronome on during playback. The first beat of each measure is accented.':'Metronome off.');
+    markDirty();status($('metronome').checked?'Metronome on during playback. The first beat of each measure is accented.':'Metronome off.');
   };
-  $('piano-symbols').onchange=()=>{$('keyboard').classList.toggle('symbols-hidden',!$('piano-symbols').checked);};
-  $('advance-entry').onchange=()=>{advanceAfterEntry[part]=$('advance-entry').checked;};
-  $('note-names').onchange=()=>{$('keyboard').classList.toggle('names-hidden',!$('note-names').checked);};
-  for (const id of ['bpm','loop','loop-from','loop-to']) $(id).onchange=()=>{stopTransport();centerCursor();status('Playback settings updated.');};
-  $('part').onchange=()=>{part=$('part').value;if(!isPhone)selectedNotes.clear();render();};
-  $('position').onchange=()=>seek(+$('position').value);
-  for (const id of ['duration','piano-duration']) $(id).onchange=()=>{
+  $('dark-mode').onchange=schedulePreferenceSave;
+  $('piano-symbols').onchange=()=>{$('keyboard').classList.toggle('symbols-hidden',!$('piano-symbols').checked);schedulePreferenceSave();};
+  $('advance-entry').onchange=()=>{advanceAfterEntry[part]=$('advance-entry').checked;markDirty();};
+  $('note-names').onchange=()=>{$('keyboard').classList.toggle('names-hidden',!$('note-names').checked);schedulePreferenceSave();};
+  $('bpm').onchange=()=>{const value=+$('bpm').value;if(!Number.isFinite(value)||value<1||value>300){$('bpm').value=lastValidBpm;status('Choose a tempo from 1 to 300 BPM.',true);return;}lastValidBpm=value;stopTransport();centerCursor();markDirty();status('Playback settings updated.');};
+  for (const id of ['loop','loop-from','loop-to']) $(id).onchange=()=>{stopTransport();$('loop-range').hidden=!$('loop').checked;centerCursor();markDirty();status('Playback settings updated.');};
+  $('snap').onchange=()=>markDirty();
+  $('part').onchange=()=>{part=$('part').value;if(!isPhone)selectedNotes.clear();markDirty();render();};
+  $('position').onchange=()=>{const value=+$('position').value;if(!Number.isFinite(value)||value<0||value>256){$('position').value=position;status('Choose a position from 0 to 256 quarter notes.',true);return;}seek(value);};
+  for (const id of ['duration']) $(id).onchange=()=>{
     duration=+$(id).value;entryDurations[part]=duration;
-    $('duration').value=duration;$('piano-duration').value=duration;
+    $('duration').value=duration;
+    markDirty();
   };
   $('next').onclick=()=>{
     try{seek(song.dispatch({type:'advance',at:Math.min(256,Math.round((position+duration)*24)/24)}));}
     catch(error){status(error.message,true);}
   };
-  $('zoom').oninput=()=>{beatWidth=+$('zoom').value;renderTimeline(song.inspect(position));updateLive(transport?playPosition():position);centerCursor();};
+  $('zoom').oninput=()=>{beatWidth=+$('zoom').value;renderTimeline(song.inspect(position));updateLive(transport?playPosition():position);centerCursor();schedulePreferenceSave();};
   $('show-parts').onclick=()=>{
     const show=$('show-parts').getAttribute('aria-expanded')!=='true';
     $('show-parts').setAttribute('aria-expanded',String(show));
     $('show-parts').textContent=show?'Hide parts':'Show parts';
     $('timeline').classList.toggle('hide-parts',!show);
+    schedulePreferenceSave();
   };
   $('show-box-keys').onclick=()=>{
     const show=$('show-box-keys').getAttribute('aria-pressed')!=='true';
     $('show-box-keys').setAttribute('aria-pressed',String(show));
     $('show-box-keys').textContent=`Key labels: ${show?'On':'Off'}`;
     $('timeline').classList.toggle('hide-box-keys',!show);
+    schedulePreferenceSave();
   };
   $('split').onclick=()=>mutate({type:'split',at:position},'Box split. Every note keeps its timing.');
   $('merge').onclick=()=>mutate({type:'merge',at:position},'Boundary merged. Every note keeps its timing.');
@@ -1124,6 +1510,7 @@ var Composer = (() => {
     partVolumes[role]=level;slider.nextElementSibling.textContent=`${Math.round(level*100)}%`;
     slider.setAttribute('aria-valuetext',`${Math.round(level*100)} percent`);
     if(partGains[role])partGains[role].gain.setTargetAtTime(level,audio.currentTime,.01);
+    markDirty();
   };
   function timelineClick(event){
     if((event.detail>0&&Date.now()<ignoreTimelineClickUntil)||event.target.closest('.part-volume'))return;
@@ -1132,6 +1519,7 @@ var Composer = (() => {
       const role=collapseButton.dataset.collapseRole;
       if(collapsedParts.has(role))collapsedParts.delete(role);else collapsedParts.add(role);
       renderTimeline(song.inspect(position));updateLive(transport?playPosition():position);
+      schedulePreferenceSave();
       document.querySelector(`[data-collapse-role="${role}"]`).focus({preventScroll:true});return;
     }
     const noteButton=event.target.closest('[data-note]');
@@ -1142,7 +1530,7 @@ var Composer = (() => {
       if(selectionMode==='notes'){
         if(selectedNotes.has(note.id))selectedNotes.delete(note.id);else selectedNotes.add(note.id);
       }else{selectedNotes.clear();selectedNotes.add(note.id);}
-      selected=note.id;part=note.part;render({center:false});return;
+      selected=note.id;part=note.part;markDirty();render({center:false});return;
     }
     const phoneBox=isPhone&&event.target.closest('[data-box]');
     if(phoneBox&&selectionMode==='boxes'){
@@ -1160,7 +1548,7 @@ var Composer = (() => {
       for(const note of data.boxNotes)selectedNotes.add(note.id);
       selectedBoxes.clear();boxAnchor=null;selected=null;
       selectionMode='notes';$('touch-select-kind').value='notes';
-      position=+phoneBox.dataset.at;render({center:false});
+      position=+phoneBox.dataset.at;markDirty();render({center:false});
       document.querySelector(`[data-box="${phoneBox.dataset.box}"]`)?.focus({preventScroll:true});
       status(`${selectedNotes.size} notes selected. Clear removes the selection. Delete removes whole notes, including held notes.`);return;
     }
@@ -1169,7 +1557,7 @@ var Composer = (() => {
       if(event.ctrlKey||event.metaKey||event.shiftKey){
         if(selectedNotes.has(note.id))selectedNotes.delete(note.id);else selectedNotes.add(note.id);
       }else{selectedNotes.clear();selectedNotes.add(note.id);}
-      selected=note.id;part=note.part;position=note.start;render();
+      selected=note.id;part=note.part;position=note.start;markDirty();render();
       document.querySelector(`[data-note="${note.id}"]`).focus({preventScroll:true});
       status(`${selectedNotes.size} ${selectedNotes.size===1?'note':'notes'} selected. Piano entry is in ${part}.`);return;
     }
@@ -1324,9 +1712,9 @@ var Composer = (() => {
       return;
     }
     if(isPhone)touchEdit='';
-    if(gesture.type==='seek'){
+      if(gesture.type==='seek'){
       if(!commit){position=gesture.original;selected=gesture.selection;selectedNotes.clear();for(const id of gesture.selections)selectedNotes.add(id);}
-      render();status(commit?`Editing cursor at ${locationName(position)}. No notes changed.`:'Cursor drag cancelled.');return;
+      if(commit)markDirty();render();status(commit?`Editing cursor at ${locationName(position)}. No notes changed.`:'Cursor drag cancelled.');return;
     }
     if(commit&&gesture.valid&&gesture.moved){
       if(gesture.type==='move')position=gesture.preview.find(note=>note.id===gesture.id).start;
@@ -1352,6 +1740,7 @@ var Composer = (() => {
     const roman=$('roman-choice').value;
     if(roman)mutate({type:'label',at:position,name:labelName(song.inspect(position).harmony),custom:false,roman},'Roman interpretation chosen for this harmony passage. Notes and key are unchanged.');
   };
+  $('custom-label').onkeydown=event=>{if(event.key==='Enter'){event.preventDefault();$('set-label').click();}};
   $('set-label').onclick=()=>{if(mutate({type:'label',at:position,name:$('custom-label').value.trim(),custom:true},'Custom label set for this harmony span.'))$('custom-label').value='';};
   $('keyboard').oncontextmenu=event=>{
     const key=event.target.closest('[data-key]');if(!key)return;
@@ -1360,7 +1749,7 @@ var Composer = (() => {
     if(drag)finishDrag(false);
     const pitch=+key.dataset.key;
     if(!song.inspect(position).active.some(note=>note.part===part&&note.pitch===pitch)){
-      status(`No ${pitchName(pitch)} note in ${part} at the orange cursor.`,true);return;
+      status(`No ${pitchName(pitch)} note in ${part} at the amber entry cursor.`,true);return;
     }
     mutate({type:'delete-at',part,pitch,at:position},`${pitchName(pitch)} deleted from ${part}. Undo restores the complete note.`);
   };
@@ -1372,19 +1761,14 @@ var Composer = (() => {
         stopTransport();
         const start=position;
         position=song.dispatch({type:'enter',part,pitch,start,duration,advance:advanceAfterEntry[part]}).position;
-        selectedNotes.clear();render();revealPhoneNote(song.inspect().notes.at(-1).id);
+        selectedNotes.clear();markDirty();render();revealPhoneNote(song.inspect().notes.at(-1).id);
         status(`Added ${pitchName(pitch)} to ${part} at ${number(start)}. ${advanceAfterEntry[part]?'Cursor moved to its end.':'Position stays fixed.'}`);
       }catch(error){status(error.message,true);return;}
     }
     try{await activateAudio();sound(pitch,audio.currentTime,.3,'note',false,auditionPart);}catch(error){status(error.message,true);}
   };
-  $('octave-down').onclick=()=>{keyboardBase=Math.max(0,keyboardBase-12);renderKeyboard(song.inspect(position));updateLive(transport?playPosition():position);};
-  $('octave-up').onclick=()=>{keyboardBase=Math.min(120-keyboardSpan(),keyboardBase+12);renderKeyboard(song.inspect(position));updateLive(transport?playPosition():position);};
-  function reset() {stopTransport();song=Composer.createComposer();position=0;selectedNotes.clear();part='chord';selectedBoxes.clear();boxAnchor=null;render();}
-  $('blank').onclick=()=>{
-    if(song.inspect().notes.length&&!confirm('Replace this scratch composition? This prototype does not save work.'))return;
-    reset();scene=null;step=0;renderWalkthrough();status('Blank composition ready.');
-  };
+  $('octave-down').onclick=()=>{keyboardBase=Math.max(0,keyboardBase-12);renderKeyboard(song.inspect(position));updateLive(transport?playPosition():position);schedulePreferenceSave();};
+  $('octave-up').onclick=()=>{keyboardBase=Math.min(120-keyboardSpan(),keyboardBase+12);renderKeyboard(song.inspect(position));updateLive(transport?playPosition():position);schedulePreferenceSave();};
   const add=(role,pitches,start,length)=>{for(const pitch of pitches)song.dispatch({type:'add',part:role,pitch,start,duration:length});};
   const scenarios={
     bass:{description:'The bass note lasts for two measures. The chord and melody change above it. A box split leaves the notes unchanged.',steps:[
@@ -1416,11 +1800,10 @@ var Composer = (() => {
     $('walk-next').hidden=false;$('walk-next').disabled=step>=current.steps.length;
     $('walk-next').textContent=current.steps[step]?.[0]||'Example complete';
   }
-  document.querySelectorAll('[data-scene]').forEach(button=>button.onclick=()=>{
-    if(song.inspect().notes.length&&!confirm('Start this example from blank? Current scratch work will be replaced.'))return;
-    reset();scene=button.dataset.scene;step=0;renderWalkthrough();status('Example ready. Tap the next step button.');
+  document.querySelectorAll('[data-scene]').forEach(button=>button.onclick=async()=>{
+    const title=button.textContent.trim();try{if(await createSavedComposition(`Example: ${title}`)){scene=button.dataset.scene;step=0;renderWalkthrough();status('Example opened as a separate composition. Your other work is unchanged.');}}catch(error){status(error.message,true);}
   });
-  $('walk-next').onclick=()=>{try{const [title,action]=scenarios[scene].steps[step];action();step++;render();renderWalkthrough();status(title+'. The step is complete.');}catch(error){status(error.message,true);}};
+  $('walk-next').onclick=()=>{try{const [title,action]=scenarios[scene].steps[step];action();markDirty();step++;render();renderWalkthrough();status(title+'. The step is saved in this example.');}catch(error){status(error.message,true);}};
   window.addEventListener('keydown',event=>{
     if(event.target.closest('#help-panel,#mobile-tools,#piano-resize'))return;
     if((drag||touchEdit)&&event.key==='Escape'){event.preventDefault();if(drag)finishDrag(false);touchEdit='';render({center:false});return;}
@@ -1449,7 +1832,20 @@ var Composer = (() => {
       centerCursor();
     }
   }).observe($('timeline-scroll'));
-  updatePhoneLayout();
+  async function startApp(){
+    await bootStorage();updatePhoneLayout();
+    if('serviceWorker'in navigator){
+      try{
+        const registration=await navigator.serviceWorker.register('./service-worker.js',{scope:'./'});
+        if(registration.waiting){updateWorker=registration.waiting;$('offline-update').hidden=false;}
+        registration.addEventListener('updatefound',()=>registration.installing?.addEventListener('statechange',()=>{
+          if(registration.waiting){updateWorker=registration.waiting;$('offline-update').hidden=false;$('offline-status').textContent='App update ready';}
+        }));
+        offlineCheck();
+      }catch{$('offline-status').textContent='Offline setup failed. You can keep using the app online.';$('offline-status').dataset.state='error';}
+    }else offlineCheck();
+  }
+  startApp();
 })();
 </script>
 </body></html>

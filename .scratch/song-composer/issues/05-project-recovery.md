@@ -63,4 +63,8 @@ These safeguards follow from the accepted recovery requirements; they are not ex
 7. Inspect exported MIDI and open it in a real receiving editor. Check the three part tracks/channels, tempo, key/meter changes, supported rhythms, and held-note timing. Verify that boundary-crossing sustains are not retriggered.
 8. Export overlapping equal pitches in one part: identify the positions and require acknowledgement before proceeding, preserve both written event pairs, and leave the source project unchanged. Equal pitches in different parts use distinct channels. Document actual receiving-editor behavior rather than claiming universal playback equivalence.
 
-These checks define required evidence for the implementation. None has been run against an app or export yet.
+These checks define the remaining acceptance evidence. The 55 model and exchange checks pass, but browser-level storage, offline, multi-tab, and receiving-editor checks remain open.
+
+## Implementation follow-up — October 31, 2026
+
+The owner approved the [implementation plan](../../../docs/save-and-exchange-plan.md). The local prototype now has IndexedDB saved compositions, versioned project-file import/export, MIDI Type 1 export, and service-worker offline support. The app and README describe these features. Automated source and model checks pass. Browser automation is disabled in Work settings, so live UI, storage, multi-tab, offline-session, and physical-phone checks remain open. MuseScore Studio did not launch in this environment; receiving-editor verification remains open. Nothing has been deployed from this work.

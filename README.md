@@ -1,55 +1,49 @@
 # Simple Composer
 
-A browser app for writing music with an on-screen piano, a timeline of chord boxes, and independent Melody, Chord, and Bass parts. Build a phrase, explore its harmony, and hear the parts together.
+Simple Composer lets you write music in your browser, hear it, and change it. Tap the on-screen piano to add notes, then arrange them on a timeline.
 
-**[Open Simple Composer](https://simplecomposer.netlify.app/)** — no account or installation needed.
+**[Open Simple Composer](https://simplecomposer.netlify.app/)**
 
-This is a working prototype. **Notes are not saved:** reloading, closing, or discarding the browser tab loses the composition.
+## Write your music
 
-## Write and arrange
+Choose Melody for the main tune, Chord for notes that support it, or Bass for the low notes. A **chord** is a group of notes played together.
 
-- Enter notes on the piano with separate duration settings for Melody, Chord, and Bass. Use whole through sixteenth notes, dotted values, and quarter- or eighth-note triplets.
-- Advance the cursor after each note to write a melody, or keep it in place to build a chord. Each part remembers its own entry settings during the session.
-- Give every note its own start and duration. Hold a bass note while the melody and chord voices move, including across measures.
-- Organize the timeline by splitting and merging chord boxes without changing the notes.
-- Change the time signature within a composition: 2/4, 3/4, 4/4, and 6/8 are supported. Notes entered beyond the song's end add measures automatically.
+Choose how long a note lasts, then tap a piano key. For example, you can hold one bass note while four shorter melody notes play above it. Each note keeps its own starting point and length.
 
-## Edit and navigate
+- Move, shorten, lengthen, or delete notes. Use Undo and Redo to reverse or restore edits.
+- Split or join chord boxes without changing the notes inside them.
+- Select several notes to edit them together. On a phone, tap a chord box to select every note sounding inside it, including held notes.
 
-- Edit a note's pitch, start, and duration, or drag it along the timeline to move or resize it.
-- Select notes across parts, then move, resize, or delete them together. Group edits preserve relative timing and can be undone in one step.
-- Snap edits to quarter notes, eighth notes, or quarter- and eighth-note triplets. Invalid edits, including overlapping notes of the same pitch in one part, are rejected.
-- Undo and redo musical edits. Pan and zoom the timeline, collapse individual parts, or hide all three part rows while keeping chord labels and the ruler visible.
-- Drag the wider editing cursor handle to inspect active notes silently. Resize the piano vertically by dragging its top handle on desktop or phones in either orientation.
+## Explore the notes
 
-## Explore harmony
+The app names chords from the Bass and Chord parts. It also shows how they relate to the **key**, the main note and major or minor setting that music is built around. These relationships appear as I, IV, V, and other symbols.
 
-- See chord names based on the sounding Bass and Chord notes. Melody notes remain independent of chord recognition.
-- Recognize 14 chord qualities: major, minor, diminished, augmented, sus2, sus4, 6, m6, 7, maj7, m7, m(maj7), m7♭5, and dim7.
-- Choose an alternative recognized name or write a custom chord label without changing the notes.
-- View Roman numerals and inversion figures relative to the active key. Choose compatible readings for secondary dominants, tritone substitutes, leading-tone diminished chords, and modal interchange.
-- Let empty and new chord boxes inherit the active collection’s tonic and major/minor mode when advancing or entering notes. Boxes with sounding notes keep their key.
-- Change the key from the cursor or apply a key to selected chord boxes, including separated boxes. Key changes and harmonic collections have independent settings.
-- Use major or minor sixth-diminished collections to distinguish sixth-chord tones, diminished-chord tones, and outside tones. Optional piano symbols and note names support this view.
+You can choose another suggested chord reading or write your own label. Change the key or note collection along the timeline. New and empty boxes follow the collection’s key when you advance or enter notes.
 
-## Listen and review
+Blue, plum, and gray marks show which notes belong to the collection’s groups or fall outside it. Optional piano labels show note names and group symbols.
 
-- Play, pause, and resume the composition at an adjustable tempo, or loop a range of whole measures. Press Space to play or pause after selecting a chord box, or outside other controls.
-- Use a metronome with accented measure starts. In 6/8, it follows dotted-quarter pulses.
-- Adjust each part's volume independently, including muting it.
-- Follow the playhead and highlighted chord boxes during playback. Piano keys audition notes while the composition plays.
-- Switch to dark mode, turn on key labels (hidden by default), and open the short beginner guide and examples for held bass, chord changes, and key and meter.
+## Listen and adjust
 
-## Desktop and phone
+- Play, pause, change the speed, or repeat a section. Space plays or pauses when you select a chord box.
+- Adjust each part’s volume or mute it. Turn on a steady click to follow the beat.
+- Drag the piano’s top edge to change its height. Hide note rows or phone piano controls to make more room.
+- Choose ivory light mode or warm charcoal dark mode. Green outlines show selections; an amber cursor marks where new notes go.
+- Open Help for short instructions and examples that create separate compositions.
 
-The same app adapts to both screens. Desktop supports mouse editing and selection shortcuts. On a phone, portrait mode provides a one-octave piano with taller, adjustable keys and octave buttons. Part and duration controls sit above the piano; a Show/Hide piano controls button hides the whole control area while keeping the keys and resize handle available. Taller chord boxes, larger text, longer volume sliders, and wider, spaced Play/Pause, Undo, Select, and Tools buttons improve the phone layout. Play/Pause, Undo, and Tools stay at the top. Tap a chord box to select all notes that sound inside it, including held notes. More box taps add notes to the selection. Clear removes the selection; Move, Resize, and Delete affect the complete selected notes. Use Select → Notes for individual note taps, or Select → Boxes for key changes. Ordinary swipes scroll the timeline.
+## Save and share
 
-Landscape remains available with a two-octave piano. Both orientations support writing and playback, and rotation preserves notes and selections within the current session.
+Your music saves in this browser. The app reopens your last composition, paused. Click its name to create, open, rename, copy, or move compositions to Trash. You can restore trashed work.
+
+A **project file** keeps your music and the app’s composition settings. Download one as a backup or import it on another device. Importing creates a separate copy.
+
+**MIDI**, short for Musical Instrument Digital Interface, stores instructions for playing notes. Export a MIDI file to use your music in another music app. It keeps the three parts, note timing, speed, and volumes, but not this app’s chord boxes or custom labels. The sound depends on the app that plays it.
+
+After an online setup, the app shows **Ready offline** when it can reopen without internet. Browser data can be cleared, so keep project-file backups.
 
 ## Current limits
 
-- No project saving, project import/export, or MIDI export.
-- Playback uses a temporary synth sound.
-- Automatic chord naming covers the 14 qualities above. Extended chords remain playable but may have no automatic name; pitch spelling currently uses practical flat names.
-- Compositions are limited to 256 quarter notes. Measure insertion/deletion, draggable box boundaries, and the full voicing toolbox are not implemented.
-- The phone layout has been checked in resized desktop browsers; physical-phone usability and audio checks are still pending.
+- No account or cloud sync; saved music stays in this browser.
+- No MIDI import or audio-file export.
+- MIDI export requires at least four beats per minute.
+- Compositions can contain up to 256 quarter-note beats. Some chords may have no suggested name.
+- The current sound is generated electronically. A final piano sound has not been chosen.

@@ -7,7 +7,123 @@ const script = html.match(/<script id="composer-core">([\s\S]*?)<\/script>/)[1];
 const context = vm.createContext({ structuredClone });
 vm.runInContext(script, context);
 const { createComposer, planPlayback } = context.Composer;
+const exchangeScript = html.match(/<script id="exchange-core">([\s\S]*?)<\/script>/)[1];
+const exchangeContext = vm.createContext({ structuredClone, Composer: context.Composer });
+vm.runInContext(exchangeScript, exchangeContext);
+const Exchange = exchangeContext.Exchange;
 const plain = value => JSON.parse(JSON.stringify(value));
+const midiSettings = (bpm,partVolumes={bass:1,chord:1,melody:1}) => ({bpm,partVolumes,loop:{enabled:false,from:0,to:1},metronome:false,entryDurations:{bass:1,chord:2,melody:1},advanceAfterEntry:{bass:false,chord:false,melody:true},snap:1,position:0,activePart:'chord'});
+
+test('both palettes keep text readable and musical selection boundaries visible', () => {
+  const readTokens = block => Object.fromEntries([...block.matchAll(/--([\w-]+):([^;]+);/g)].map(m => [m[1],m[2]]));
+  const light = readTokens(html.match(/:root\{([\s\S]*?)\}/)[1]);
+  const dark = {...light,...readTokens(html.match(/:root:has\(#dark-mode:checked\)\{([\s\S]*?)\}/)[1])};
+  for (const [theme,tokens] of Object.entries({light,dark})) {
+    const color = name => {
+      const value=tokens[name] || name;
+      return value.startsWith('var(--') ? color(value.slice(6,-1)) : value;
+    };
+    const luminance = name => {
+      let hex=color(name).slice(1);
+      if(hex.length===3) hex=[...hex].map(c=>c+c).join('');
+      assert.match(hex,/^[\da-f]{6}$/i);
+      return [0.2126,0.7152,0.0722].reduce((sum,weight,i)=>{
+        const channel=parseInt(hex.slice(i*2,i*2+2),16)/255;
+        return sum+weight*(channel<=0.04045?channel/12.92:((channel+0.055)/1.055)**2.4);
+      },0);
+    };
+    const check = (foreground,background,minimum=4.5) => {
+      const [lo,hi]=[luminance(foreground),luminance(background)].sort((a,b)=>a-b);
+      assert.ok((hi+0.05)/(lo+0.05)>=minimum,`${theme}: ${foreground} on ${background}`);
+    };
+    for(const surface of ['page','surface','surface-soft','hover','selection-bg','entry-bg']) {
+      check('ink',surface);check('muted',surface);
+    }
+    for(const surface of ['primary','primary-hover']) check('#ffffff',surface);
+    check('entry-ink','entry');check('entry','entry-bg');check('error','error-bg');check('error','button');
+    for(const family of ['sixth','dim','outside']) {
+      check(family,`${family}-bg`);check(family,'surface-soft');
+      check(`${family}-on-white`,'key-white');check(`${family}-on-black`,'key-black');
+      check('selection',`${family}-bg`,3);
+    }
+    for(const surface of ['page','surface','surface-soft']) {check('border',surface,3);check('selection',surface,3);}
+    check('selection','selection-bg',3);
+  }
+});
+
+test('composition snapshots round-trip and reject malformed values without repairing them', () => {
+  const song=createComposer();
+  song.dispatch({type:'add',part:'melody',pitch:72,start:1/3,duration:2/3});
+  song.dispatch({type:'context',kind:'key',at:2,tonic:5,mode:'minor'});
+  song.dispatch({type:'split',at:1});
+  const snapshot=song.snapshot(), restored=createComposer(snapshot);
+  assert.deepEqual(plain(restored.snapshot()),plain(snapshot));
+  assert.equal(restored.inspect().canUndo,false);
+  assert.throws(()=>createComposer({...snapshot,notes:[...snapshot.notes,{...snapshot.notes[0],id:'n2',pitch:128}]}),/invalid composition/i);
+  assert.throws(()=>createComposer({...snapshot,notes:[...snapshot.notes,{...snapshot.notes[0]}]}),/invalid composition/i);
+  assert.equal(createComposer({...snapshot,notes:[...snapshot.notes,{...snapshot.notes[0],id:'n2'}]}).snapshot().notes.length,2); // Restored same-pitch overlaps are preserved.
+});
+
+test('project files validate before restore and reject invalid or future formats', () => {
+  const settings={bpm:96,partVolumes:{bass:1,chord:.5,melody:0},loop:{enabled:true,from:0,to:1},metronome:false,entryDurations:{bass:1,chord:2,melody:1},advanceAfterEntry:{bass:false,chord:false,melody:true},snap:1/3,position:4,activePart:'chord'};
+  const project=Exchange.makeProject('Held bass',createComposer().snapshot(),settings);
+  assert.equal(Exchange.parseProject(JSON.stringify(project)).composition.name,'Held bass');
+  assert.throws(()=>Exchange.parseProject('{'),/valid project/i);
+  assert.throws(()=>Exchange.parseProject(JSON.stringify({...project,version:2})),/not supported/i);
+  assert.throws(()=>Exchange.parseProject(' '.repeat(5*1024*1024+1)),/too large/i);
+  assert.throws(()=>Exchange.makeProject('Bad',createComposer().snapshot(),{...settings,bpm:0}),/invalid settings/i);
+});
+
+function parseMidi(input) {
+  const bytes=[...input];
+  const read32=at=>(bytes[at]*0x1000000+bytes[at+1]*0x10000+bytes[at+2]*0x100+bytes[at+3])>>>0;
+  assert.equal(String.fromCharCode(...bytes.slice(0,4)),'MThd');
+  assert.equal(bytes[9],1); // Standard MIDI File Type 1
+  const tracks=[];let offset=14;
+  while(offset<bytes.length){
+    assert.equal(String.fromCharCode(...bytes.slice(offset,offset+4)),'MTrk');
+    const length=read32(offset+4),end=offset+8+length;offset+=8;
+    let tick=0,status=0;const events=[];
+    while(offset<end){
+      let delta=0,value;
+      do{value=bytes[offset++];delta=(delta<<7)|(value&127);}while(value&128);
+      tick+=delta;let first=bytes[offset++];
+      if(first<128){offset--;first=status;}else if(first<240)status=first;
+      if(first===255){const type=bytes[offset++],size=bytes[offset++],data=bytes.slice(offset,offset+size);offset+=size;events.push({tick,type,data});if(type===47)break;}
+      else {const size=(first&0xf0)===0xc0||(first&0xf0)===0xd0?1:2,data=bytes.slice(offset,offset+size);offset+=size;events.push({tick,status:first,data});}
+    }
+    tracks.push(events);offset=end;
+  }
+  return tracks;
+}
+
+test('MIDI export writes distinct parts, exact triplet timing, context, and part volumes', () => {
+  const song=createComposer();
+  song.dispatch({type:'context',kind:'key',at:2,tonic:5,mode:'minor'});
+  song.dispatch({type:'context',kind:'meter',at:2,n:6,d:8});
+  song.dispatch({type:'enter',part:'melody',pitch:72,start:1/3,duration:1/3,advance:false});
+  song.dispatch({type:'add',part:'bass',pitch:48,start:0,duration:4});
+  const settings=midiSettings(120,{bass:1,chord:.5,melody:0});
+  const tracks=parseMidi(Exchange.writeMidi(song.snapshot(),settings));
+  assert.equal(tracks.length,4);
+  assert.ok(tracks[0].some(event=>event.type===81&&event.data.join(',')==='7,161,32'));
+  assert.ok(tracks[0].some(event=>event.type===89&&event.tick===960&&event.data[1]===1));
+  assert.ok(tracks[0].some(event=>event.type===88&&event.tick===960&&event.data[0]===6&&event.data[1]===3));
+  assert.ok(tracks[1].some(event=>event.status===0x90&&event.data[0]===48));
+  assert.ok(tracks[2].some(event=>event.status===0xb1&&event.data[0]===7&&event.data[1]===64));
+  assert.ok(tracks[3].some(event=>event.status===0xb2&&event.data[0]===7&&event.data[1]===0));
+  assert.ok(tracks[3].some(event=>event.status===0x92&&event.tick===160&&event.data[0]===72));
+  assert.ok(tracks[3].some(event=>event.status===0x82&&event.tick===320&&event.data[0]===72));
+});
+
+test('MIDI export rejects unencodable tempos and reports same-part overlaps', () => {
+  const song=createComposer();
+  song.dispatch({type:'add',part:'chord',pitch:60,start:0,duration:2});
+  const snapshot=song.snapshot();snapshot.notes.push({...snapshot.notes[0],id:'n2',start:1});
+  assert.throws(()=>Exchange.writeMidi(snapshot,midiSettings(3)),/cannot encode/i);
+  assert.doesNotThrow(()=>Exchange.writeMidi(snapshot,midiSettings(4)));
+  assert.deepEqual(plain(Exchange.overlaps(snapshot)),[{part:'chord',pitch:60,start:0,end:2},{part:'chord',pitch:60,start:1,end:3}]);
+});
 
 test('box note selection includes all sounding parts and excludes notes at its boundaries', () => {
   const song=createComposer();
@@ -878,4 +994,72 @@ test('metronome clicks accent actual measure starts and use two dotted-quarter p
   ]);
   assert.deepEqual(plain(planPlayback(song.inspect(), { from: 0, to: 8, bpm: 120 }).clicks), []);
   assert.equal(song.inspect().notes.length, 0);
+});
+
+test('a failed autosave keeps edits and recovery visible without an automatic retry loop', async () => {
+  const saveSource=html.slice(html.indexOf('  async function saveNow(){'),html.indexOf('  async function saveBeforeSwitch(){'));
+  const timers=[],messages=[];
+  const env=vm.createContext({dirty:true,saving:false,conflicted:false,database:{},storageError:null,saveTimer:null,activeRevision:1,activeId:'test',createdAt:1,tabId:'tab',channel:null,
+    clearTimeout(){},setTimeout(fn){timers.push(fn);},saveStatus(message,state){messages.push(state);},projectRecord(){return {};},
+    writeProject:async()=>{throw new Error('Storage full');},putStored:async()=>{},offlineCheck(){}});
+  vm.runInContext(saveSource,env);await env.saveNow();
+  assert.equal(env.dirty,true);assert.equal(env.saving,false);assert.equal(env.activeRevision,1);
+  assert.equal(messages.at(-1),'error');assert.equal(timers.length,0);
+  env.writeProject=async()=>({revision:2,createdAt:1});await env.saveNow();
+  assert.equal(env.storageError,null);assert.equal(env.dirty,false);assert.equal(env.activeRevision,2);assert.equal(messages.at(-1),'saved');
+  env.dirty=true;env.writeProject=async()=>{env.dirty=true;return {revision:3,createdAt:1};};await env.saveNow();
+  assert.equal(timers.length,1,'edits made during a successful save still receive a follow-up save');
+});
+
+test('errors stay in the active dialog and save failures offer recovery there', () => {
+  const statusSource=html.slice(html.indexOf('  function status('),html.indexOf('  function locationName('));
+  const ids=['projects-dialog','mobile-tools','status','projects-status','tools-status','project-recovery-actions','project-retry'];
+  const elements=Object.fromEntries(ids.map(id=>[id,{open:false,hidden:true,textContent:'',classList:{toggle(){}}}]));
+  const env=vm.createContext({$:id=>elements[id],storageError:null,conflicted:false,database:{}});
+  vm.runInContext(statusSource,env);
+  elements['projects-dialog'].open=true;env.status('Invalid project file',true);
+  assert.equal(elements['projects-status'].hidden,false);assert.equal(elements.status.hidden,true);assert.equal(elements['project-recovery-actions'].hidden,true);
+  env.storageError=new Error('Quota');env.status('Save failed',true);assert.equal(elements['project-recovery-actions'].hidden,false);
+  elements['projects-dialog'].open=false;elements['mobile-tools'].open=true;env.status('Invalid position',true);
+  assert.equal(elements['tools-status'].hidden,false);assert.equal(elements['projects-status'].hidden,true);
+  env.status('');assert.equal(elements['tools-status'].hidden,true);
+});
+
+test('composition naming preserves typed text and allows another attempt after a failed save', async () => {
+  const start=html.indexOf("  $('project-name-form').onsubmit="),end=html.indexOf("  $('export-project').onclick",start);
+  const elements={'composition-name':{value:'My new song'},'save-project-name':{disabled:false},'project-name-form':{hidden:false},'projects-dialog':{open:true,close(){this.open=false;}}};
+  const messages=[];
+  const env=vm.createContext({$:id=>elements[id],renamingProject:null,status:message=>messages.push(message),createSavedComposition:async()=>{throw Error('Storage full');}});
+  vm.runInContext(html.slice(start,end),env);await elements['project-name-form'].onsubmit({preventDefault(){}});
+  assert.equal(elements['composition-name'].value,'My new song');assert.equal(elements['project-name-form'].hidden,false);
+  assert.equal(elements['projects-dialog'].open,true);assert.equal(elements['save-project-name'].disabled,false);assert.equal(messages.at(-1),'Storage full');
+  env.createSavedComposition=async()=>true;await elements['project-name-form'].onsubmit({preventDefault(){}});
+  assert.equal(elements['projects-dialog'].open,false);assert.equal(elements['project-name-form'].hidden,true);
+});
+
+test('save feedback avoids a fast busy flash, holds a slow status, and never delays errors', () => {
+  const source=html.slice(html.indexOf('  const SAVE_FEEDBACK='),html.indexOf('  function requestValue('));
+  let now=0,nextId=0;const tasks=new Map();
+  const elements=Object.fromEntries(['save-status','retry-save','download-recovery'].map(id=>[id,{textContent:'',dataset:{},hidden:true}]));
+  const env=vm.createContext({$:id=>elements[id],performance:{now:()=>now},setTimeout(fn,delay){tasks.set(++nextId,{fn,at:now+delay});return nextId;},clearTimeout(id){tasks.delete(id);}});
+  vm.runInContext(source,env);
+  function advance(ms){const end=now+ms;while(true){const entry=[...tasks].sort((a,b)=>a[1].at-b[1].at)[0];if(!entry||entry[1].at>end)break;tasks.delete(entry[0]);now=entry[1].at;entry[1].fn();}now=end;}
+  env.saveStatus('Saving…','saving');assert.equal(elements['save-status'].textContent,'Edits pending');
+  advance(100);env.saveStatus('Saved locally');advance(400);assert.equal(elements['save-status'].textContent,'Saved locally');assert.equal(tasks.size,0);
+  env.saveStatus('Saving…','saving');advance(300);assert.equal(elements['save-status'].textContent,'Saving…');
+  advance(100);env.saveStatus('Saved locally');advance(200);assert.equal(elements['save-status'].textContent,'Saving…');
+  env.saveStatus('Could not save','error');assert.equal(elements['save-status'].textContent,'Could not save');assert.equal(elements['retry-save'].hidden,false);
+  advance(1000);assert.equal(elements['save-status'].textContent,'Could not save');
+  env.saveStatus('Saving…','saving');advance(300);env.saveStatus('Saved locally');advance(500);assert.equal(elements['save-status'].textContent,'Saved locally');
+  env.saveStatus('Saving…','saving');advance(300);env.saveStatus('Saved locally');advance(100);env.saveStatus('Saving…','saving');advance(500);
+  assert.equal(elements['save-status'].textContent,'Saving…','a new pending save cancels the old success display');
+  env.saveStatus('Save paused','conflict');advance(1000);assert.equal(elements['save-status'].textContent,'Save paused');assert.equal(elements['download-recovery'].hidden,false);
+});
+
+test('editing centers the cursor immediately and leaves active playback and drags alone', () => {
+  const source=html.slice(html.indexOf('  function centerCursor()'),html.indexOf('  function ',html.indexOf('  function centerCursor()')+4));
+  const calls=[],properties=[];const scroll={clientWidth:400,scrollTo:options=>calls.push(options)};
+  const env=vm.createContext({$:id=>id==='timeline-scroll'?scroll:{style:{setProperty:(...args)=>properties.push(args)}},transport:null,drag:null,position:8,beatWidth:48});
+  vm.runInContext(source,env);env.centerCursor();assert.equal(calls[0].behavior,'instant');assert.equal(calls[0].left,184);
+  env.transport={};env.centerCursor();assert.equal(calls.length,1);env.transport=null;env.drag={};env.centerCursor();assert.equal(calls.length,1);
 });
